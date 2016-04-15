@@ -1,0 +1,477 @@
+{% load humanize %}
+{% load i18n %}
+{% load thumbnail%}
+{% load custom %}
+{% block head %}
+    <script type="text/javascript" src="{{ MEDIA_URL}}js/jquery.js"></script>
+    <style>
+.picture_border:hover{
+    border:1px solid #999;
+    border-color:red;
+}
+.picture_border{
+    border:1px solid #999;
+    border-color:black;
+    color:white;
+}
+ul.errorlist{
+  display:inline;
+  padding:0;
+  margin:0;
+}
+ul.errorlist li{
+  display:inline;
+  list-style:none;
+  color:#cc0000;
+}
+.mostform_last_upd{
+    margin-bottom:5px;
+    background:no-repeat;
+    background-position:center center;
+    background-color:white;
+    height:90px;
+    width:112px;
+}
+body,html{
+  margin:0;
+  padding:0;
+  background:white;
+  background-repeat:no-repeat;
+  font-family: Arial;
+  font-size:11px;
+  color:#555555;
+}
+.opacity{
+    background-color:#993399;
+    opacity:0.6;
+    filter:alpha(opacity=60);
+    height:35px;
+}
+.most_menu{
+    margin-top:2px;
+    
+    overflow:hidden;background-image:url({{MEDIA_URL}}img/measurement_tape.png);width:672px;font-weight:bold;color:white;text-align:center;background-repeat:no-repeat;
+}
+
+.most_menu a{
+    
+    text-decoration:none;
+    color:white;
+    line-height:32px;
+    display:block;
+    font-size:12px;
+}
+.div2{
+   margin-top:-5px;
+}
+.div3{
+    border-top:2px solid #B5121C;
+}
+.menu_devider{
+    height:2px;
+}
+.most_menu div:hover .div2, .opacity a.selected,.selected2{
+	background-image:url({{MEDIA_URL}}red_bar.png);
+	background-position:bottom;
+	background-repeat:repeat-x;
+}
+.most_menu div:hover .opacity{
+    background-color:transparent;
+}
+.selected{
+    background-color:transparent;
+}
+.selected a{
+    color:black;
+}
+    </style>
+{% endblock %}
+
+        <div style="font-family:Arial;">
+        <div style="overflow:hidden;width:100%;margin-left:15px;">
+        <div id="test"  style="margin-left:-2px;margin-top:3px;width:673px;float:left;">
+            <div>
+            {% if not err %}
+            <div class="rows2" >
+                       <div style="margin-bottom:10px;">&nbsp;<img {% ifequal store_type 'store' %}src="{{MEDIA_URL}}img/latest_store.png"{%else %} src="{{MEDIA_URL}}img/latest_designer.png"{%endifequal%}/>
+                            <div style="float:right;padding-top:10px;">
+                                {% ifequal title "Last updated"%}
+                                {% url view_most_all "store" "last-updated" store_type as see_all_link %}
+                               {%endifequal %}
+                               {% ifequal title "Most viewed"%}
+                                {% url view_most_all "store" "most-viewed" store_type as see_all_link %}
+                               {%endifequal %}
+                               {% ifequal title "Most comment"%}
+                                {% url view_most_all "store" "most-commented" store_type as see_all_link %}
+                               {%endifequal %}
+                               {% ifequal title "Most favourite"%}
+                                {% url view_most_all "store" "most-favourite" store_type as see_all_link %}
+                               {%endifequal %}
+                               <a href="{{see_all_link}}" style="text-decoration:none; color:#B5121C;font-weight:bold;font-size:11px;" target="_parent">see all {% ifequal store_type 'store' %} stores{%else %}designers{%endifequal%}</a>
+                           </div>
+                       </div>
+                       <div class="most_menu">
+                              <div style="width:20%;float:left;"  >
+                                   <div class="opacity" id="viewd">
+                                       {% url view_most_store store_type "most-viewed" as link %}
+                                    <a href="{{link}}" > Most Viewed</a>
+                                   </div>
+                                   <div class="div2" id="line_viewd">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                              <div style="width:20%;float:left;"  >
+                                   <div class="opacity selected" id="update">
+                                       {% url view_most_store store_type "last-updated" as link %}
+                                    <a href="{{link}}" > Last Updated </a>
+                                   </div>
+                                   <div class="div2" id="line_upd">&nbsp;
+                                   </div>
+                                   <div class="div3">
+                                   </div>
+                              </div>
+                              <div style="width:20%;float:left;"  >
+                                   <div class="opacity" id="commentd">
+                                       {% url view_most_store store_type "most-commented" as link %}
+                                    <a href="{{link}}"> Most Commented </a>
+                                   </div>
+                                   <div class="div2" id="line_comm">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                              
+                              <div style="width:20%;float:left;"  >
+                                   <div class="opacity" id="favd">
+                                       {% url view_most_store store_type "most-favourite" as link %}
+                                    <a href="{{link}}" > Most Favourited </a>
+                                   </div>
+                                   <div class="div2" id="line_favd">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                              <div style="width:20%;float:left;"  >
+                                   <div class="opacity" id="not_hovered">
+                                   </div>
+                                   <div class="div2">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                              
+                       </div>
+                   
+                       <div style="vertical-align:top;margin-top:-10px;">
+                         <div style="width:100%;">
+                                {%  for store in stores|slice:":5" %}
+                                <div style="height:145px;float:left;width:112px;background-color:{%ifequal store_type 'store'%}#ffaea6{% else %}#8b786a{%endifequal%};background-repeat:no-repeat;vertical-align:top; padding:15px 8px 11px 8px;">
+                                  <div style="vertical-align:top;" >
+                                   <div style="height:145px; text-align:center;margin-top:-10px;">
+                                       {% ifequal title "Last updated" %}
+                                        {% url view_stores store.slug as link %}
+                                       {% else %}
+                                        {% url view_stores store.store.slug as link %}
+                                       {% endifequal %}
+                                        <a id="link{{forloop.counter}}" href="{{link}}" style="text-decoration:none; border:none;" target="_parent">
+
+                                       <div align="center" style="margin-bottom:5px;padding-top:-20px;">
+                                            <img style="border:none;"  id="{{forloop.counter}}"src="{{MEDIA_URL}}paku.png" />
+                                       </div>
+                                           {% ifequal title 'Last updated'%}
+                                               <div class="mostform_last_upd" style="{% if store.picture %}background-image:url({% thumbnail store.picture.name 112x90 %});{% endif %}"></div>
+                                           {% else %}
+                                             <div class="mostform_last_upd"  style="{% if store.store.picture %}background-image:url({% thumbnail store.store.picture.name 112x90 %});{% endif %}"></div>
+                                           {% endifequal %}
+                                            <div style="font-size:12px; color:white;">
+                                                {% ifnotequal title "Last updated" %}{{store.store.name|capfirst|truncatechar:20}}{% else %}{{store.name|capfirst|truncatechar:20}} {% endifnotequal %}
+                                           </div>
+                                       <div style="font-size:11px;float:left;text-decoration:none; color:blue;margin-left:40px;">{%trans 'more'%}</div><div style="size:1px;float:left;"> >></div>
+                                       </a>
+                                   </div>
+                                  </div>
+                                </div>
+                               {% ifnotequal forloop.counter 5 %}
+                                <div style="float:left;">
+                                  <div>
+                                   <div style="width:8px;">
+                                        &nbsp;
+                                   </div>
+                                  </div>
+                                </div>
+                               {%endifnotequal%}
+                               {% endfor %}
+                           {%  for store in ctr_store|slice:":5" %}
+                            <div style="height:145px;float:left;width:112px;background-color:{%ifequal store_type 'store'%}#ffaea6{% else %}#8b786a{%endifequal%};background-repeat:no-repeat;vertical-align:top; padding:15px 8px 11px 8px;">
+                                  <div style="vertical-align:top;" >
+                                   <div style="height:145px; text-align:center; margin-top:-10px;">
+                                   <a id="links{{forloop.counter}}" style="text-decoration:none; border:none;" target="_parent">
+                                   <div align="center" style="margin-bottom:5px;">
+                                         <img style="border:none;"  id="img{{forloop.counter}}"src="{{MEDIA_URL}}paku.png" />
+                                   </div>
+                                       <img style="border:none;" src="{{MEDIA_URL}}/no store picture.jpg" width="112px" height="90px" border="1" />
+                                   </a>
+                                   <br />
+                               </div>
+                              </div>
+                            </div>
+                            {% ifnotequal forloop.counter temp_flg %}
+                                <div style="float:left;">
+                                  <div>
+                                   <div style="width:8px;">
+                                        &nbsp;
+                                   </div>
+                                  </div>
+                                </div>
+                            {%endifnotequal%}
+                            {% endfor %}
+                        </div>
+
+
+                       </div>
+
+                
+           {% else %}
+               <div>
+                        <h2>{{err}} - slug : {{slug}}</h2>
+               </div>
+           {% endif %}
+            </div>
+            {% ifnotequal title "Invitation" %}
+            <!--
+           <div style="overflow:hidden;width:100%;clear:both;">
+               <div style="text-align:right;">
+                   {% ifequal title "Most view" %}
+                   <a href="/fashion/most-viewed/" style="text-decoration:none; color:blue;font-weight:bold;font-size:13px;" target="_parent">see all</a>
+                   {% endifequal %}
+                    {% ifequal title "Most comment" %}
+                    <a href="/fashion/most-commented/" style="text-decoration:none; color:blue;font-weight:bold;font-size:13px;" target="_parent">see all</a>
+                   {% endifequal %}
+                    {% ifequal title "Most favourite" %}
+                    <a href="/fashion/most-favourite/" style="text-decoration:none; color:blue;font-weight:bold;font-size:13px;" target="_parent">see all</a>
+                   {% endifequal %}
+                    {% ifequal title "Last updated" %}
+                    <a href="/fashion/" style="text-decoration:none; color:blue;font-weight:bold;font-size:13px;" target="_parent">see all</a>
+                   {% endifequal %}
+
+               </div>
+           </div>-->
+           {% endifnotequal %}
+        </div>
+        </div>
+        </div>
+</div>
+
+<input type="hidden" id="store_click" value="{{click}}" />
+<script>
+<!--
+    $(document).ready(function(){
+        var click_value = $('#store_click').val()
+        if(click_value == 1){
+            $('#update').addClass('selected')
+            $('#line_upd').addClass('selected2')
+        }
+        else if(click_value == 2)
+        {
+            $('#viewd').addClass('selected')
+            $('#line_upd').removeClass('selected2')
+            $('#line_viewd').addClass('selected2')
+            $('#update').removeClass('selected')
+        }
+        else if(click_value == 3)
+        {
+            $('#commentd').addClass('selected')
+            $('#line_upd').removeClass('selected2')
+            $('#line_comm').addClass('selected2')
+            $('#update').removeClass('selected')
+           // $('#asd').attr('style','height:210px;')
+        }
+        else if(click_value == 4)
+        {
+            $('#favd').addClass('selected')
+            $('#line_upd').removeClass('selected2')
+            $('#line_favd').addClass('selected2')
+            $('#update').removeClass('selected')
+            //$('#asd').attr('style','height:210px;')
+        }
+        else if(click_value == 5)
+        {
+            $('#invite').addClass('selected')
+            $('#line_upd').removeClass('selected2')
+            $('#line_inv').addClass('selected2')
+            $('#update').removeClass('selected')
+            //$('#asd').attr('style','height:210px;')
+        }
+        $("#id_message").css('width','380px')
+        $("#id_message").css('height','50px')
+        $("#RSVP_To6").hide()
+        $("#RSVP_To7").hide()
+        $("#RSVP_To8").hide()
+        $("#RSVP_To9").hide()
+        $("#RSVP_To10").hide()
+        $("#id_invite").click(function(e){
+            e.preventDefault()
+            $("#id_invite").hide()
+            $("#id_field1").append(', &nbsp;')
+            $("#id_field2").append(', &nbsp;')
+            $("#id_field3").append(', &nbsp;')
+            $("#id_field4").append(', &nbsp;')
+            $("#id_field5").append(', &nbsp;')
+            $("#id_field1").append($('#id_email6'))
+            $("#id_field2").append($('#id_email7'))
+            $("#id_field3").append($('#id_email8'))
+            $("#id_field4").append($('#id_email9'))
+            $("#id_field5").append($('#id_email10'))
+            //$("#id_email6").insertAfter("#id_email")
+        })
+        $("#invite_link").hover(
+          function () {
+            $(this).attr('style','background-image: url("{{MEDIA_URL}}short_mouseover.png");background-color:transparent; background-repeat:no-repeat; font-weight:bold; border:none; width:70px; line-height:20px; color:white; height:21px;cursor:pointer;');
+          },
+          function () {
+            $(this).attr('style','background-image: url("{{MEDIA_URL}}shortest_button_merah.png");background-color:transparent; background-repeat:no-repeat; font-weight:bold; border:none;width:70px; color:white;line-height:20px; height:21px;cursor:pointer;');
+          }
+        );
+        $("#link1").hover(
+          function () {
+            $("#1").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#1").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#link2").hover(
+          function () {
+            $("#2").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+
+            $("#2").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#link3").hover(
+          function () {
+            $("#3").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#3").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+            $("#link4").hover(
+          function () {
+            $("#4").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#4").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+            $("#link5").hover(
+          function () {
+            $("#5").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#5").attr('src','{{MEDIA_URL}}paku.png');
+          }
+
+        );
+            $("#link6").hover(
+          function () {
+            $("#6").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#6").attr('src','{{MEDIA_URL}}paku.png');
+          }
+
+        );
+        $("#links1").hover(
+          function () {
+            $("#img1").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#img1").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#links2").hover(
+          function () {
+            $("#img2").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#img2").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#links3").hover(
+          function () {
+            $("#img3").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#img3").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#links4").hover(
+          function () {
+            $("#img4").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#img4").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#links5").hover(
+          function () {
+            $("#img5").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#img5").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#item1").hover(
+          function () {
+            $("#black1").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#black1").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#item2").hover(
+          function () {
+            $("#black2").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#black2").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#item3").hover(
+          function () {
+            $("#black3").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#black3").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#linkss1").hover(
+          function () {
+            $("#imgg1").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#imgg1").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#linkss2").hover(
+          function () {
+            $("#imgg2").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#imgg2").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#linkss3").hover(
+          function () {
+            $("#imgg3").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#imgg3").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+    })
+    -->
+</script>

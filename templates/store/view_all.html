@@ -1,0 +1,69 @@
+{% extends 'account_base.html' %}
+{% load humanize %}
+{% load thumbnail%}
+{% load i18n %}
+{% load custom %}
+{% block content_loged %}
+<table style="margin-left:-14px;margin-top:-60px;" width="700px" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding-bottom:30px;font-size:11px;">
+                <a href="/" style="text-decoration:none;">Home > </a><a href="/fashion/find-by-store" style="text-decoration:none;">Fashion Finder > </a>{{title}}
+            </td>
+        </tr>
+            <tr>
+                <td width="400px">
+                    <div class="title" style="padding:0px;">{{title|capfirst}}</div>
+                </td>
+                <td>
+                    {% if object.has_previous %}
+                       <a href="?page={{ object.previous_page_number }}" class="hyperlink"><< previous</a>
+                    {%else%}
+                            << previous
+                    {% endif %}
+                </td>
+                <td>
+                    {% if object.has_next %}
+                       <a href="?page={{ object.next_page_number }}" class="hyperlink">next >></a>
+                    {% else %}
+                            next >>
+                    {% endif %}
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    &nbsp;
+                </td>
+            </tr>
+           <tr>
+            <td colspan="3" width="100%">
+                {%  for object in object.object_list %}
+                <table  style="float:left;width:100px;">
+
+               <tr style="height:160px;">
+
+
+                   <td style="">
+                       {% ifequal slug "store" %}
+                            {% url view_stores store.slug as link %}
+                       {% else %}
+                            {% url detail_items item.id as link %}
+                       {%endifequal %}
+                       <div style="font-size:12px;margin-bottom:-8px;"><a href="{{link}}" style="color:#917B4C" class="hyperlink">
+                       {% ifequal slug "store" %}{{object.name|capfirst|truncatechar:20}}{%else%}{{object.item|capfirst|truncatechar:20}}{% endifequal %}</a>
+                       </div>
+                       <br />
+                       <a href="{{link}}">
+                             <div class="picture_border" style="height:85px;width:128px;background-image:url({% ifequal slug "store" %}{% thumbnail object.picture.name 85x128 %}{%else %}{% thumbnail object.picture1.name 85x128 %}{% endifequal %});"></div>
+                        </a>
+                       <br />
+                       <div>{% ifequal slug "item" %}{%ifnotequal object.price 0 %}{{object.currency|capfirst}} {{object.price|intcomma}}{%endifequal %}{%else%}{%trans 'on request'%}{%endifnotequal%}</div>
+                   </td>
+               </tr>
+              </table>
+              {% endfor %}
+             </td>
+           </tr>
+</table>
+{% endblock %}
+

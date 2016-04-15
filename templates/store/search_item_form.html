@@ -1,0 +1,34 @@
+{% load cache %}
+      {% cache 3600 search_item_form %}
+        <div id="search_item_form_box" class="search_form_box">
+          <form method="GET" action="{% url list_item %}" id="search_item_form">
+            <table>
+                 {% for field in form2 %}
+                <tr>
+                    <td width="22%">
+                        {{ field.label }} :
+                    </td>
+                    <td width="2%">
+
+                    </td>
+                    <td width="76%">
+                        {{ field }}
+                    </td>
+                </tr>
+                 {% endfor %}
+                 <tr>
+                     <td colspan="5" align="right">
+                           <input class="short_red_button" style="padding:1px 11px 3px;" type="submit" value="search" name="submit2" />
+                     </td>
+                 </tr>
+            </table>
+          </form>
+        </div>
+       {% endcache %}
+<script>
+    <!--
+    $(document).ready(function(){
+        $("#id_keywords").css('width','450px')
+    })
+    -->
+</script>

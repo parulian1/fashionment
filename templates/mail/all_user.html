@@ -1,0 +1,7 @@
+{% for data in users %}
+{% if data.first_name %}
+{{data.first_name}} {{data.last_name}}
+{% else %}
+{{data.name}}
+{%endif%}
+{%endfor %}

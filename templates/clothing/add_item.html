@@ -1,0 +1,66 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% block title %}
+Fashionment.com - {% trans 'Add Fashin item to store and online boutique' %}
+{% endblock %}
+{%block content_loged%}
+<div id="add_item_div">
+    <div><a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> <a href="{% url view_store %}" class="hyperlink">{%ifequal user.account_type 1 %}{% trans 'My Store' %}{%else%}{% trans 'My Portfolio' %}{%endifequal%} ></a> <a href="{% url line_add %}" class="hyperlink">{%trans 'Add Collection' %} ></a> {%trans 'Add Item' %}
+    </div>
+    <div>&nbsp;
+    </div>
+    <div>&nbsp;
+    </div>
+<form id="frm1" method="POST" enctype="multipart/form-data" >
+    <div class="title">
+        <h2>{%trans 'Add Item'%}</h2>
+    </div>
+    <div class="form_fields1">
+        {%for field in form%}
+            <div class="column2" id="row{{forloop.counter}}">
+                <div class="column1">
+                    {{field.label}}
+                </div>
+                {{field}}
+                {{field.errors}}
+                <div class="eg" id="eg{{forloop.counter}}">
+                    {{field.help_text}}
+                </div>
+            </div>
+        {%endfor%}
+        <div class="column2">
+            <div class="column1">
+            </div>
+            <input class="long_red_button" name="save" type="submit" value="Save And Preview"/>
+            <input class="medium_red_button" name="add" type="submit" value="Add Again"/>
+        </div>
+    </div>
+</form>
+</div>
+<script>
+    <!--
+    $(document).ready(function(){
+        $('#frm1').submitLoad()
+        
+        if(!$.mobile()){
+        $('#row7').hide()
+        $('#id_price').numeric();
+       $('#id_currency').insertBefore($('#id_price'))
+        all.show()
+        img.attr('style','display:;border:none;');
+        name1.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+        img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_description"), //reference to form field
+            maxlength: 800,
+            statusids: ["eg3"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        }
+    })
+    -->
+</script>
+
+{%endblock%}

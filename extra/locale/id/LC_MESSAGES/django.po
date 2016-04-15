@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-08-26 14:42+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: librecaptcha.py:133
+msgid "Reload Image"
+msgstr ""
+
+#: wizard.py:130
+msgid ""
+"We apologize, but your form has expired. Please continue filling out the "
+"form from this page."
+msgstr ""
+
+#: forms/fields.py:32
+msgid "Enter numbers only."
+msgstr ""
+
+#: forms/fields.py:33
+msgid "The area code does not exist."
+msgstr ""
+
+#: forms/fields.py:86
+msgid "Enter a list of values."
+msgstr ""
+
+#: forms/fields.py:87
+#, python-format
+msgid "Select a valid choice. %s is not one of the available choices."
+msgstr ""
+
+#: forms/fields.py:180
+msgid "Invalid entry, please try again."
+msgstr ""
+
+#: forms/fields.py:206
+msgid "Upload a proper SWF file."
+msgstr ""
+
+#: forms/forms.py:66
+msgid "Make Default"
+msgstr ""

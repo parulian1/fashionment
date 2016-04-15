@@ -1,0 +1,47 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% load pagination_tags %}
+{%load thumbnail%}
+{%block content_loged%}
+{%url tag_page as view_tags%}
+<div style="margin-top:-20px;">
+<h1>{%trans 'All tags related to '%}{{tag}}</h1>
+    <div class="form_fields">
+    {%if object_list%}
+    {% autopaginate object_list 10 %}
+    {% paginate %}
+    {%for tagviews in object_list%}
+        <a class="article_title" href="{{tagviews.get_absolute_url}}">
+            {{tagviews.title}}
+        </a>
+        <div class="article_date">
+            Posted on {{tagviews.pub_date.date|date:"d b Y" }} by {{tagviews.author}}
+        </div>
+        <div class="rows" >
+            <div style="float:left;">
+                {% if tagviews.article_image %}
+                    <a href="{{tagviews.get_absolute_url}}"><div class="article_small_image picture_border" style="background-image:url({% thumbnail tagviews.article_image.name 100x75 %});" ></div></a>
+                {% endif %}
+            </div>
+            <div style="margin-top:5px;">
+                {%if tagviews.excerpt_html%}
+                    {{tagviews.excerpt_html|safe|removetags:"p" }}
+                {%else%}
+                    {{tagviews.body_html|truncatewords_html:50|safe|removetags:"p"  }}
+                {%endif%}
+            </div>
+
+        </div>
+        <div id="hr_line">
+            <hr />
+        </div>
+    {%endfor%}
+    {%else%}
+    {%trans 'currently no tag view'%}
+    {%endif%}
+
+<a class="short_red_button" href="{{view_tags}}">{%trans 'back'%}</a>
+
+</div>
+</div>
+{%endblock%}

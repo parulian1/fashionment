@@ -1,0 +1,20 @@
+{% extends "account_base.html"%}
+{% load i18n %}
+{% load cache %}
+{% block title %}
+Fashionment.com - {{year}}
+{% endblock %}
+
+{%block content_loged %}
+{% cache 3600 fashionfact_year_new year %}
+<div class="fashion_fact_year_div">
+    {%url fashionfacts_archive_index as weblog_page%}
+        <h2>{%trans 'List All Entries Article By Month in' %} {{year}}</h2>
+           {%for date in date_list%}
+              <a class="article_month_image" href="{{ date|date:"M"|lower }}/"style="background-image:url('{{MEDIA_URL}}calender/{{ date|date:"F"|lower }}.jpg')"></a>
+           {%endfor%}
+    <div style="width:100%; float:left;"><a class="short_red_button" href="{{ weblog_page }}">{%trans 'Back'%}</a></div>
+
+</div>
+{% endcache %}
+{% endblock %}

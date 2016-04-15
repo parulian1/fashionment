@@ -1,0 +1,368 @@
+{% load humanize %}
+{% load i18n %}
+{% load thumbnail%}
+{% load custom %}
+{% block head %}
+    <link type="text/css" rel="stylesheet" href="{{MEDIA_URL}}css/style.css" />
+    <script type="text/javascript" src="{{ MEDIA_URL}}js/jquery.js"></script>
+    <style>
+
+
+.div2{
+    margin-top:-5px;
+}
+.div3{
+    border-top:2px solid #B5121C;
+}
+.menu_devider{
+    height:2px;
+}
+
+
+    </style>
+{% endblock %}
+<form method="POST" action="">
+        <div id="mostform_item"  class="rows2">
+            {% if not err %}
+                    <div class="rows2" >
+                       <div id="latest_item_icon">&nbsp;
+                                <img src="{{MEDIA_URL}}img/latest_items.png" alt="latest items icon" />
+                                <div class="mostform_see_all">
+                                    {% ifequal title "Last updated"%}
+                                    {% url view_most_all "items" "last-updated" "" as see_all_link2 %}
+                                   {%endifequal %}
+                                   {% ifequal title "Most viewed"%}
+                                    {% url view_most_all "items" "most-viewed" "" as see_all_link2 %}
+                                   {%endifequal %}
+                                   {% ifequal title "Most comment"%}
+                                    {% url view_most_all "items" "most-commented" "" as see_all_link2 %}
+                                   {%endifequal %}
+                                   {% ifequal title "Most favourite"%}
+                                    {% url view_most_all "items" "most-favourite" "" as see_all_link2 %}
+                                   {%endifequal %}
+                                        {% ifnotequal title 'Invitation'%}<a href="{{see_all_link2}}" class="see_all_link" target="_parent">see all items</a>{%endifnotequal%}
+                                </div>
+                       </div>
+                        <div class="most_menu">
+                            <div class="comment_user_report"  >
+                                   <div class="opacity" id="view2">
+                                       {% url view_most_item "most-viewed" as link %}
+                                    <a href="{{link}}" id="link_vw"> Most Viewed </a>
+                                   </div>
+                                   <div class="div2" id="line_view">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                            <div class="comment_user_report"  >
+                                   <div class="opacity selected" id="update2">
+                                       {% url view_most_item "last-updated" as link %}
+                                    <a href="{{link}}" id="link_up"> Last Updated </a>
+                                   </div>
+                                   <div class="div2 selected" id="line_update">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                            <div class="comment_user_report"  >
+                                   <div class="opacity" id="comment2">
+                                       {% url view_most_item "most-commented" as link %}
+                                    <a href="{{link}}" id="link_cm"> Most Commented </a>
+                                   </div>
+                                   <div class="div2" id="line_comment">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                            <div class="comment_user_report"  >
+                                   <div class="opacity" id="fav2">
+                                       {% url view_most_item "most-favourite" as link %}
+                                    <a href="{{link}}" id="link_fv"> Most Favourited </a>
+                                   </div>
+                                   <div class="div2" id="line_fav">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                            <div class="comment_user_report"  >
+                                   <div class="opacity" id="invite_tab">
+                                       {% url view_most_item "invite-friend" as link %}
+                                    <a href="{{link}}" target="{% if not user.id %}_parent{% endif %}"> Invite Your Friends </a>
+                                   </div>
+                                   <div class="div2" id="line_inv">&nbsp;
+                                   </div>
+                                   <div class="div3">&nbsp;
+                                   </div>
+                              </div>
+                       </div>
+                       {% ifnotequal title "Invitation" %}
+                       <div class="rows mostform_item_div">
+                               {%  for item in items|slice:":5" %}
+                                    <div class="mostform_item_col">
+                                          {%ifequal title "Last updated" %}
+                                           {% url detail_items item.id as item_link%}
+                                          {% else %}
+                                            {% url detail_items item.item.id as item_link %}
+                                          {%endifequal %}
+                                          <a id="item{{forloop.counter}}"href="{{item_link}}" target="_parent" class="hyperlink" >
+                                                   <div align="center" class="each_row" >
+                                                       <img class="no_border"  id="black{{forloop.counter}}"src="{{MEDIA_URL}}paku.png" alt="fashionment nail icon" />
+                                                   </div>
+                                                   <div class="mostform_last_upd" style="{% ifequal title "Last updated" %}{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 112x90 %});{% endif %}{%else%}{% if item.item.picture1 %}background-image:url({% thumbnail item.item.picture1.name 112x90 %});{% endif %}{%endifequal%}" >
+                                                       {% ifequal title "Last updated" %}
+                                                            {%ifequal item.availability 3%}
+                                                                <img src="{{MEDIA_URL}}img/sold_out_medium.png" style="border:none;width:112px;" alt="item sold out medium size" />
+                                                            {%endifequal%}
+                                                       {%else%}
+                                                                {%ifequal item.item.availability 3%}
+                                                                    <img src="{{MEDIA_URL}}img/sold_out_medium.png" style="border:none;width:112px;" alt="item sold out medium size" />
+                                                                {%endifequal%}
+                                                       {%endifequal%}
+                                                   </div>
+                                               {% ifequal title "Last updated" %}
+                                                {% url detail_items item.id as link %}
+                                                <div class="mostform_item_name1">
+                                                        {{item.item|capfirst|truncatechar:15}}
+                                                   </div>
+                                               {% else %}
+                                                {% url detail_items item.item.id as link %}
+                                                    <div class="mostform_item_name2">
+                                                        {{item.item.item|capfirst|truncatechar:15}}
+                                                   </div>
+                                               {% endifequal %}
+                                               <div class="mostform_link_more" >more</div><div class="mostform_link_arrow"> >></div>
+                                        </a>
+                                    </div>
+                                  {% ifnotequal forloop.counter 5 %}
+                                    <div class="mostform_div_divider">
+                                            &nbsp;
+                                    </div>
+                                  {% endifnotequal %}
+                               {% endfor %}
+                               {%  for item in ctr_item|slice:":5" %}
+                               <div id="background{{forloop.counter}}" class="mostform_item_col">
+                                   <a id="linkss{{forloop.counter}}" class="hyperlink no_border" >
+                                           <div align="center" class="each_row">
+                                               <img   id="imgg{{forloop.counter}}"src="{{MEDIA_URL}}paku.png" />
+                                           </div>
+                                           <img  src="{{MEDIA_URL}}/no_item_image.jpg" width="112px" height="92px" border="1" alt="no item picture" />
+                                   </a>
+                                       <br />
+                                </div>
+                                {%ifnotequal forloop.counter temp_flg%}
+                                    <div class="mostform_div_divider">
+                                            &nbsp;
+                                    </div>
+                                {%endifnotequal%}
+                                {% endfor %}
+                           {% else %}
+                           <div class="mostform_invitation_bg">
+                                   {% if not invitecomplete %}
+                                   <div class="invitation_div" >
+                                           {% for field in form %}
+                                               <div valign="top" id="{{field.label}}{{forloop.counter}}" class="rows2">
+                                                   <div class="invitation_title">
+                                                    {% ifequal forloop.counter 1 %}{{title}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {%endifequal %}
+                                                   </div>
+                                                   <div class="invitation_label">
+                                                       {% ifequal forloop.counter 1%}
+                                                        RSVP To  :
+                                                       {% else %}
+                                                       &nbsp;
+                                                       {% endifequal %}
+                                                       {% ifequal forloop.counter 11 %}
+                                                            {{field.label}} :
+                                                       {% endifequal %}
+                                                   </div>
+                                                   <div class="invitation_field_div">
+                                                       {% ifnotequal forloop.counter 11 %}
+                                                       <div class="invitation_field">
+                                                               {{field}}
+                                                               <div class="errorslist">{{field.errors}}</div>
+                                                           </div>
+                                                       <div id="id_field{{forloop.counter}}" class="invitation_more_div">
+                                                               {% ifequal forloop.counter 5 %}
+                                                               <a id="id_invite" href="#" class="hyperlink" target="_parent">{% trans 'invite more' %}</a>
+                                                               {% endifequal %}
+                                                           </div>
+                                                       {% else %}
+                                                       <div class="invitation_more">
+                                                               {{field}}{{field.errors}}{% ifequal forloop.counter 5%}
+                                                               <a id="id_invite" href="#" class="hyperlinks" target="_parent">{% trans 'invite more' %}</a>
+                                                               {% endifequal %}
+                                                           </div>
+                                                           <div id="id_field{{forloop.counter}}">
+
+                                                           </div>
+                                                       {% endifnotequal %}
+                                                   </div>
+                                               </div>
+                                           {% endfor %}
+                                       <div>
+                                           <div id="invitation_button_div">
+                                               <input id="invite_link" class="short_red_button invitation_button" type="submit" value="Invite" name="submit1" />
+                                           </div>
+                                       </div>
+                                    </div>
+                                   {% else %}
+                                   <div id="invite_complete_div">
+                                    <div id="invite_complete_div">
+                                           {{title}}
+                                     </div>
+                                    <div>
+                                           &nbsp;
+                                    </div>
+                                    {% blocktrans %}
+                                    <div class="invite_complete_msg">
+                                         You're a Star!  Thank you for inviting your friends.
+                                    </div>
+                                    <div class="invite_complete_msg">
+                                         Your invitation has been successfully sent.
+                                    </div>
+                                   {% endblocktrans %}
+                                  </div>
+                                  {% endif %}
+                               </div>
+                           </div>
+
+                       {% endifnotequal %}
+                            </div>
+             {% endif %}
+         </div>
+<input type="hidden" id="item_click" value="{{click}}" />
+</form>
+<script>
+<!--
+    $(document).ready(function(){
+        var title = '{{title}}'
+        var item_frame = $('#item_frame', parent.document.body);
+        /*$('.most_menu a').click(function(e){e.preventDefault();
+            $.ajax({
+                  url:$(this).attr('href'),
+                  type:'GET',
+                  dataType:'json',
+                  success:function(data){
+                  }})
+        })*/
+        if(title=='Invitation'){
+            item_frame.height('295px')
+        }else{
+            item_frame.height('261px')
+        }
+        var click_value = $('#item_click').val()
+        if(click_value == 1){
+            $('#update2').addClass('selected')
+            $('#line_update').addClass('selected2')
+            $('link_up').attr('style','color:black;')
+        }
+        else if(click_value == 2)
+        {
+            $('#view2').addClass('selected')
+            $('#line_update').removeClass('selected2')
+            $('#line_view').addClass('selected2')
+            $('#update2').removeClass('selected')
+            $('link_vw').attr('style','color:black;')
+        }
+        else if(click_value == 3)
+        {
+            $('#comment2').addClass('selected')
+            $('#line_update').removeClass('selected2')
+            $('#line_comment').addClass('selected2')
+            $('#update2').removeClass('selected')
+            $('link_cm').attr('style','color:black;')
+           // $('#asd').attr('style','height:210px;')
+        }
+        else if(click_value == 4)
+        {
+            $('#fav2').addClass('selected')
+            $('#line_update').removeClass('selected2')
+            $('#line_fav').addClass('selected2')
+            $('#update2').removeClass('selected')
+            $('link_fv').attr('style','color:black;')
+            //$('#asd').attr('style','height:210px;')
+        }
+        else if(click_value == 5)
+        {
+            $('#invite_tab').addClass('selected')
+            $('#line_upd').removeClass('selected2')
+            $('#line_inv').addClass('selected2')
+            $('#update2').removeClass('selected')
+            //$('#asd').attr('style','height:210px;')
+        }
+        $("#id_message").css('width','380px')
+        $("#id_message").css('height','50px')
+        $("#RSVP_To6").hide()
+        $("#RSVP_To7").hide()
+        $("#RSVP_To8").hide()
+        $("#RSVP_To9").hide()
+        $("#RSVP_To10").hide()
+        $("#id_invite").click(function(e){
+            e.preventDefault()
+            $("#id_invite").hide()
+            $("#id_field1").append(', &nbsp;')
+            $("#id_field2").append(', &nbsp;')
+            $("#id_field3").append(', &nbsp;')
+            $("#id_field4").append(', &nbsp;')
+            $("#id_field5").append(', &nbsp;')
+            $("#id_field1").append($('#id_email6'))
+            $("#id_field2").append($('#id_email7'))
+            $("#id_field3").append($('#id_email8'))
+            $("#id_field4").append($('#id_email9'))
+            $("#id_field5").append($('#id_email10'))
+            //$("#id_email6").insertAfter("#id_email")
+        })
+        $("#invite_link").hover(
+          function () {
+            $(this).attr('style','background-image: url("{{MEDIA_URL}}short_mouseover.png");background-color:transparent; background-repeat:no-repeat; font-weight:bold; border:none; width:70px; line-height:20px; color:white; height:21px;cursor:pointer;');
+          },
+          function () {
+            $(this).attr('style','background-image: url("{{MEDIA_URL}}shortest_button_merah.png");background-color:transparent; background-repeat:no-repeat; font-weight:bold; border:none;width:70px; color:white;line-height:20px; height:21px;cursor:pointer;');
+          }
+        );
+        $("#item1").hover(
+          function () {
+            $("#black1").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#black1").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#item2").hover(
+          function () {
+            $("#black2").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#black2").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#item3").hover(
+          function () {
+            $("#black3").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#black3").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#item4").hover(
+          function () {
+            $("#black4").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#black4").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        $("#item5").hover(
+          function () {
+            $("#black5").attr('src','{{MEDIA_URL}}paku_merah.png');
+          },
+          function () {
+            $("#black5").attr('src','{{MEDIA_URL}}paku.png');
+          }
+        );
+        
+    })
+    -->
+</script>

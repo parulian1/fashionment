@@ -1,0 +1,735 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% load thumbnail %}
+{% load custom%}
+{% load humanize %}
+{% load paginator %}
+{% load cache %}
+{% block title %}
+Fashionment.com -
+{%ifequal user.id view_store.user.id%}
+    {%trans 'My Store'%}
+{%else%}
+    {{view_store.name|capfirst}}
+{%endifequal%} {%trans 'Store'%}
+{% endblock %}
+{% block head %}
+<script type="text/javascript" src="/media/js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+	theme : "advanced",
+	mode : "textareas",
+	plugins : "bbcode,emotions",
+	theme_advanced_buttons1 : "bold,italic,underline,undo,redo,link,unlink,image,emotions,removeformat,cleanup",
+	theme_advanced_buttons2 : "",
+	theme_advanced_buttons3 : "",
+	theme_advanced_toolbar_location : "bottom",
+	theme_advanced_toolbar_align : "center",
+	theme_advanced_styles : "Code=codeStyle;Quote=quoteStyle",
+	content_css : "",
+	entity_encoding : "raw",
+	add_unload_trigger : false,
+	remove_linebreaks : false,
+    relative_urls : false
+});
+</script>
+{% endblock %}
+{%block content_loged%}
+{%if view_store%}
+
+<div id="store_view" class="form_fields" style="margin-top:-60px;width:100%;" >
+<form method="POST" action="" id="form1" >
+    
+    <div>
+        {%ifequal user.id view_store.user.id%}
+            <div >
+               <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} > </a>{% ifequal user.account_type 1%}{%trans 'My Store'%}{%else %}{% trans 'My Portfolio'%}{%endifequal%}
+
+            </div>
+        {%else%}
+            <div >
+              <a href="{% url view_profile view_store.user.id %}" class="hyperlink">{{view_store.user.username|truncatewords:":1"}} {% trans 'Profile' %} > </a>  {{view_store.name|capfirst}}
+            </div>
+        {%endifequal%}
+    </div>
+    
+    <div style="margin-top:30px;">
+        {%ifequal user.id view_store.user.id%}
+            <div class="title" style="margin-bottom:10px;">
+                {% ifequal user.account_type 1%}{%trans 'My Store'%}{%else %}{% trans 'My Portfolio'%}{%endifequal%}
+            </div>
+        {%else%}
+            <div class="title" >
+                {{view_store.name|capfirst}}
+            </div>
+        {%endifequal%}
+    </div>
+
+    <div>
+        <div style="width:98%;" class="rows">
+            {% cache cache_time have_store_part1 view_store.id owner_flag%}
+            <div style="overflow:hidden;">
+                <div style="float:left;width:81%;">
+                    &nbsp;
+                </div>
+                <div align="right" >
+                    {%ifequal user.id view_store.user.id%}
+                        <a class="link_decoration" href="{%url edit_store%}">{%trans 'Edit'%}</a> |
+                        <a class="link_decoration" href="{%url remove_store%}">{%trans 'Remove'%}</a>
+                    {% else %}
+                    {%if request.user.id%}
+                    {%url report view_store.id "store" as report%}
+
+                        {%if addict%}
+                            {%ifequal addict.store.id view_store.id%}
+
+                            <div class="title" style="font-size:12px;">{%trans 'Already Addicted'%}</div>
+                            {%else%}
+                            <a class="medium_red_button"href="{%url addicted view_store.user.id%}">{% ifequal view_store.user.account_type 1 %}{%trans 'Addict Store'%}{% else %}{%trans 'Addict Designer'%}{%endifequal%}</a>
+                            <a id="addict_clickme" href="#"  title='Addict Store|If you think this store is cool and you would like to get notified with their latest products, simply click "Addict Store" button. All notifications on their products and services will be sent to your "Fashionment Mail" (its on the left side menu!). List of your addictions will appear on your profile and related stores will get informed whenever someone is addicted to them. '><img style="margin:3px 0 0 0;border:none;cursor:help;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>
+                            {% endifequal %}
+                        {%else%}
+                            <a class="medium_red_button"href="{%url addicted view_store.user.id%}">{% ifequal view_store.user.account_type 1 %}{%trans 'Addict Store'%}{% else %}{%trans 'Addict Designer'%}{%endifequal%}</a>
+                            <a id="addict_clickme" href="#"  title='Addict Store|If you think this store is cool and you would like to get notified with their latest products, simply click "Addict Store" button. All notifications on their products and services will be sent to your "Fashionment Mail" (its on the left side menu!). List of your addictions will appear on your profile and related stores will get informed whenever someone is addicted to them. '><img style="margin:3px 0 0 0;border:none;cursor:help;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>
+                        {%endif%}
+                    {%else%}
+                    {%endif%}
+                    {% endifequal %}
+                </div>
+            </div>
+
+            <div class="rows2">
+                <div class="related_store_table_column1">
+                    {%if view_store.picture%}
+                        <div class="picture_border_view" style="{% if view_store.picture %}background-image:url({% thumbnail view_store.picture.name 200x150 %});{% endif %}"></div>
+                        
+                    {%else%}
+                        <div class="picture_border_view" style="background-image:url('{{MEDIA_URL}}no_store_picture.jpg');"></div>
+                    {%endif%}
+                    {% if request.user.id %}
+                    {%ifnotequal request.user.id view_store.user.id %}
+                        <div style="margin-left:120px;" ><a href="{{report}}" class="hyperlink"><div id="report_flag" style="float:left;"></div>{% trans 'Report user' %}</a></div>
+                    {%endifnotequal %}
+                    {% endif %}
+                </div>
+                <div style="float:left;width:63%;">
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {% ifequal view_store.user.account_type 1 %}{%trans 'Store Name'%}{% else %}{% trans 'Designer Name'  %}{%endifequal%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+                        <div class="related_store_table_column2">
+                            {{view_store.name|capfirst}}
+                        </div>
+                    </div>
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {%trans 'Address'%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+                        <div class="related_store_table_column2" id="ie_suck_warp">
+                            {% for line in view_store.location_list|default:"-" %}
+                                    {{line}}<br />
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {%trans 'Telephone'%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+                        <div class="related_store_table_column2">
+                            {% if view_store.phone_area %}{{view_store.phone_area}} - {%endif %}{{view_store.telephone|default:"-"}}
+                        </div>
+                    </div>
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {%trans 'Facsimile'%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+                        <div class="related_store_table_column2">
+                            {%if view_store.fax%}
+                            {{view_store.fax_code}} - 
+                            {%endif%}
+                            {{view_store.fax|default:"-"}}
+                        </div>
+                    </div>
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {%trans 'Handphone'%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+                        <div class="related_store_table_column2">
+                            {{view_store.handphone|default:"-"}}
+                        </div>
+                    </div>
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {%trans 'Company Website'%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+                        <div class="related_store_table_column2">
+                            {% if view_store.company_website %}
+                            <a href="{{view_store.company_website}}" class="hyperlink">
+                            {% endif%}
+                            {{view_store.company_website|default:"-"}}
+                            {% if view_store.company_website %}
+                            </a>
+                            {% endif%}
+                        </div>
+                    </div>
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {%trans 'Last Item Update'%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+                        <div class="related_store_table_column2">
+                            {{view_store.last_updated|date:"d F Y"}}
+                        </div>
+                    </div>
+                    {%endcache %}
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {%trans 'Viewed'%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+        
+                        <div class="related_store_table_column2">
+                            {%if view_store.view_set.all%}
+                            {%for viewed in view_store.view_set.all%}
+                                {{viewed.count}} {%trans 'Time'%}{{viewed.count|pluralize:"s"}}
+                            {%endfor%}
+                            {%else%}
+                                0 {%trans 'Time'%}
+                            {%endif%}
+                        </div>
+                    </div>
+                    <div class="detail_item_rows2">
+                        <div class="related_store_table_column1">
+                            {%trans 'Rating'%}
+                        </div>
+                        <div style="float:left;">
+                            :
+                        </div>
+
+                        <div class="related_store_table_column2">
+                            <div id="example-1">
+                                <input type="hidden" id="star_counter" value="{{rating.avg_rate}}" />
+                                <input type="hidden" id="star_id" name="star" />
+                                <input type="hidden" id="pub_date" value="{{flag}}" />
+                            </div>
+                            <div id="example-2">
+                                {{rating_counter.count|default:"0"}} {%trans 'Time'%}{{rating_counter.count|pluralize:"s"}}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% cache cache_time have_store_part2 view_store.id owner_flag%}
+            <div style="margin-bottom:10px;">
+                <div class="title">
+                    {% ifequal view_store.user.account_type 1 %}{%trans 'Store Story'%}{%else%}{%trans 'About my portfolio'%}{%endifequal%}
+                </div>
+                <div id="ie_suck_warp">
+                    {% for line in view_store.store_story_list|default:_("-") %}
+                           {{ line }}<br />
+                    {% endfor %}
+                </div>
+            </div>
+            <div style="margin-bottom:10px;">
+                <div class="title">
+                    {%trans 'Promotion Text'%}
+                </div>
+                <div id="ie_suck_warp">
+                    {{view_store.promotion_text|linebreaksbr|default:"-" }}
+                </div>
+            </div>
+            <div class="form_fields" style="width:670px;" >
+                <hr />
+            </div>
+        {% endcache %}
+        </div>
+    </div>
+
+{%ifequal user.id view_store.user.id %}
+<!--div>
+    <span>{%trans 'My Collection'%}</span>
+    <a href="{%url line_add %}">{%trans 'Add Collection'%}</a>
+</div!-->
+{%endifequal%}
+{% cache cache_time view_store view_store.id owner_flag %}
+{%ifequal user.id view_store.user.id%}
+ 
+ {%for lines in line_data|dictsortreversed:"id"|slice:":11"%}
+
+        <div class="rows" style="width:98%;">
+            <a href="" style="color:black; font-size:12px; font-weight:bold;display:block;" class="link_decoration" id="line_id{{forloop.counter}}"><img style=" border:none;" id="imgArrow{{forloop.counter}}" src="{{MEDIA_URL}}1.jpg" />{{lines.store|capfirst}}'s {{lines|capfirst}} Collection</a>
+            {%if lines.my_items%}
+            {%else%}
+                {%ifequal lines.store.user.id user.id%}
+                    <a class="short_red_button"  href="{%url item_add lines.id%}" style="clear:both;">{%trans 'Add Item'%}</a>
+                {%endifequal%}
+            {%endif%}
+            <!--span>
+                {%ifequal user.id view_store.user.id%}
+                    <a href="{%url edit_line lines.id%}">{%trans 'Edit'%}</a>
+                {% else %}
+                    &nbsp;
+                {% endifequal %}
+            </span!-->
+            {%if lines.my_items%}
+            <div class="rows" style="height:145px; ">
+            <div style="width:89%;float:left;">
+                {%for item in lines.my_items|slice:":10"%}
+                {%ifnotequal item.deleted 1%}
+                    <div class="view_picture">
+                        <div class="line_name">{{item.item|capfirst|truncatechar:15}}&nbsp;</div>
+                        <a href="{%url detail_items item.id %}">
+                            <div class="picture_border" style="height:75px;width:100px;background:no-repeat;background-position:center center;{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 100x75 %});{% endif %}">{%ifequal item.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_small.png" style="border:none;" />{%endifequal%}</div>
+                        </a>
+                        <div class="view_store_txt1">{%ifnotequal item.price 0 %}{{item.currency}} {{item.price|intcomma}}{%else%}{%trans 'on request'%}{%endifnotequal%}&nbsp;</div>
+                    {%ifequal user.id item.line.store.user.id%}
+                        <a class="link_decoration" href="{%url edit_item item.id%}">{%trans 'Edit'%}</a> |
+                        {%url remove_collection_or_item "item" item.id as remove %}
+                        <a class="link_decoration" href="{{remove}}">{%trans 'Remove'%}</a>
+                    {%endifequal%}
+                    </div>
+                    {%endifnotequal%}
+                {%endfor%}
+            </div>
+            <div style="margin-top:50px;" class="addicted_div">
+                <div>
+                    {%ifequal lines.store.user.id user.id%}
+                        <a class="short_red_button"  href="{%url item_add lines.id%}">{%trans 'Add Item'%}</a>
+                    {%endifequal%}
+                </div>
+                {%for item in lines.my_items%}
+                    {%ifequal forloop.counter 5%}
+                        <div align="right" style="margin-top:50px;">
+                            <a class="link_decoration" href="{%url view_item lines.id%}" >{%trans 'more'%} >></a>
+                        </div>
+                    {%endifequal%}
+                {%endfor%}
+            </div>
+
+        </div>
+        {%endif%}
+        </div>
+  <div class="form_fields" style="width:670px;">
+      <hr />
+  </div>
+
+{%endfor%}
+    <div class="pagination" style="width:97%;">
+        {%if view_store.line_set.all%}
+            <a class="view_store_collection" href="{%url view_line view_store.id%}">{%trans 'See All Collection'%} >></a>
+        {%endif%}
+    </div>
+    {%else%}
+    <div class="view_store_collection">
+        {%if line_dummy%}
+        <a href="{%url view_line line_dummy.0.store.id%}" class="hyperlink" style="color:#B5121C;">{{line_dummy.0.store.name|capfirst}}'s Collection</a>
+        {%else%}
+         {{view_store.name|capfirst}}'s Collection
+        {%endif%}
+    </div>
+    {%if line_dummy%}
+        {%for line in line_dummy|dictsortreversed:"id"|slice:":10"%}
+         {%if line.item_set.all%}
+            <div class="rows" style="float:left; width:120px;">
+        <!--div >
+            {%if line.item_set.all%}
+            
+            {%ifequal line.store.user.id user.id%}
+                <a href="{%url edit_line%}">{%trans 'Edit'%}</a>
+            {%else%}
+            {%endifequal%}
+            {%else%}
+            {%endif%}
+        </div!-->
+        
+        {%for item in line.item_set.all|dictsortreversed:"id"|slice:":1"%}
+            <div class="view_picture">
+                <div class="line_name">{{item.line|capfirst|truncatechar:16}}</div>
+                <a href="{%url view_item line.id%}">
+                    <div class="picture_border" style="height:75px;width:100px;{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 100x75 %});{% endif %}"></div>
+                </a>
+            </div>
+        
+        {%endfor%}
+        
+    </div>
+         {%endif%}
+        {%endfor%}
+
+        <div class="rows" style="clear:both;">
+  <div style="float:right;">
+      {%for line in line_dummy%}
+          {%ifequal forloop.counter 5%}
+            <a  class="link_decoration" href="{%url view_line line.store.id%}">
+                <div style="background-image:url({{MEDIA_URL}}img/click_here.jpg);width:138px;height:22px;margin-right:20px;"></div>
+            </a>
+          {%endifequal%}
+      {%endfor%}
+  </div>
+  </div>
+ 
+{%endif%}
+   
+  <div class="form_fields" style="width:670px;" >
+      <hr />
+  </div>
+    {%endifequal%}
+   <div class="rows">
+   <div class="title" style="padding:20px 0 0;">
+        {{view_store|capfirst}}'s {%trans 'Addicts'%}
+   </div>
+        
+        <div>
+            {%if my_addict%}
+            
+                {%for my_fan in my_addict%}
+                    {%for who_addict_me in my_fan.user.store_set.all%}
+                    {%ifequal who_addict_me.deleted 0%}
+                    <div class="who_addicted_me" >
+                        <div class="who_addicted_me_col1">
+                            {{who_addict_me.name|truncatechar:13}}
+                        </div>
+                        
+                        <div>
+                            <a href="{%url view_stores who_addict_me.slug%}"  ><div class="picture_border" style="height:75px;width:100px;background:no-repeat;background-position:center center;{% if who_addict_me.picture %}background-image:url({% thumbnail who_addict_me.picture.name 100x75 %});{% endif %}"></div></a>
+                        </div>                       
+                    </div>
+                    {%endifequal%}
+                    {%endfor%}
+
+                {%endfor%}
+                <div class="rows">
+                    <div style="margin-top:95px; text-align:right; ">
+                        {%for my_fan in my_addict%}
+                            {%ifequal forloop.counter 5%}
+                                <a class="link_decoration" href="{% url view_my_addict view_store.user.id %}">{%trans 'more'%} >></a>
+                            {%endifequal%}
+                        {%endfor%}
+                    </div>
+                </div>
+            {%else%}
+                {%blocktrans%}
+                    You are not an addiction just yet. Make people addict to you by increasing your collections and doing more promotions
+                {%endblocktrans%}
+            {%endif%}
+
+        </div>
+    </div>
+  <div class="form_fields" style="width:670px;" >
+      <hr />
+  </div>
+  <div>
+      &nbsp;
+  </div>
+  
+    {% if viewed_ad2 %}
+    <div style="width:550px;height:100px;" id="comment_ad" class="rows">
+       <a href="{{viewed_ad2.ad_website}}">
+            <img border="0" src="{{MEDIA_URL}}{{viewed_ad2.ad_image}}" height="100px" width="549px"/>
+       </a>
+    </div>
+    
+    <div>
+        &nbsp;
+    </div>
+    {%endif%}
+   {% if comment %}
+
+    <iframe id="comment_frame" src="{% url view_comment "store" view_store.id %}" frameborder="0" height="500px" width="679"   scrolling="no" ></iframe>
+   
+   
+    {% endif %}
+    {%if user.is_authenticated %}
+     <div style="background-color:#DDD5C2;width:679px;">
+       <div class="title" style="padding-top:5px;padding-bottom:5px;">
+           &nbsp;{% trans 'Leave your comment here' %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       </div>
+       {% if messages %}
+        <div style="margin-top:10px;font-weight:bold;">
+            {% for message in messages %}
+                    {{ message }}
+               {% endfor %}
+        </div>
+        {% endif %}
+       <form method="POST" action="">
+       <div class="rows" style="text-align:center;">
+            {%for commentfield in form%}
+                <div class="rows">
+                    {{commentfield}} {{commentfield.errors}}
+                </div>
+            {%endfor%}
+            <div style="padding-top:10px;padding-bottom:27px;padding-left:5px;">
+                <input class="short_red_button" type="submit" style="background-color:transparent;" value="Comment" />
+            </div>
+            <input type="hidden" value="{% ifequal title 'Last updated' %}{{data.designer.id}}{% else %}{{data.designer.store.id}}{% endifequal %}" name="designer_id"/>
+            <input type="hidden" value="{{object.page_num}}" name="page_num"/>
+        </div>
+      </form>
+   </div>
+    {% else %}
+    <div style="margin-top: 15px;">
+        <a href="{% url auth_login %}">{%trans 'Please Sign In To Comment'%}</a>
+    </div>
+    {%endif%}
+  {% endcache %}
+</form>
+
+   
+</div>
+<script>
+<!--
+
+
+var star_counter = $("#star_counter").val();
+var pub_date = $("#pub_date").val();
+$(document).ready(function(){
+    
+    
+    var line_id1 = $("#line_id1")
+    var line_id2 = $("#line_id2")
+    var line_id3 = $("#line_id3")
+    var line_id4 = $("#line_id4")
+    var line_id5 = $("#line_id5")
+    var line_id6 = $("#line_id6")
+    var imgArrow1 = $('#imgArrow1')
+    var imgArrow2 = $('#imgArrow2')
+    var imgArrow3 = $('#imgArrow3')
+    var imgArrow4 = $('#imgArrow4')
+    var imgArrow5 = $('#imgArrow5')
+    var imgArrow6 = $('#imgArrow6')
+    
+    $('#addict_clickme').cluetip({activation: 'click', sticky: true,closePosition: 'title', width: 350, splitTitle: '|'});
+    $('#bottom_ad').hide()
+    all.show()
+    if('{{user.id}}'=='{{ view_store.user.id}}'){
+        name1.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+        img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+        img.attr('style','display:;border:none;');
+    }
+	$('#id_comment').css('width','678px')
+    $('#id_comment').css('height','100px')
+    line_id4.siblings().hide();
+    line_id5.siblings().hide();
+    line_id6.siblings().hide();
+    imgArrow4.attr('src','{{MEDIA_URL}}2.jpg');
+    imgArrow5.attr('src','{{MEDIA_URL}}2.jpg');
+    imgArrow6.attr('src','{{MEDIA_URL}}2.jpg');
+    if(!$.mobile()){
+    line_id1.toggle(
+    function(){
+
+         $(this).siblings().slideToggle();
+         imgArrow1.attr('src','{{MEDIA_URL}}2.jpg');
+    }, function() {
+         $(this).siblings().slideToggle();
+         imgArrow1.attr('src','{{MEDIA_URL}}1.jpg');
+    });
+    line_id2.toggle(
+    function(){
+
+         $(this).siblings().slideToggle();
+         imgArrow2.attr('src','{{MEDIA_URL}}2.jpg');
+    }, function() {
+         $(this).siblings().slideToggle();
+         imgArrow2.attr('src','{{MEDIA_URL}}1.jpg');
+    });
+    line_id3.toggle(
+    function(){
+
+         $(this).siblings().slideToggle();
+         imgArrow3.attr('src','{{MEDIA_URL}}2.jpg');
+    }, function() {
+         $(this).siblings().slideToggle();
+         imgArrow3.attr('src','{{MEDIA_URL}}1.jpg');
+    });
+    line_id4.toggle(
+    function(){
+         $(this).siblings().slideToggle();
+         imgArrow4.attr('src','{{MEDIA_URL}}1.jpg');
+    }, function() {
+         $(this).siblings().slideToggle();
+         imgArrow4.attr('src','{{MEDIA_URL}}2.jpg');
+    });
+    line_id5.toggle(
+    function(){
+
+         $(this).siblings().slideToggle();
+         imgArrow5.attr('src','{{MEDIA_URL}}1.jpg');
+    }, function() {
+         $(this).siblings().slideToggle();
+         imgArrow5.attr('src','{{MEDIA_URL}}2.jpg');
+    });
+    line_id6.toggle(
+    function(){
+         $(this).siblings().slideToggle();
+         imgArrow6.attr('src','{{MEDIA_URL}}1.jpg');
+    }, function() {
+         $(this).siblings().slideToggle();
+         imgArrow6.attr('src','{{MEDIA_URL}}2.jpg');
+    });
+
+        $('#example-1').ratings(5).bind('ratingchanged', function(event, data) {
+        $('#example-rating-1').text(data.rating);
+
+      });
+    }
+    $('#form1').submitLoad()
+});
+
+jQuery.fn.ratings = function(stars, initialRating) {
+
+  //Save  the jQuery object for later use.
+  var elements = this;
+
+  //Go through each object in the selector and create a ratings control.
+  return this.each(function() {
+
+    //Make sure intialRating is set. if(!initialRating)
+    if(!star_counter){
+
+        initialRating = 0;
+
+    }
+      else{
+            initialRating = star_counter;
+        }
+
+    //Save the current element for later use.
+    var containerElement = this;
+
+    //grab the jQuery object for the current container div
+    var container = jQuery(this);
+
+    //Create an array of stars so they can be referenced again.
+    var starsCollection = Array();
+
+    //Save the initial rating.
+    containerElement.rating = initialRating;
+
+    //Set the container div's overflow to auto.  This ensure it will grow to
+    //hold all of its children.
+    container.css('overflow', 'auto');
+
+    //create each star
+    for(var starIdx = 0; starIdx < stars; starIdx++) {
+
+      //Create a div to hold the star.
+      var starElement = document.createElement('div');
+
+      //Get a jQuery object for this star.
+      var star = jQuery(starElement);
+
+      //Store the rating that represents this star.
+      starElement.rating = starIdx + 1;
+
+      //Add the style.
+      star.addClass('jquery-ratings-star');
+
+      //Add the full css class if the star is beneath the initial rating.
+      if(starIdx < initialRating) {
+        star.addClass('jquery-ratings-full');
+      }
+
+      //add the star to the container
+      container.append(star);
+      starsCollection.push(star);
+    if(pub_date==0)
+    {
+    $('#example-1').click(function(e){
+      
+        $(this).replaceWith('Loading <img src="{{MEDIA_URL}}wait.gif"/>')
+    })
+       //hook up the click event
+      star.click(function(e) {
+          e.preventDefault()
+        //When clicked, fire the 'ratingchanged' event handler.  Pass the rating through as the data argument.
+        elements.triggerHandler("ratingchanged", {rating: this.rating});
+        containerElement.rating = this.rating;
+        $("#star_id").val(this.rating);
+         $('#form1').attr('action','{%url rate_store view_store.id%}');
+         $('#form1').submit();
+      });
+      star.mouseenter(function() {
+        //Highlight selected stars.
+        for(var index = 0; index < this.rating; index++) {
+          starsCollection[index].addClass('jquery-ratings-full');
+        }
+        //Unhighlight unselected stars.
+        for(var index = this.rating; index < stars; index++) {
+          starsCollection[index].removeClass('jquery-ratings-full');
+        }
+      });
+
+      container.mouseleave(function() {
+        //Highlight selected stars.
+        for(var index = 0; index < containerElement.rating; index++) {
+          starsCollection[index].addClass('jquery-ratings-full');
+        }
+        //Unhighlight unselected stars.
+        for(var index = containerElement.rating; index < stars ; index++) {
+          starsCollection[index].removeClass('jquery-ratings-full');
+        }
+      });
+    }
+    }
+  });
+};
+
+-->
+</script>
+{%else%}
+{% cache 3600 dont_have_store user.id%}
+<div id="store_view" class="form_fields" style="margin-top:-60px;width:100%;" >
+    <div style="font-size:11px;">
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} > </a> {%trans 'My Store'%}
+    </div>
+    <div style="margin-top:30px;">
+        <div class="title" >
+            {% ifequal user.account_type 1%}{%trans 'My Store'%}{%else%}{%trans 'My Portfoliio'%}{%endifequal%}
+        </div>
+        <div style="margin-top: 10px; margin-bottom: 45px;">
+            <a class="short_red_button"  href="{% url add_store%}">{%trans 'Add Store'%}</a>
+            <a id="mystore_clickme" href="#"  title='Add Store|By adding a store you get a chance to own your boutique now. Build up your product portfolio by clicking "Add Collection" button. This allows you to put as many products, segmented in different collections, as you want. With more collections and items you add, more people will get interested in products you offer.'><img style="margin:3px 0 0 3px;cursor:help;border:none;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>
+        </div>
+    </div>
+</div>
+{% endcache %}
+<SCRIPT>
+<!--
+    $(document).ready(function(){
+        $('#mystore_clickme').cluetip({activation: 'click', sticky: true,closePosition: 'title', width: 350, splitTitle: '|'});
+        
+
+   })
+-->
+</SCRIPT>
+{%endif%}
+{%endblock%}
+
+
+
+
+ 

@@ -1,0 +1,30 @@
+{%extends "base.html"%}
+{%load i18n%}
+{%block content%}
+{% block title %}
+Fashionment.com - {% trans 'Add Profile' %}
+{% endblock %}
+<div>
+<form method="POST"  enctype="multipart/form-data" >
+    <div class="title">
+       <h3>{%trans 'Add Profile'%}</h3>
+    </div>
+    <div class="form_fields1">
+        {%for field in formprofile%}
+        <div class="column2">
+            <div class="column1">
+                {{field.label}}
+            </div>
+            {{field}}
+            {{field.errors}}
+        </div>
+        {%endfor%}
+        <div class="column2">
+            <div class="column1">
+            </div>
+        <input class="short_red_button" type="submit" value="Submit"/>
+        </div>
+    </div>
+</form>
+</div>
+{%endblock%}

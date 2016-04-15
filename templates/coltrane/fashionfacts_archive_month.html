@@ -1,0 +1,51 @@
+{% extends "account_base.html" %}
+{%load i18n%}
+{% load thumbnail%}
+{% load pagination_tags %}
+{% load cache %}
+{% block title %}
+Fashionment.com - Article in {{ month|date:"F, Y" }}
+{% endblock %}
+
+{% block content_loged %}
+{% cache 3600 fashionfact_month_new month.year %}
+{%url fashionfacts_archive_year month.year as weblog_view_month%}
+
+<div style="margin-top:-20px;">
+<h1>{%trans 'All article in' %} {{ month|date:"F - Y" }}</h1>
+<div id="article_view" class="form_fields">
+    {%if entry_list_list%}
+    {% autopaginate entry_list_list 10 %}
+    {% paginate %}
+    {%endif%}
+    {%for entry in entry_list_list%}
+        <a class="article_title" href="{{entry.get_absolute_url}}">
+            {{entry.title}}
+        </a>
+        <div class="article_date">
+            Posted on {{entry.pub_date.date|date:"d b Y" }} by {{entry.author}}
+        </div>
+        <div class="rows" >
+            <div style="float:left;">
+                {% if entry.article_image %}
+                    <a href="{{entry.get_absolute_url}}"><div class="article_small_image picture_border" style="background-image:url({% thumbnail entry.article_image.name 100x75 %});" ></div></a>
+                {% endif %}
+            </div>
+            <div style="margin-top:5px;">
+                {%if entry.excerpt_html%}
+                    {{entry.excerpt_html|safe|removetags:"p" }}
+                {%else%}
+                    {{entry.body_html|truncatewords_html:50|safe|removetags:"p"  }}
+                {%endif%}
+            </div>
+
+        </div>
+        <div id="hr_line">
+            <hr />
+        </div>
+    {%endfor%}
+ <a class="short_red_button" href="{{weblog_view_month}}">{%trans 'Back'%}</a>
+</div>
+</div>
+{%endcache %}
+{% endblock %}

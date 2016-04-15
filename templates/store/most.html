@@ -1,0 +1,163 @@
+{% extends 'account_base.html' %}
+{% load humanize %}
+{% load thumbnail%}
+{% load i18n %}
+{% load custom %}
+{% load cache %}
+{% block content_loged %}
+<form method="POST">
+<div id="most_div">
+    {% if not err %}
+
+            <div id="most_bread_crump">
+                <a href="/" class="hyperlink">Home</a> > {{title}}
+            </div>
+            <div class="rows2">
+                <div id="most_title" class="title">
+                    {{title}}
+                </div>
+                <div id="most_previous">
+                    {% if stores.has_previous %}
+                       <a href="?page={{ stores.previous_page_number }}" class="hyperlink"><< previous</a>
+                    {%else%}
+                        {% if items.has_previous %}
+                           <a href="?page={{ items.previous_page_number }}" class="hyperlink"><< previous</a>
+                        {% else %}
+                            << previous
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div id="most_next">
+                    {% if stores.has_next %}
+                       <a href="?page={{ stores.next_page_number }}" class="hyperlink">next >></a>
+                    {%else%}
+                        {% if items.has_next %}
+                           <a href="?page={{ items.next_page_number }}" class="hyperlink">next >></a>
+                        {% else %}
+                            next >>
+                        {% endif %}
+                    {% endif %}
+                
+                </div>
+            </div>
+                <div>
+                    &nbsp;
+                </div>
+            {% if stores.object_list %}
+             <!--<div style="padding-bottom:10px;" class="rows2"><img src="{{MEDIA_URL}}img/latest_store.png" /></div>-->
+                 <div class="rows2">
+                {%  for store in stores.object_list %}
+                <div class="most_store_div">
+                       {% ifequal title "Last updated" %}
+                        {% url view_stores store.slug as link %}
+                       {% else %}
+                        {% url view_stores store.store.slug as link %}
+                       {% endifequal %}
+                       <div class="most_store_name"><a href="{{link}}" class="hyperlink reply_inbox_user_font">
+                       {% if store.store %}{{store.store|capfirst|truncatechar:20}}{%else%}{{store.name|capfirst|truncatechar:20}}{% endif %}</a>
+                       </div>
+                       <br />
+                       <a href="{{link}}">
+                           {% ifequal title 'Last updated'%}
+                             
+                             <div class="picture_border most_store_pic" style="{% if store.picture %}background-image:url({% thumbnail store.picture.name 85x128 %});{% endif %}"></div>
+                           {% else %}
+                             
+                             <div class="picture_border most_store_pic" style="{% if store.store.picture %}background-image:url({% thumbnail store.store.picture.name 85x128 %});{% endif %}"></div>
+                           {% endifequal %}
+                        </a>
+                       <br />
+                       <div>
+                           {%if msg%}
+                           {{msg|capfirst}}
+                           {% ifnotequal title "Last Updated" %}
+                            {{store.count}}
+                            {% trans 'times' %}
+                           {% else %}
+                            {{store.last_updated|naturalday}}
+                            {% trans 'at' %}
+                            {{store.last_updated|date:"H:i"}}
+                           {% endifnotequal %}
+                           {%else%}
+                                <input type="hidden" id="star_counter" class="star_counter_class" value="{{store.avg_rate}}" />
+                           {%endif%}
+                       </div>
+                </div>
+              {% endfor %}
+             </div>
+            {%endif %}
+          {% if items.object_list %}
+          <!--<div style="padding-bottom:10px;" class="rows2"><img src="{{MEDIA_URL}}img/latest_store.png" /></div>-->
+           <div class="rows2">
+               {%  for item in items.object_list %}
+               <div class="most_item_div">
+                     {% ifequal title "Last Updated" %}
+                        {% url detail_items item.id as link %}
+                       {% else %}
+                        {% url detail_items item.item.id as link %}
+                       {% endifequal %}
+                       <div class="most_item_name reply_inbox_user_font"><a href="{{link}}" class="hyperlink reply_inbox_user_font">{% ifnotequal title "Last Updated" %}{{item.item.item|truncatechar:16|default:_("No Name")}}{%else%}{{item.item|truncatechar:16|default:_("No Name")}}{%endifnotequal%}</a></div>
+                       <br />
+                       <a href="{{link}}">
+                           {% ifequal title 'Last Updated'%}
+                             <div class="picture_border most_item_pic" style="{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 85x128 %});{% endif %}">{%ifequal item.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_small.png" style="border:none;" alt="item sold out" />{%endifequal%}</div>
+                             
+                           {% else %}
+                             <div class="picture_border most_item_pic" style="{% if item.item.picture1 %}background-image:url({% thumbnail item.item.picture1.name 85x128 %});{% endif %}">{%ifequal item.item.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_small.png" style="border:none;" alt="item sold out" />{%endifequal%}</div>
+                             
+                           {% endifequal %}
+                        </a>
+                       <br />
+                       <div>
+                           {%if msg%}
+                           {{msg}}
+                           {% ifnotequal title "Last Updated" %}
+                            {{item.count}}
+                            {% trans 'times' %}
+                           {% else %}
+                            {{item.last_updated|naturalday}}
+                            {% trans 'at' %}
+                            {{item.last_updated|date:"H:i"}}
+                           {% endifnotequal %}
+                           {%else%}
+                                <input type="hidden" id="star_counter" class="star_counter_class" value="{{item.avg_rate}}" />
+                           {%endif%}
+                       </div>
+               </div>
+               {% endfor %}
+             </div>
+          {%endif %}
+
+   {% else %}
+    <tr>
+        <td>
+            <h2>{{err}}</h2>
+        </td>
+    </tr>
+   {% endif %}
+</div>
+</form>
+<script>
+<!--
+$(document).ready(function(){
+  $('.star_counter_class').each(function(i){
+    var stars=$([]) //empty jquery
+    var input_value=$(this).val()
+    for(var i=0;i<input_value;i++){
+      $('<img src="{{MEDIA_URL}}full-star.png" alt="fashionment full star" />').insertBefore($(this))
+
+    }
+          if(input_value!=5)
+          {
+              for(var a=input_value;a<5;a++){
+                  $('<img src="{{MEDIA_URL}}empty-star.png" alt="fashionment empty star" />').insertBefore($(this))
+
+              }
+
+          }
+  })
+});
+-->
+</script>
+{% endblock %}
+

@@ -1,0 +1,40 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% load thumbnail %}
+{% load custom%}
+{% load humanize %}
+{% block title %}
+{% load cache %}
+Fashionment.com -
+    {%trans 'Invite Friends Completed'%}
+{% endblock %}
+{%block content_loged%}
+{% cache 3600 invitation_complete %}
+<div id="invite_complete_div">
+                <div id="invite_complete_title">
+                      {{title}}
+                 </div>
+                <div>
+                       &nbsp;
+                </div>
+                {% blocktrans %}
+                <div class="rows invitation_div2">
+                     You're a Star!  Thank you for inviting your friends.<br/>
+                     Your invitation has been successfully sent.
+                </div>
+                     
+               {% endblocktrans %}
+</div>
+{% endcache %}
+<script>
+ <!--
+   $(document).ready(function(){
+    var invite=$('#invite2')
+    var img = $('#invite_img')
+    invite.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+    img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+    img.attr('style','display:;border:none;');
+  })
+ -->
+</script>
+{% endblock%}

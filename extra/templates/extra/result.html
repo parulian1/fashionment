@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+  {{ block.super }} {% trans 'Complete' %}
+{% endblock%}
+{% block content %}
+  <h2 style="font-size:18px;">{% block heading %}{{ title }}{% endblock %}</h2>
+  <p>{% block description %}{{ description }}{% endblock %}</p>
+  {% if links %}
+    <div class="links">
+      {% for link in links %}
+        <a class="result_link" href="{{ link.url }}">{{ link.text }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

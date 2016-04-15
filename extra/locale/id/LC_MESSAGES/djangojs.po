@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Django\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-06-24 16:18+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: media/admin/js/SelectFilter2.js:33
+#, perl-format
+msgid "Available %s"
+msgstr ""
+
+#: media/admin/js/SelectFilter2.js:41
+msgid "Choose all"
+msgstr ""
+
+#: media/admin/js/SelectFilter2.js:46
+msgid "Add"
+msgstr ""
+
+#: media/admin/js/SelectFilter2.js:48
+msgid "Remove"
+msgstr ""
+
+#: media/admin/js/SelectFilter2.js:53
+#, perl-format
+msgid "Chosen %s"
+msgstr ""
+
+#: media/admin/js/SelectFilter2.js:54
+msgid "Select your choice(s) and click "
+msgstr ""
+
+#: media/admin/js/SelectFilter2.js:59
+msgid "Clear all"
+msgstr ""
+
+#: media/admin/js/calendar.js:24 media/admin/js/dateparse.js:32
+msgid ""
+"January February March April May June July August September October November "
+"December"
+msgstr ""
+
+#: media/admin/js/calendar.js:25
+msgid "S M T W T F S"
+msgstr ""
+
+#: media/admin/js/dateparse.js:33
+msgid "Sunday Monday Tuesday Wednesday Thursday Friday Saturday"
+msgstr ""
+
+#: media/admin/js/admin/CollapsedFieldsets.js:34
+#: media/admin/js/admin/CollapsedFieldsets.js:72
+msgid "Show"
+msgstr ""
+
+#: media/admin/js/admin/CollapsedFieldsets.js:63
+msgid "Hide"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:47
+#: media/admin/js/admin/DateTimeShortcuts.js:81
+msgid "Now"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:51
+msgid "Clock"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:78
+msgid "Choose a time"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:82
+msgid "Midnight"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:83
+msgid "6 a.m."
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:84
+msgid "Noon"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:88
+#: media/admin/js/admin/DateTimeShortcuts.js:183
+msgid "Cancel"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:128
+#: media/admin/js/admin/DateTimeShortcuts.js:177
+msgid "Today"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:132
+msgid "Calendar"
+msgstr ""
+
+#: media/admin/js/admin/DateTimeShortcuts.js:175
+msgid "Yesterday"
+msgstr "Kemarin"
+
+#: media/admin/js/admin/DateTimeShortcuts.js:179
+msgid "Tomorrow"
+msgstr ""
+
+#: media/js/custom.js:733
+msgid "moomoo"
+msgstr "woofwoof"
+
+#: media/js/custom.js:785
+#, perl-format
+msgid "Enter a number between 1 and %s to jump to that page"
+msgstr ""
+"Masukan sebuah nomor antara 1 dan %s untuk langsung menuju ke halaman "
+"tersebut"
+
+msgid "furkfoff"
+msgstr "3etrafurkr"

@@ -1,0 +1,284 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load thumbnail%}
+{%load custom%}
+{% load humanize %}
+{% load paginator%}
+{% block title %}
+Fashionment.com -
+{% trans 'Remove Your Fashion Collection' %}
+{% endblock %}
+{%block head%}
+
+{%endblock%}
+{%block content_loged%}
+<div id="store_view" class="form_fields row2 big_minus_top_margin">
+    <div>
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> <a href="{% url view_store %}" class="hyperlink">{% trans 'My Store' %} ></a>
+        {{store.name|capfirst}}
+    </div>
+    <div>&nbsp;
+    </div>
+    <div>&nbsp;
+    </div>
+    {% if not item %}
+        <div class="pagination">
+            {%ifequal paginator.num_pages 1%}
+            {%else%}
+                {% paginator 2 %}
+            {%endifequal%}
+        </div>
+        <form method="POST" action="{% url view_remove_line %}">
+           {% if page_obj.object_list %}
+            {%for lines in page_obj.object_list%}
+            <div class="rows2 small_bottom_space">
+                {%ifequal forloop.counter 1%}
+                <div class="remove_div">
+                <div class="title">
+                    <h3 class="each_row">
+                        {{lines.store|capfirst}}'s Collection
+                    </h3>
+                </div>
+                <div class="each_row">
+                    <input type="checkbox" class="check_all">{%trans 'Check All' %}
+                </div>
+                    {%ifequal lines.store.user.id user.id%}
+                    &nbsp;
+                    {%endifequal%}
+               </div>
+                <div class="remove_">
+                    <input type="submit" class="short_red_button" value="remove">
+               </div>
+                {%endifequal%}
+            </div>
+
+                <div class="rows2">
+                        <div>
+                            <input type="checkbox" class="line" name="line_checked" value="{{lines.pk}}">
+                            <a href="" class="link_decoration" style="color:black; font-size:12px; font-weight:bold;" id="line_id{{forloop.counter}}"><img style=" border:none;" id="imgArrow{{forloop.counter}}" src="{{MEDIA_URL}}1.jpg" alt="fashionment navigating icon" />{{lines.store|capfirst}}'s {{lines}} Collection</a>
+                        </div>
+                        {%if lines.my_items%}
+                        {%else%}
+                        <div style="width:87%;float:left;">
+
+                            &nbsp;
+                        </div>
+                        <div>
+                            &nbsp;
+                        </div>
+
+                        {%endif%}
+                        {%if lines.my_items%}
+                        <div class="rows" style="">
+                            <div style="float:left;">
+                                {%for item in lines.my_items%}
+                                    <div class="view_picture">
+                                        <div style="text-align:left; color:#917B4C; font-size:12px; margin-bottom:5px;">{{item.item|capfirst|truncatechar:16}}</div>
+                                        <a href="{%url detail_items item.id %}?page={{forloop.revcounter}}">
+                                            <div class="picture_border" style="height:75px;width:100px;background:no-repeat;background-position:center center;{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 100x75 %});{% endif %}">{%ifequal item.availability 3%}
+                                                <img src="{{MEDIA_URL}}/img/sold_out_small.png" style="border:none;" alt="fashionment sold out " />{%endifequal%}
+                                            </div>
+                                        </a>
+                                    </div>
+                                {%endfor%}
+                            </div>
+                            <input type="hidden" value="{{lines.id}}" id="lines_items{{forloop.counter}}" />
+                        </div>
+                        {%endif%}
+                </div>
+                    <div class="form_fields">
+                        <hr />
+                    </div>
+                {%endfor%}
+            <div class="rows2 small_bottom_space">
+                <div class="remove_div">
+                <div class="title">
+
+                    &nbsp;
+                </div>
+                    <div class="each_row">
+                    <input type="checkbox" class="check_all">{%trans 'Check All' %}
+                </div>
+                    {%ifequal lines.store.user.id user.id%}
+                    &nbsp;
+                    {%endifequal%}
+               </div>
+                <div class="remove_div2">
+                    <input type="submit" class="short_red_button" value="remove">
+               </div>
+            </div>
+
+        {%for lines in view_line%}
+           <div>
+                {%ifequal forloop.counter 1%}
+                    {%ifequal lines.store.user.id user.id%}
+                    &nbsp;
+                    {%endifequal%}
+                {%endifequal%}
+            </div>
+        {%endfor%}
+        {% else %}
+        <div>
+            {% trans 'You doesnt have any line' %}
+        </div>
+        {% endif %}
+        </form>
+    {% else %}
+    <div class="delete_div">
+        {% blocktrans %}
+         Are you sure you want to delete these following items:
+        {%endblocktrans %}
+   </div>
+    <div class="delete_item_div">
+         {{item.item|capfirst}}<br/>
+         <div class="picture_border addict_pic" style="{% if items.picture1 %}background-image:url({% thumbnail items.picture1.name 100x75 %});{% endif %}">{%ifequal items.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_small.png" class="no_border" />{%endifequal%}</div>
+   </div>
+    <div class="rows2">
+        <div id="yes_delete_div" class="comment_user_report"><a href="{% url delete_item item.id %}" class="short_red_button">Yes</a></div>
+        <div id="no_delete_div"><a href="{% url view_store %}" class="short_red_button">No</a></div>
+    </div>
+    {% endif %}
+</div>
+<script>
+<!-- //script is commented to prevent google crawl, but script still works
+$(document).ready(function(){
+    //Put all script inside 'document).ready' to prevent IE errors
+    var lines_items1 = $("#lines_items1").val()
+    var lines_items2 = $("#lines_items2").val()
+    var lines_items3 = $("#lines_items3").val()
+    var lines_items4 = $("#lines_items4").val()
+    var lines_items5 = $("#lines_items5").val()
+    var line_id1 = $("#line_id1")
+    var line_id2 = $("#line_id2")
+    var line_id3 = $("#line_id3")
+    var line_id4 = $("#line_id4")
+    var line_id5 = $("#line_id5")
+    var line_id6 = $("#line_id6")
+    var line_id7 = $("#line_id7")
+    var imgArrow1 = $('#imgArrow1')
+    var imgArrow2 = $('#imgArrow2')
+    var imgArrow3 = $('#imgArrow3')
+    var imgArrow4 = $('#imgArrow4')
+    var imgArrow5 = $('#imgArrow5')
+    var imgArrow6 = $('#imgArrow6')
+    var imgArrow7 = $('#imgArrow7')
+    line_id5.parent().siblings().hide();
+    line_id6.parent().siblings().hide();
+    line_id7.parent().siblings().hide();
+    imgArrow5.attr('src','{{MEDIA_URL}}2.jpg');
+    imgArrow6.attr('src','{{MEDIA_URL}}2.jpg');
+    imgArrow7.attr('src','{{MEDIA_URL}}2.jpg');
+    all.show()
+    img.attr('style','display:;border:none;');
+    name1.attr('style',' color:#B5121C; font-size:12px; font-weight:bold; margin-left:0px')
+    img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+        if(lines_items1==id_line_items1){
+            $('#item1 .rows').show()
+        }
+        if(lines_items2==id_line_items2){
+            $('#item2 .rows').show()
+        }
+        if(lines_items3==id_line_items3){
+            $('#item3 .rows').show()
+        }
+        if(lines_items4==id_line_items4){
+            $('#item4 .rows').show()
+        }
+        if(lines_items5==id_line_items5){
+            $('#item5 .rows').show()
+        }
+if(!$.mobile()){
+line_id1.toggle(
+function(){
+
+     $(this).parent().siblings().slideToggle();
+     imgArrow1.attr('src','{{MEDIA_URL}}2.jpg');
+}, function() {
+     $(this).parent().siblings().slideToggle();
+     imgArrow1.attr('src','{{MEDIA_URL}}1.jpg');
+});
+line_id2.toggle(
+function(){
+
+     $(this).parent().siblings().slideToggle();
+     imgArrow2.attr('src','{{MEDIA_URL}}2.jpg');
+}, function() {
+     $(this).parent().siblings().slideToggle();
+     imgArrow2.attr('src','{{MEDIA_URL}}1.jpg');
+});
+line_id3.toggle(
+function(){
+
+     $(this).parent().siblings().slideToggle();
+     imgArrow3.attr('src','{{MEDIA_URL}}2.jpg');
+}, function() {
+     $(this).parent().siblings().slideToggle();
+     imgArrow3.attr('src','{{MEDIA_URL}}1.jpg');
+});
+line_id4.toggle(
+function(){
+
+     $(this).parent().siblings().slideToggle();
+     imgArrow4.attr('src','{{MEDIA_URL}}2.jpg');
+}, function() { // same here
+     $(this).parent().siblings().slideToggle();
+     imgArrow4.attr('src','{{MEDIA_URL}}1.jpg');
+});
+line_id5.toggle(
+function(){
+
+     $(this).parent().siblings().slideToggle();
+     imgArrow5.attr('src','{{MEDIA_URL}}1.jpg');
+}, function() {
+     $(this).parent().siblings().slideToggle();
+     imgArrow5.attr('src','{{MEDIA_URL}}2.jpg');
+});
+line_id6.toggle(
+function(){
+     $(this).parent().siblings().slideToggle();
+     imgArrow6.attr('src','{{MEDIA_URL}}1.jpg');
+}, function() {
+     $(this).parent().siblings().slideToggle();
+     imgArrow6.attr('src','{{MEDIA_URL}}2.jpg');
+});
+line_id7.toggle(
+function(){
+     $(this).parent().siblings().slideToggle();
+     imgArrow7.attr('src','{{MEDIA_URL}}1.jpg');
+}, function() {
+     $(this).parent().siblings().slideToggle();
+     imgArrow7.attr('src','{{MEDIA_URL}}2.jpg');
+});
+$("input[name=line_checked]").click(function(){
+    var length=$(this).length
+    if($("input[name=line_checked]").length!=$("input[name=line_checked]:checked").length){
+        $(".check_all").each(function()
+            {
+                $(this).attr('checked',false)
+            }); 
+    }
+}); 
+ $('.check_all').click(function(){
+            var checked_status = this.checked;
+            $(".check_all").each(function()
+            {
+                this.checked = checked_status;
+
+
+            });
+            
+            $("input[name=line_checked]").each(function()
+            {
+                this.checked = checked_status;
+
+
+            });
+    })
+    }
+});
+
+
+-->
+</script>
+
+{%endblock%}

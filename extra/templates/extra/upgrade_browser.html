@@ -1,0 +1,37 @@
+{% if IE %}
+<div id="browser_box">
+        <div>
+            <a style="background-image:url(/media/img/firefox_logo.png);" href="http://www.mozilla.com/">
+            </a>
+            <a style="background-image:url(/media/img/opera_logo.png);" href="http://www.opera.com/browser/download/">
+            </a>
+            <a style="background-image:url(/media/img/googlechrome_logo.png);" href="http://www.google.com/chrome/index.html?hl=en&brand=CHMB&utm_campaign=en&utm_source=en-ha-apac-ww-sk&utm_medium=ha">
+            </a>
+        </div>
+        <a id="recommended_browser">Recommended Browsers</a>
+</div>
+<div id="browser_box_bottom">
+</div>
+<script>
+    var browser_box_bottom=$('#browser_box_bottom')
+    var close_container=$('<div></div>').appendTo(browser_box_bottom)
+    var browser_close=$('<a href="#"></a>').appendTo(close_container).toggle(
+        function(e){
+          e.preventDefault()
+          $(this).parents(browser_box_bottom).prev().slideUp()
+          $(this).css('background-image','url(/media/img/hide-arrow-down.png)')
+          $.cookie('hide_browser_choice',true)
+        },
+        function(e){
+          e.preventDefault()
+          $(this).parents(browser_box_bottom).prev().slideDown()
+          $(this).css('background-image','url(/media/img/hide-arrow-up.png)')
+          $.cookie('hide_browser_choice',null)
+        }
+    )
+    if($.cookie('hide_browser_choice')){
+       //don't show recommended browsers 
+       browser_close.triggerHandler('click')
+    }
+</script>
+{% endif %}

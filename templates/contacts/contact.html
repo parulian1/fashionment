@@ -1,0 +1,36 @@
+{% extends "account_base.html"%}
+{% load i18n %} 
+
+{% block title %}
+Fashionment.com - {% trans 'Contact Fashiontment' %}
+{% endblock %}
+
+
+{% block content_loged %}
+  <h1>Contact Us</h1>
+  <form action="." method="post" class="form_fields">
+    {{ form.non_field_errors }}
+    {% for field in form %}
+        <div class="each_row" id="row{{forloop.counter}}">
+            <div class="column2">
+                <div class="column1">
+                    {{field.label}}
+                </div >
+                <div id="change_dot">
+                    {{field}}
+                    {{field.errors}}
+                </div>
+
+                <div class="eg" id="eg{{forloop.counter}}">
+                    {{field.help_text}}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+   
+    <div class="column_one_label">
+        <input type="submit" value="{% trans 'Send' %}" class="short_red_button" >
+    </div>
+   
+  </form>
+{% endblock %}

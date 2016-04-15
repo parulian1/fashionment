@@ -1,0 +1,4 @@
+{{ object }}
+Written by {{ object.user.full_name }}
+
+{{ object.body }}

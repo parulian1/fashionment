@@ -1,0 +1,275 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load thumbnail%}
+{%load humanize%}
+{%load paginator%}
+{% load cache %}
+{% block title %}
+Fashionment.com - {% trans 'View Compare Thumbnails , Compare Fashion Item To Many Other Fashion Item' %}
+{% endblock %}
+{%block content_loged%}
+<div class="form_fields compare_thumb">
+    <div>
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> {%trans 'My Compare Thumbnails' %}
+    </div>
+    <div>
+        &nbsp;
+    </div>
+    <div>
+        &nbsp;
+    </div>
+    {% cache 300 compare_thumb user.id page_num %}
+    <form id="form1" name="mylist" action="" method="POST">
+        <table width="98%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td rowspan="2"  class="title activate">
+                    {%trans 'My Compare Thumbnails'%}
+                </td>
+                <td align="right">
+                    {%ifequal paginator.num_pages 1%}
+                    {%else%}
+                        {% paginator 2 %}
+                    {%endifequal%}
+                </td>
+            </tr>
+        <tr>
+            <td>
+                <div class="pagination">
+                    <a class="link_decoration" href="{%url view_compare_list%}" >{%trans 'List'%}</a> |
+                    <a id="visit_link" class="link_decoration"   href="{%url view_compare_thumbnails%}" >{%trans 'Thumbnails'%}</a>
+                </div>
+            </td>
+        </tr>
+        {%if page_obj.object_list%}
+        <tr>
+            <td colspan="2">
+                <a class="link_decoration"   id="check_all" href="#">{%trans 'Check all' %}</a> |
+                <a class="link_decoration"   id="uncheck_all" href="#" >{%trans 'Uncheck all' %}</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        {%for item_list in page_obj.object_list%}
+            <tr>
+                <td colspan="2">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="25" valign="top">
+                                <input type="checkbox" class="input" name="check" value="{{item_list.item.id}}" />
+                            </td>
+                            <td rowspan="8" width="200" height="100">
+                                
+                                <div class="picture_compare thumb_border" style="{% if item_list.item.picture1 %}background-image:url({% thumbnail item_list.item.picture1.name 220x165 %});{% endif %}">{%ifequal item_list.item.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_large.png" class="no_border" />{%endifequal%}</div>
+                            </td>
+                            <td width="20">
+                                &nbsp;
+                            </td>
+                            <td width="100">
+                                {%trans 'Rating'%}
+                            </td>
+                            <td>
+                                {%if item_list.item.rating_set.all%}
+                                {%for rating in item_list.item.rating_set.all%}
+                                    <input type="hidden" id="star_counter" class="star_counter_class" value="{{rating.avg_rate}}" />
+                                {%endfor%}
+                                {%else%}
+                                    <input type="hidden" id="star_counter" class="star_counter_class" value="0" />
+                                {%endif%}
+                        </tr>
+                        <tr>
+                            <td >
+                                &nbsp;
+                            </td>
+                            <td width="10">
+                                &nbsp;
+                            </td>
+                            <td width="100">
+                                {%trans 'Item Name'%}
+                            </td>
+                            <td>
+                                <a href="{% url detail_items item_list.item.id %}" class="link_decoration">{{item_list.item|capfirst}}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td width="10">
+                                &nbsp;
+                            </td>
+                            <td  width="100">
+                                {%trans 'Collection Name'%}
+                            </td>
+                            <td>
+                                {{item_list.item.line|capfirst}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td width="10">
+                                &nbsp;
+                            </td>
+                            <td  width="100">
+                                {%trans 'Price'%}
+                            </td>
+                            <td>
+                                {%ifnotequal item_list.item.price 0 %}{{item_list.item.price|intcomma}}{%else%}{%trans 'on request'%}{%endifnotequal%}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td width="10">
+                                &nbsp;
+                            </td>
+                            <td  width="100">
+                                {%trans 'Size'%}
+                            </td>
+                            <td>
+                                {{item_list.item.size|default:"-"}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td width="10">
+                                &nbsp;
+                            </td>
+                            <td  width="100">
+                                {%trans 'Availability'%}
+                            </td>
+                            <td>
+                                {%ifequal item_list.item.availability 1%}
+                                    {%trans 'In-Stock'%}
+                                {%endifequal%}
+                                {%ifequal item_list.item.availability 2%}
+                                    {%trans 'Pre Order'%}
+                                {%endifequal%}
+                                {%ifequal item_list.item.availability 3%}
+                                    {%trans 'Sold Out'%}
+                                {%endifequal%}
+                            </td>
+                        </tr>
+                        <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td width="10">
+                            &nbsp;
+                        </td>
+                        <td  width="100">
+                            {%trans 'Gender'%}
+                        </td>
+                        <td>
+                            {%ifequal item_list.item.gender 1%}
+                            {%trans 'Male'%}
+                            {%endifequal%}
+                            {%ifequal item_list.item.gender 0%}
+                            {%trans 'Female'%}
+                            {%endifequal%}
+                            {%ifequal item_list.item.gender 2%}
+                            {%trans 'Unisex'%}
+                            {%endifequal%}
+                        </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td width="10">
+                                &nbsp;
+                            </td>
+                            <td  width="100" valign="top">
+                                {%trans 'Store/Designer'%}
+                            </td>
+                            <td valign="top">
+                                <a href="{% url view_stores item_list.item.line.store.slug%}" class="link_decoration">{{item_list.item.line.store.name|capfirst}}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                &nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        {%endfor%}
+
+            <tr>
+                <td align="left"  id="error_message" height="15">
+                </td>
+                <td  class="right_float">
+                    <a class="short_red_button" href="#" id="remove">{%trans 'Remove'%}</a>
+                    <a class="log_in" href="#" id="compare">{%trans 'Compare'%}</a>
+                </td>
+            </tr>
+
+        {%else%}
+            <tr>
+                <td colspan="2">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    {%trans "Don't have any compare Thumbnails"%}
+                </td>
+            </tr>
+        {%endif%}
+        </table>
+    </form>
+    {% endcache %}
+</div>
+<script>
+<!--
+
+$(document).ready(function(){
+    var compare = $("#compare")
+    var form1 = $('#form1')
+    compare_thumb_js()
+    $().click(function(e) {
+            var n = $('.input:checked').length;
+            //$("#error_message").text(n + (n <= 1 ? " is" : " are") + " checked!");
+            if(n<=1){
+                 compare.click(function(e){
+                     e.preventDefault()
+                     $("#error_message").text("You Must tick two to compare or more")
+                   })
+            }
+
+            else{
+                  compare.click(function(e){
+                     e.preventDefault()
+                     form1.attr('action','{%url view_detail_compare%}')
+                     form1.submit();
+                     $("#error_message").text("")
+                   })
+            }
+        });
+     $("#remove").click(function(e){
+         e.preventDefault()
+         form1.attr('action','{%url remove_compare_thumbnails%}')
+         form1.submit();
+   })
+
+        $('#check_all').click(function(e){
+          compare.click(function(){
+             form1.attr('action','{%url view_detail_compare%}')
+             form1.submit();
+             $("#error_message").text("")
+           })
+            e.preventDefault()
+            $('.input').attr('checked',true)
+          }
+        )
+});
+-->
+</script>
+{%endblock%}

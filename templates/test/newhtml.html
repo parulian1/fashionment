@@ -1,0 +1,15 @@
+<tr style="height:90px">
+       <td>
+           <hr />
+       </td>
+   </tr>
+   {%  for item in items %}
+   <tr style="float:left;width:20%;height:135px">
+       <td>
+         <center style="position:absolute;margin-left:40px"><a href="" class="hyperlink">{{item.item.item}}</a></center>
+         <br />
+         <a href=""><img src="{{MEDIA_URL}}/{{item.item.picture1}}" width="100px" height="85px" /></a>
+       </td>
+       <td width="4%">&nbsp;</td>
+   </tr>
+   {% endfor %}

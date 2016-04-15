@@ -1,0 +1,130 @@
+{% block head %}
+<meta http-Equiv="Cache-Control" Content="no-cache">
+<meta http-Equiv="Pragma" Content="no-cache">
+<meta http-Equiv="Expires" Content="0">
+    <style>
+
+body,html{
+  margin:0;
+  padding:0;
+  background:white;
+  background-repeat:no-repeat;
+  font-family: Arial;
+  font-size:11px;
+  color:#555555;
+}
+    </style>
+  <link type="text/css" rel="stylesheet" href="{{MEDIA_URL}}css/style.css" />
+  <script type="text/javascript" src="{{ MEDIA_URL}}js/jquery.js"></script>
+{% endblock %}
+{% load paginator %}
+{%load i18n%}
+{% load cache %}
+{% load humanize %}
+{%load thumbnail%}
+<div class="rows2">
+        <div id="page_number" class="comment_title_div">
+          {%trans 'Comments'%}
+
+        {%ifequal paginator.num_pages 1%}
+        {%else%}
+            <div class="comment_pagination_div">
+                {% if paginator %}
+                    {% paginator 5 %}
+                {% endif %}
+                {%endifequal%}
+            </div>
+        </div>
+        <input type="hidden" value="{{data.user.account_type}}" id="first_comment_id" />
+    <div id="content">
+        {% cache 300 comment_page slug id page user%}
+        <div name="commentiframe" id="comment_div">
+            {%for store_comment in page_obj.object_list%}
+
+            <div class="rows2">
+                <div class="comment_user_div">
+                    {% if store_comment.user.id %}
+                        <a href="{% url view_profile store_comment.user.id %}" target="_parent">
+                            <div class="comment_user_pic"  style="{% if store_comment.user.picture %}background-image:url({% thumbnail store_comment.user.picture.name 50x72 %});{% endif %}"></div>
+                        </a>
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
+                </div>
+                <div class="comment_user_div2">
+                    <div class="rows">
+                        <div class="comment_user_username">
+                            <a href="{% url view_profile store_comment.user.id %}" target="_parent" class="hyperlink">
+                                {{store_comment.user.username|capfirst}}
+                            </a>
+                        </div>
+                        <div class="comment_user_report">
+                            {% ifnotequal request.user.id store_comment.user.id %}
+                            {%url report store_comment.id "comment" as report%}
+                                <!--<a class="link_decoration" href="{{report}}" target="_parent">{%trans 'Report'%}</a>-->
+                            {%endifnotequal %}
+                            &nbsp;
+                        </div>
+                        <div class="comment_user_delete">
+                            {% ifequal store_comment.store.user user %}
+                                <a href="{% url remove_comment store_comment.id %}" class="x_comment comment_delete">
+                                    delete
+                                </a>
+                            {% else %}
+                                {% ifequal store_comment.user user %}
+                                    <a href="{% url remove_comment store_comment.id %}" class="x_comment comment_delete">
+                                        delete
+                                    </a>
+                                {% endifequal %}&nbsp;
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    <div class="comment_user_date">
+                            {{store_comment.date_added|naturalday}} at {{store_comment.date_added|date:"H:i"}}
+                    </div>
+                    <div id="ie_suck_warp" class="rows small_font">
+                        {{store_comment.comment|safe}}
+                    </div>
+                </div>
+
+            </div>
+            <div class="comment_user_line"></div>
+            {%endfor%}
+        </div>
+	{% endcache %}
+    </div>
+</div>
+
+<script>
+    <!--
+    $(document).ready(function(){
+   // $('.x_comment').click(function(e){
+   //     e.preventDefault()
+   //     $('#confirmation_delete_comment',top.document).removeAttr('display')
+   //     $('#confirmation_delete_comment',top.document).attr('style','position:absolute;top:740px;left:330px;')
+    //    $('#delete_comment',top.document).attr('href',$('.x_comment').attr('href'))
+    //})
+    var total_comment = '{{total_comment}}'
+    var item_comment = $('#comment_frame', parent.document.body);
+    //alert(total_comment)
+    if(total_comment==1 ||total_comment==0){
+        item_comment.height('175px');
+        $('#comment_div').attr('style','height:145px;overflow:auto;width:100%; padding:1px;');
+    }else{
+            if(total_comment==2){
+                item_comment.height('275px');
+                $('#comment_div').attr('style','height:245px;overflow:auto;width:100%; padding:1px;');
+            }else if(total_comment==3){
+                item_comment.height('375px');
+                $('#comment_div').attr('style','height:345px;overflow:auto;width:100%; padding:1px;');
+            }else if(total_comment==4){
+                item_comment.height('475px');
+                $('#comment_div').attr('style','height:445px;overflow:auto;width:100%; padding:1px;');
+            }else if(total_comment>4){
+                item_comment.height('475px');
+                $('#comment_div').attr('style','height:445px;overflow:auto;width:100%; padding:1px;');
+            }
+    }
+    })
+    -->
+</script>

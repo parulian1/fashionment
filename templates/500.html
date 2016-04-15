@@ -1,0 +1,19 @@
+{% extends "account_base.html" %}
+{% load i18n %}
+{% load cache %}
+{% block title %}
+  Fashionment.com - {% trans 'Error' %}
+{% endblock %}
+
+{% block content_loged %}
+  <div class="title">{% trans 'This is a major error' %}</div>
+  {% if message %}
+    <p>{{ message }}</p>
+  {% endif %}
+  <p><b>
+      {% blocktrans %}
+    Don't worry our technical staff has been notified about the error. Please try again shortly.
+    If the problem still persists,please <a href="contacts/">Contact us</a> about it
+      {%endblocktrans %}
+  </b></p>
+{% endblock %}

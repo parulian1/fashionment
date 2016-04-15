@@ -1,0 +1,100 @@
+{% extends 'mail_base.html' %}
+{% load i18n %}
+
+{% load humanize %}
+{% block head %}
+
+<script type="text/javascript" src="{{MEDIA_URL}}js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+	theme : "advanced",
+	mode : "textareas",
+	plugins : "bbcode,emotions",
+	theme_advanced_buttons1 : "bold,italic,underline,undo,redo,link,unlink,image,emotions,removeformat,cleanup",
+	theme_advanced_buttons2 : "",
+	theme_advanced_buttons3 : "",
+	theme_advanced_toolbar_location : "bottom",
+	theme_advanced_toolbar_align : "center",
+	theme_advanced_styles : "Code=codeStyle;Quote=quoteStyle",
+	content_css : "",
+	entity_encoding : "raw",
+	add_unload_trigger : false,
+	remove_linebreaks : false,
+    relative_urls : false
+});
+</script>
+{% endblock %}
+{% block mail_content %}
+<form action="" method="post" class="form_fields" enctype="multipart/form-data">
+          <table width="674px" id="compose_msg_bg">
+          <tr>
+              <td colspan="5">
+                  &nbsp;
+              </td>
+          </tr>
+          
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                    <tr>
+                        <td width="2%">
+                            &nbsp;
+                        </td>
+                        <td>
+                            {{field.label}}
+                        </td>
+                        <td colspan="3">
+                             {{field}}
+                             {{field.errors}}
+                        </td>
+                    </tr>
+                {% endfor %}
+               <tr>
+                   <td>
+                        &nbsp;
+                    </td>
+                   <td>
+                   </td>
+                   <td width="58%">
+
+                   </td>
+                   <td>
+                       <input type="submit" name="save" value="Save to Draft" class="medium_red_button compose_save_button">
+                   </td>
+                   <td>
+                       <input type="submit" name="send" value="Send" class="short_red_button compose_send_button">
+                   </td>
+               </tr>
+          
+          </table>
+</form>
+<input type="hidden" id="temp_val" value="{{temp}}" />
+<script>
+    <!--
+       $(document).ready(function(){
+        var temp_value = $("#temp_val").val()
+        if(temp_value){$("#id_subject").val(temp_value)}
+        expand.attr('style','display:inline;border:none;');
+        var url = '/mail/lookup/'
+        $('#id_to_user').autocomplete(url,{	highlight: false,scroll: true,scrollHeight: 180
+        });
+        if(!$.mobile()){
+        $('#store1').click(function(){
+            all2.hide();
+            expand.attr('src','');
+
+        name3.attr('style',' color:#B5121C; font-weight:bold; margin-left:20px')
+        })
+
+            all2.show();
+            expand.attr('src','{{MEDIA_URL}}fashion_icon.png');
+            name3.attr('style',' color:#B5121C;font-weight:bold; margin-left:0px')
+            $('#id_subject').css('width','450px')
+            $('#id_message').css('width','450px')
+            $('#id_message').css('height','250px')
+            }
+            
+
+       })
+     -->
+</script>
+{% endblock %}

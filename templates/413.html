@@ -1,0 +1,11 @@
+{% extends "account_base.html" %}
+{% load i18n %}
+
+{% block title %}
+  Fashionment.com - {% trans 'File Too Large' %}
+{% endblock %}
+
+{% block content_loged %}
+  <h1 class="errors">{% trans 'File Too Large' %}!</h1>
+  <p>{% trans 'Please upload something smaller' %}</p>
+{% endblock %}

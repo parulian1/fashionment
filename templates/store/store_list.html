@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load i18n %}
+{% load thumbnail %}
+{% block title %}
+Fashionment.com - {% trans 'List of all store in our site' %}
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ MEDIA_URL }}css/accessories.css" type="text/css" />
+{% endblock %}
+
+{% block content %}
+
+
+
+{% include 'store/search_store.html' %}
+<div class="page_row">
+        {% if stores.has_previous %}
+            <a href="?page={{ stores.previous_page_number }}">previous</a>
+        {% endif %}
+        {% trans 'Page' %} {{ stores.number }} {% trans 'of' %} {{ stores.paginator.num_pages }}
+        {% if stores.has_next %}
+            <a href="?page={{ stores.next_page_number }}">next</a>
+        {% endif %}
+</div>
+<div>
+    {% for store in stores.object_list %}
+    <div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+ <!--
+  $(document).ready(function(){
+    loadJSfor('accessory_list')
+  })
+-->
+</script>
+{% endblock %}

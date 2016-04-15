@@ -1,0 +1,18 @@
+{% extends "account_base.html" %}
+
+{% block content %}
+<form method="POST"  enctype="multipart/form-data" action="{%url maihide_decrypts%}?k={{request.GET.k}}&c={{request.GET.c}}">
+    {% for field in form %}
+    <div class="row" style="padding:0;">
+        <label class="cell1" >
+            {{field.label}}
+        </label>
+        <div class="cell2">
+           {{field}}
+            <span class="error">{{field.errors}}</span>
+        </div>
+    </div>
+    {% endfor %}
+    <input style="margin:0;" id="recaptcha_submit" type="submit" class="red_button" value="Submit" />
+</form>
+{%endblock%}

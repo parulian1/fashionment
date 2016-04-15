@@ -1,0 +1,101 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% load thumbnail %}
+{% load custom%}
+{% load humanize %}
+{% load cache %}
+{% block title %}
+Fashionment.com -
+    {%trans 'Invite Friends By Emails'%}
+{% endblock %}
+{%block content_loged%}
+{% cache 3600 invitation %}
+<form method="POST" action="">
+<div id="invitation">
+            <div>
+               <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} > </a>{% trans 'Invite Your Friends'%}
+
+            </div>
+</div>
+<div class="rows" id="invitation_title">
+                {% trans 'Invite Your Friends'%}
+</div>
+<div id="invitation_form_div">
+     <div class="med_top_marg">
+       <div class="small_left_marg" id="invite_div" >
+           {% for field in form %}
+             <div  id="{{field.label}}{{forloop.counter}}" class="rows2">
+                   <div class="invite_col1">
+                       {% ifequal forloop.counter 1%}
+                        RSVP To  :
+                       {% else %}
+                       &nbsp;
+                       {% endifequal %}
+                       {% ifequal forloop.counter 11 %}
+                            {{field.label}} :
+                       {% endifequal %}
+                   </div>
+                   <div class="invite_col2">
+                       {% ifnotequal forloop.counter 11 %}
+                       <div class="invite_field_col">
+                           {{field}}
+                           <div class="errorslist">{{field.errors}}</div>
+                       </div>
+                       <div id="id_field{{forloop.counter}}" class="left_float">
+                           {% ifequal forloop.counter 5 %}
+                            <a id="id_invite" href="#" class="hyperlink" target="_parent">{% trans 'invite more' %}</a>
+                           {% endifequal %}
+                       </div>
+                       {% else %}
+                           <div class="left_float">
+                               {{field}}{{field.errors}}{% ifequal forloop.counter 5%}
+                                <a id="id_invite" href="#" class="hyperlink" target="_parent">{% trans 'invite more' %}</a>
+                               {% endifequal %}
+                           </div>
+                           <div id="id_field{{forloop.counter}}">
+
+                           </div>
+                       {% endifnotequal %}
+                   </div>
+           </div>
+           {% endfor %}
+           <div class="rows invite_submit_div" >
+                <input id="invite_link" class="short_red_button back_link" type="submit" value="Invite" name="submit1" />
+           </div>
+        </div>
+     </div>
+</div>
+</form>
+{% endcache %}
+<script>
+    <!--
+  $(document).ready(function(){
+    var invite=$('#invite2')
+    var img = $('#invite_img')
+    $("#RSVP_To6").hide()
+    $("#RSVP_To7").hide()
+    $("#RSVP_To8").hide()
+    $("#RSVP_To9").hide()
+    $("#RSVP_To10").hide()
+    $("#id_invite").click(function(e){
+        e.preventDefault()
+        $("#id_invite").hide()
+        $("#id_field1").append(', &nbsp;')
+        $("#id_field2").append(', &nbsp;')
+        $("#id_field3").append(', &nbsp;')
+        $("#id_field4").append(', &nbsp;')
+        $("#id_field5").append(', &nbsp;')
+        $("#id_field1").append($('#id_email6'))
+        $("#id_field2").append($('#id_email7'))
+        $("#id_field3").append($('#id_email8'))
+        $("#id_field4").append($('#id_email9'))
+        $("#id_field5").append($('#id_email10'))
+        //$("#id_email6").insertAfter("#id_email")
+    })
+    invite.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+    img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+    img.attr('style','display:inline;border:none;');
+  })
+  -->
+</script>
+{% endblock%}

@@ -1,0 +1,33 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% load custom %}
+{% load cache %}
+{% block title %}
+{%load thumbnail%}
+{% load cache %}
+{%load humanize%}
+Fashionment.com - {% trans 'Detail Item' %} {{item.item}} {% trans 'by picture' %}
+{% endblock %}
+{% block content_loged %}
+    {% cache 600 detail_picture %}
+        <div id="view_detail_picture">
+            {% ifequal user.id item.line.store.user.id %}
+                <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a>
+                <a href="{% url view_store %}" class="hyperlink">{% trans 'My Store' %} ></a>
+            {% else %}
+            <a href="{% url view_profile item.line.store.user.id %}" class="hyperlink">
+                {{item.line.store.user.username|capfirst}} {% trans 'Profile' %} >
+            </a>
+            <a href="{% url view_stores item.line.store.slug %}" class="hyperlink">
+                {{item.line.store|capfirst}} {% trans 'Store' %} >
+            </a>
+            {% endifequal %}
+            <a href="{% url view_item item.line.id %}" class="hyperlink" >{{item.line|capfirst}} {%trans 'Collection' %} ></a> <a href="{% url detail_items item.id %}" class="hyperlink" >{{item.item|capfirst}} {%trans 'Item' %} ></a> {{slug}}
+        </div>
+        <div>
+            &nbsp;
+        </div>
+        <div class="picture_detail" style="background-image:url({% thumbnail image 375x300%});">
+        </div>
+    {% endcache %}
+{% endblock %}

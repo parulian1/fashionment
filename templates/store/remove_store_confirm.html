@@ -1,0 +1,211 @@
+{%extends "account_base.html" %}
+{%load i18n%}
+{% block title %}
+{% load thumbnail%}
+Fashion -{% trans 'Remove '%} {% ifequal view_store.user.account_type 1 %}{% trans 'My Store'%}{%else %}{% trans 'My Portfolio'%}{%endifequal%}
+{% endblock %}
+{%block content_loged%}
+<div class="rows" id="confirm_rem_store">
+    <div style="font-size:12px;margin-bottom:10px;margin-left:50px;">
+        {% blocktrans %}
+         Are you sure you want to delete your store?
+        {%endblocktrans %}
+   </div>
+   {%url remove_collection_or_item "line" "" as remove%}
+    <div class="rows2">
+        <div style="float:left;width:13%;">&nbsp;</div>
+        <div style="float:left;width:13%;"><a href="{% url remove_store %}" class="short_red_button">Yes</a></div>
+        <div style="float:left;width:62%;"><a href="{%url view_my_profile %}" id="no_removed" class="short_red_button">No</a></div>
+    </div>
+</div>
+<div class="rows">
+            <div id="confirm_rem_store_div1">
+                {%ifequal user.id view_store.user.id%}
+                    <a class="title store_title" href="{% url view_store %}">{% ifequal user.account_type 1 %}{%trans 'My Store'%}{%else%}{%trans 'My Portfolio'%}{%endifequal%}</a>
+                {%else%}
+                    <a class="title store_title" href="{% url view_stores view_store.slug%}">{{view_store.name|capfirst}}</a>
+                {%endifequal%}
+            </div>
+            <div class="related_item_div1">
+                {%ifequal user.id view_store.user.id%}
+                    <a class="link_decoration" href="{%url edit_store%}">{%trans 'Edit'%}</a> |
+                    <a class="link_decoration" href="{%url remove_store%}">{%trans 'Remove'%}</a>
+                {%endifequal%}
+            </div>
+        </div>
+        <div class="rows">
+            <div class="related_store_table_column1">
+                {%ifequal user.id view_store.user.id%}
+                    {%if view_store.picture%}
+                    <a href="{% url view_store %}"><div class="picture_border_view" style="{% if view_store.picture %}background-image:url({% thumbnail view_store.picture.name 200x150 %});{% endif %}"></div></a>
+                    {%else%}
+                    <a href="{% url view_store %}"><div class="picture_border_view no_store_pic"></div></a>
+                    {%endif%}
+                {%else%}
+                    {%if view_store.picture%}
+                    <a href="{% url view_stores view_store.slug%}"><div class="picture_border_view" style="{% if view_store.picture %}background-image:url({% thumbnail view_store.picture.name 200x150 %});{% endif %}"></div></a>
+                    {%else%}
+                    <a href="{% url view_stores view_store.slug%}"><div class="picture_border_view no_store_pic"></div></a>
+                    {%endif%}
+                {%endifequal%}
+            </div>
+            <div class="related_store_table_column2">
+                <div class="detail_item_rows each_row">
+                    <div class="related_store_table_column1">
+                        {%trans 'Store Name'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{view_store.name|capfirst}}
+                    </div>
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Address'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2" id="ie_suck_warp">
+                        {% for line in view_store.location_list|default:"-" %}
+                            {{line}} <br />
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Telephone'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{view_store.phone_area}} - {{view_store.telephone}}
+                    </div>
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Facsimile'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {%if view_store.fax%}
+                        {{view_store.fax_code}} - {{view_store.fax}}
+                        {%else%}
+                            {%trans 'None'%}
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Handphone'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{view_store.handphone|default:"None"}}
+                    </div>
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Company Website'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {% if view_store.company_website %}
+                        <a href="{{view_store.company_website}}" class="hyperlink">
+                        {% endif%}
+                        {{view_store.company_website|default:"None"}}
+                        {% if view_store.company_website %}
+                        </a>
+                        {% endif%}
+                    </div>
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Last Item Update'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{view_store.last_updated|date:"d F Y"}}
+                    </div>
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Viewed'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {%if view_store.view_set.all%}
+                        {%for viewed in view_store.view_set.all%}
+                            {{viewed.count}} {%trans 'Time'%}{{viewed.count|pluralize:"s"}}
+                        {%endfor%}
+                        {%else%}
+                            0 {%trans 'Time'%}
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Rating'%}
+                    </div>
+                    <div class="left_float">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        <div id="example-1">
+                            <input type="hidden" id="star_counter" value="{{rating.avg_rate}}" />
+                        </div>
+                        <div id="example-2">
+                            {{view_store.ratingcounter_set.all.count}} {%trans 'Time'%}{{view_store.ratingcounter_set.all.count|pluralize:"s"}} {%trans 'rate'%}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {%ifequal user.id view_store.user.id%}
+                <div class="rows2" id="rem_store_button_div">
+                        <a href="{%url line_add %}" class="medium_red_button">{%trans 'Add Collection'%}</a>
+                        <a id="add_collection_clickme" href="#"  title='Add Collection|By adding a store you get a chance to own your boutique now. Build up your product portfolio by clicking "Add Collection" button. This allows you to put as many products, segmented in different collections, as you want. With more collections and items you add, more people will get interested in products you offer.'><img style="margin:3px 0 0 3px;cursor:help;border:none;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>
+                    
+                </div>
+            {%endifequal%}
+            <div class="title">
+                {%trans 'Store Story'%}
+            </div>
+            <div id="ie_suck_warp">
+                {% for line in view_store.store_story_list|default:_("-") %}
+                    {{ line}}<br />
+                {% endfor %}
+            </div>
+            <div class="title">
+                {%trans 'Promotion Text'%}
+            </div>
+            <div id="ie_suck_warp">
+                {{view_store.promotion_text|linebreaksbr}}
+            </div>
+            <div class="form_fields">
+                <hr />
+            </div>
+       </div>
+<script>
+<!--
+    $(document).ready(function(){
+        name1.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+        img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+        img.attr('style','display:;border:none;');
+    })
+-->
+</script>
+{% endblock%}

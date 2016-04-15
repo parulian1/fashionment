@@ -1,0 +1,249 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load paginator%}
+{%load humanize%}
+{% load cache %}
+{% load custom %}
+{% block title %}
+Fashionment.com - {% trans 'Compare Fashion From different stores and online Boutiques' %}
+{% endblock %}
+{%block content_loged%}
+<div class="form_fields compare_list">
+   <div >
+    <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> {%trans 'My Compare List' %}
+   </div>
+   <div>
+    &nbsp;
+   </div>
+   <div>
+    &nbsp;
+   </div>
+   {% cache 300 compare_list user.id page_num %}
+    <form id="form1" name="mylist" action="" method="POST">
+        <div class="pagination padding_bottom_20">
+            {%ifequal paginator.num_pages 1%}
+            {%else%}
+                {% paginator 2 %}
+            {%endifequal%}
+            <div>
+                <div class="title activate left_text">
+                    {%trans 'My Compare Lists'%}
+                </div>
+                <a id="visit_link" class="link_decoration" href="{%url view_compare_list%}" >{%trans 'List'%}</a> |
+                <a class="link_decoration"  href="{%url view_compare_thumbnails%}" >{%trans 'Thumbnails'%}</a>
+            </div>
+        
+        </div>
+        {%if page_obj.object_list%}
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="25"><input type="checkbox" id="check_all" /></td>
+                            <td width="70" >{% trans 'Rating'%}</td>
+                            <td>{% trans 'Item Name'%}</td>
+                            <td>{% trans 'Collection Name'%}</td>
+                            <td>{% trans 'Price'%}</td>
+                            <td>{% trans 'Size'%}</td>
+                            <td width="70">{% trans 'Availability'%}</td>
+                            <td width="50">{% trans 'Gender'%}</td>
+                            <td>{% trans 'Store/Designer'%}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"><hr /></td>
+                        </tr>
+                        {%for item_list in page_obj.object_list%}
+                            <tr>
+                                <td width="20">
+                                    <input type="checkbox" class="count" name="check" value ="{{item_list.item.id}}" />
+                                </td>
+                                <td width="100" id="star_example-{{forloop.counter}}">
+                                    {%if item_list.item.rating_set.all%}
+                                    {%for rating in item_list.item.rating_set.all%}
+                                        <input type="hidden" id="star_counter" class="star_counter_class" value="{{rating.avg_rate}}" />
+                                    {%endfor%}
+                                    {%else%}
+                                        <input type="hidden" id="star_counter" class="star_counter_class" value="0" />
+                                    {%endif%}
+                                </td>
+                                <td>
+                                    <a href="{% url detail_items item_list.item.id %}" class="link_decoration">{{item_list.item|default:"-"|capfirst|truncatechar:10}}</a>
+                                </td>
+                                <td>
+                                    {{item_list.item.line|capfirst|truncatechar:17}}
+                                </td>
+                                <td>
+                                    {%ifnotequal item_list.price 0 %}{{item_list.item.price|intcomma}}{%else%}{%trans 'on request'%}{%endifnotequal%}
+                                </td>
+                                <td width="65">
+                                    {{item_list.item.size|default:"-"}}
+                                </td>
+                                <td width="70">
+                                    {%ifequal item_list.item.availability 1%}
+                                        {%trans 'In-Stock'%}
+                                    {%endifequal%}
+                                    {%ifequal item_list.item.availability 2%}
+                                        {%trans 'Pre Order'%}
+                                    {%endifequal%}
+                                    {%ifequal item_list.item.availability 3%}
+                                        {%trans 'Sold Out'%}
+                                    {%endifequal%}
+                                </td>
+                                <td width="50">
+                                    {%ifequal item_list.item.gender 1%}
+                                    {%trans 'Male'%}
+                                    {%endifequal%}
+                                    {%ifequal item_list.item.gender 0%}
+                                    {%trans 'Female'%}
+                                    {%endifequal%}
+                                    {%ifequal item_list.item.gender 2%}
+                                    {%trans 'Unisex'%}
+                                    {%endifequal%}
+                                </td>
+                                <td>
+                                    <a href="{% url view_stores item_list.item.line.store.slug%}" class="link_decoration">{{item_list.item.line.store.name|capfirst|truncatechar:12}}</a>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td colspan="10"><hr /></td>
+                                </tr>
+
+                        {%endfor%}
+                    </table>
+                </td>
+                <tr>
+                    <td colspan="10" align="right">
+                        <a class="short_red_button " href="#" id="remove">{%trans 'Remove'%}</a>
+                        <a class="log_in" href="#" id="compare">{%trans 'Compare'%}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="error_message">
+                        &nbsp;
+                    </td>
+                </tr>
+            </tr>
+          
+        </table>
+    {%else%}
+        {%trans "Don't have any compare List"%}
+    {%endif%}
+    </form>
+    {% endcache %}
+<div></div>
+</div>
+<script>
+<!--
+
+$(document).ready(function(){
+    var compare = $("#compare")
+    var form1 = $('#form1')
+    if(!$.mobile()){
+    
+    store1.click(function(){
+        all1.hide();
+        unhide.attr('src','');
+        unhide.attr('style','display:;border:none;');
+        name2.attr('style',' color:#B5121C; font-size:12px; font-weight:bold;')
+    })
+        
+    unhide.attr('style','display:;border:none;');
+    all1.show();
+    unhide.attr('src','/media/fashion_icon.png');
+    name2.attr('style',' color:#B5121C; font-weight:bold;')
+
+     $("#check_all").click(function()
+        {
+          compare.click(function(){
+
+             form1.attr('action','{%url view_detail_compares%}')
+             form1.submit();
+             $("#error_message").text("")
+
+        })
+            var checked_status = this.checked;
+            $("input[name=check]").each(function()
+            {
+                this.checked = checked_status;
+
+
+            });
+
+        });
+        $("input[name=check]").click(function(){
+            var length=$(this).length
+            if($("input[name=check]").length!=$("input[name=check]:checked").length){
+                $("#check_all").attr('checked',false)
+            }
+        });
+        $('.count').click(function() {
+            var n = $('.count:checked').length;
+            //$("#error_message").text(n + (n <= 1 ? " is" : " are") + " checked!");
+            if(n<=1){
+                
+                compare.click(function(e){
+                     e.preventDefault()
+                     $("#error_message").text("You Must tick two to compare or more")
+
+                })
+                
+            }
+            else{
+               compare.click(function(){
+                     
+                     form1.attr('action','{%url view_detail_compares%}')
+                     form1.submit();
+                     $("#error_message").text("")
+                     
+
+                })
+
+            }
+
+        });
+
+  //robin added
+  //you can get MANY classes, but you can get only ONE id
+  //that's why I created class="star_counter_class"
+  $('.star_counter_class').each(function(i){
+    var stars=$([]) //empty jquery
+    var input_value=$(this).val()
+    if(input_value!=0){
+    for(var i=0;i<input_value;i++){
+      $('<img src="{{MEDIA_URL}}full-star.png" />').insertBefore($(this))
+
+    }
+          if(input_value!=5)
+          {
+              for(var a=input_value;a<5;a++){
+                  $('<img src="{{MEDIA_URL}}empty-star.png" />').insertBefore($(this))
+
+              }
+
+          }
+    }
+    else{
+                      for(var a=input_value;a<5;a++){
+                  $('<img src="{{MEDIA_URL}}empty-star.png" />').insertBefore($(this))
+
+              }
+    }
+
+  })
+  //end robin added
+
+   $("#remove").click(function(e){
+         e.preventDefault()
+         form1.attr('action','{%url remove_compare_list%}')
+         form1.submit();
+      
+   })
+
+
+
+}
+  })
+  -->
+</script>
+{%endblock%}

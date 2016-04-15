@@ -1,0 +1,683 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% load custom %}
+{% block title %}
+{%load thumbnail%}
+{%load humanize%}
+{% load mailhide %}
+{% load cache %}
+Fashionment.com - {{item.item}}{% trans 'Fashion Item' %}
+{% endblock %}
+{%block head%}
+<script type="text/javascript" src="{{MEDIA_URL}}js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+	theme : "advanced",
+	mode : "textareas",
+	plugins : "bbcode,emotions",
+	theme_advanced_buttons1 : "bold,italic,underline,undo,redo,link,unlink,image,emotions,removeformat,cleanup",
+	theme_advanced_buttons2 : "",
+	theme_advanced_buttons3 : "",
+	theme_advanced_toolbar_location : "bottom",
+	theme_advanced_toolbar_align : "center",
+	theme_advanced_styles : "Code=codeStyle;Quote=quoteStyle",
+	content_css : "",
+	entity_encoding : "raw",
+	add_unload_trigger : false,
+	remove_linebreaks : false
+});
+</script>
+{%endblock%}
+{%block content_loged%}
+
+<form method="POST" action="" id="form1" >
+<div id="detail_items_break_crump">
+    {% ifequal user.id item.line.store.user.id %}
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a><a href="{% url view_store %}" class="hyperlink">{%ifequal user.account_type 1 %}{% trans 'My Store' %}{%else%}{% trans 'My Portfolio' %}{%endifequal%} ></a>
+        {% else %}
+        <a href="{% url view_profile item.line.store.user.id %}" class="hyperlink">{{item.line.store.user.username|capfirst}} {% trans 'Profile' %} ></a> <a href="{% url view_stores item.line.store.slug %}" class="hyperlink">{{item.line.store|capfirst}} {% trans 'Store' %} ></a>
+        {% endifequal %}
+        <a href="{% url view_item item.line.id %}" class="hyperlink" >{{item.line|capfirst}} {%trans 'Collection' %} ></a> {{item.item|capfirst}} {%trans 'Item' %}
+</div>
+
+<div id="detail_items_table">
+    <div id="item_info_div">
+{% cache 3600 item_information_part1 item.id%}     <div class="title">{{item.item|capfirst}}</div>
+     <div class="rows">
+         <div id="det_fashion_code">{%trans 'Fashion Code'%}{{item.id}}</div>
+         <div id="det_item_price">{% trans 'Price' %} {% ifnotequal item.price 0 %}{{item.currency}} {{item.price|intcomma}}{%else%}{%trans 'on request'%}{%endifnotequal%}</div>
+     </div>
+     <div class="item">
+        {% url view_detail_pic item.id "picture1" as view_detail_pic %}
+        <a href="{{view_detail_pic}}" id="product_picture">
+            <div id="main_img" class="picture_border_main_img" style="{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 250x200 %});{% endif %}">
+                {%ifequal item.availability 3%}<img id="det_sold_out" alt="item sold out" src="{{MEDIA_URL}}img/sold_out_large.png" style="" />{%endifequal%}
+                <div class="see_larger_img" style="{%ifequal item.availability 3%}margin-top:-59px;{%endifequal%}">
+                </div>
+            </div>
+        </a>
+     </div>
+     <div id="det_item_pic">
+          <a id="change_img1"><div class="picture_border1 det_item_pic1" style="{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 80x60 %});{% endif %}"></div></a>
+          {%if item.picture2%}
+          <a id="change_img"><div class="picture_border1 det_item_pic2" style="{% if item.picture2 %}background-image:url({% thumbnail item.picture2.name 80x60 %});{% endif %}"></div></a>
+          {%else%}
+          <img  src="{{MEDIA_URL}}no_item_image.jpg" id="item_no_image" border="1" width="70" height="60"/>
+          {%endif%}
+      </div>
+      <!--div class="rows2" id="det_item_info" -->
+            <div id="det_some_item_info">
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Collection'%}
+                    </div>
+                    <div class="related_store_table_column2">
+                        <a href="{%url view_item item.line.id%}" class="link_decoration">{{item.line}}</a>
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Rating'%}
+                    </div>
+               {% endcache %}
+                    <div class="related_store_table_column2">
+                        <div  id="example-1">
+                            <input type="hidden" id="star_counter" value="{{item.rating_set.all.0.avg_rate}}" />
+                            <input type="hidden" id="star_id" name="star" />
+                            <input type="hidden" id="pub_date" value="{{flag}}" />
+                        </div>
+
+                        <div id="example-2">
+                            {{item.ratingcounter_set.all.count|default:"0"}} {%trans 'Time'%}{%if item.ratingcounter_set.all%}{{item.ratingcounter_set.all.count|pluralize:"s"}}{%endif%}
+                            {{msg}}
+                        </div>
+                    </div>
+                </div>
+               {% cache 3600 item_information_part2 item.id%}                <div>
+                    <hr />
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Category'%}
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{item.line.category}}
+
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Gender'%}
+                    </div>
+                    <div class="related_store_table_column2">
+                        {%ifequal item.gender 1%}
+                            {%trans 'Male'%}
+                        {%endifequal%}
+                        {%ifequal item.gender 0%}
+                            {%trans 'Female'%}
+                        {%endifequal%}
+                        {%ifequal item.gender 2%}
+                            {%trans 'Unisex'%}
+                        {%endifequal%}
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Description'%}
+                    </div>
+                    <div class="related_store_table_column2 rows" id="ie_suck_warp">
+                        {% for line in item.description_list|default:"-" %}
+                            {{ line}}<br>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Colour'%}
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{item.colour|default:"-"}}
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Size'%}
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{item.size|default:"-"}}
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Price'%}
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{item.currency}} {{item.price|intcomma}}
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                </div>
+                 {% endcache %}                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Availability'%}
+                    </div>
+                    <div class="related_store_table_column2">
+                        {%ifequal item.availability 1%}
+                            {%trans 'In-Stock'%}
+                        {%endifequal%}
+                        {%ifequal item.availability 2%}
+                            {%trans 'Pre Order'%}
+                        {%endifequal%}
+                        {%ifequal item.availability 3%}
+                            {%trans 'Sold Out'%}
+                        {%endifequal%}
+                    </div>
+
+                </div>
+                <div>
+                    <hr />
+                </div>
+                <div class="detail_item_rows2">
+                    <div class="related_store_table_column1">
+                        {%trans 'Item Code'%}
+                    </div>
+                    <div class="related_store_table_column2">
+                        {{item.item_code|default:"-"}}
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                </div>
+            </div>
+      <!--  </div> -->
+     
+        <div id="det_item_settings">
+            {%ifequal user.id item.line.store.user.id%}
+                <a class="short_red_button" href="{%url edit_item item.id%}">{%trans 'Edit'%}</a>
+            {%else%}
+                &nbsp;
+            {%endifequal%}
+
+            {%ifequal user.id item.line.store.user.id%}
+                &nbsp;
+            {%else%}
+            {%if compare_list%}
+                {%ifequal compare_list.deleted 0%}
+                    &nbsp;
+                {%else%}
+                    <a class="long_red_button" href="{%url compare_item item.id%}">{%trans 'Add To My Compare List'%}</a>
+                    <div class="addicted_div">
+                        <a id="compare_clickme" href="#"  title='Add to My Compare List|Want to compare products before you buy? View the item and add it to your list by clicking "Add to My Compare List" button. Review all the selected items by going to "My Compare List" page by selecting the button from the left side menu. '><img style="cursor:help;border:none;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>
+                    </div>
+                {%endifequal%}
+            {%else%}
+                <a class="long_red_button"  href="{%url compare_item item.id%}" >{%trans 'Add To My Compare List'%}</a>
+                <div class="addicted_div">
+                    <a id="compare_clickme" href="#"  title='Add to My Compare List|Want to compare products before you buy? View the item and add it to your list by clicking "Add to My Compare List" button. Review all the selected items by going to "My Compare List" page by selecting the button from the left side menu. '><img style="cursor:help;border:none;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>
+                </div>
+            {%endif%}
+
+            <a href="{% url message_fashion_owner item.id %}" class="short_red_button">Mail</a>
+            {%endifequal%}
+        </div>
+<div class="rows2">
+    &nbsp;
+</div>
+{%if viewed_ad2 %}
+
+<div id="comment_ad" class="rows">
+       <a href="{{viewed_ad2.ad_website}}">
+            <img border="0" src="{{MEDIA_URL}}{{viewed_ad2.ad_image}}" height="100px" width="371px"/>
+       </a>
+    </div>
+<div>
+        &nbsp;
+</div>
+
+{%endif %}
+<div>
+    {% if item.comment_set.all %}
+        <iframe src="{% url view_comment "item" item.id %}" id="comment_frame" frameborder="0" height="500px" width="372px"  scrolling="no"></iframe>
+    {% endif %}
+</div>
+    {%if user.is_authenticated %}
+    <div id="det_comment_box_div">
+       <div class="title comment_box_title">
+           &nbsp;{% trans 'Leave your comment here' %}
+       </div>
+       {% if messages %}
+        <div class="framework_msg">
+            {% for message in messages %}
+                    {{ message }}
+               {% endfor %}
+        </div>
+        {% endif %}
+       <form method="POST" action="">
+       <div class="rows">
+            {%for commentfield in form%}
+                <div class="rows">
+                    {{commentfield}}
+                </div>
+            {%endfor%}
+            <div id="comment_button_div">
+                <input class="short_red_button transparent" type="submit"  value="Comment" />
+            </div>
+            <input type="hidden" value="{% ifequal title 'Last updated' %}{{data.designer.id}}{% else %}{{data.designer.store.id}}{% endifequal %}" name="designer_id"/>
+            <input type="hidden" value="{{object.page_num}}" name="page_num"/>
+        </div>
+      </form>
+   </div>
+    {% else %}
+    <div id="unauthorized_comment_div">
+        <a href="{% url auth_login %}">{%trans 'Please Sign In To Comment'%}</a>
+    </div>
+    {%endif%}
+
+    <div id="detail_picture" class="picture_border2">
+        <div>
+            <a href="#" class="close"></a>
+        </div>
+        <div id="det_pop_image" class="" style="{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 600x480 %});{% endif %}">
+        </div>
+    </div>
+    </div>
+    
+    <div id="det_item_info2">
+        <div class="rows" id="prev_next_item_bg">
+            <div class="type3_col" >
+                <center>
+                
+                <a {% if prev %}href="{% url detail_items prev.id%}" class="hyperlink" style="color:blue;"{% endif %}>
+                    {% if prev %}
+                    <div class="picture_border1 det_item_pic1 det_rel_item_pic" style="background-image:url({% thumbnail prev.picture1.name 80x60 %});"></div>
+                    {% else %}
+                    <img  src="{{MEDIA_URL}}no_item_image.jpg"  border="1" width="80" height="60"/>
+                    {% endif%}
+                <div class="prev_img_arrow" >
+                </div>
+                </a>
+                </center>
+            </div>
+            <div id="current_small_item">
+                <div class="picture_border1 current_small_item_pic" style="{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 80x60 %});{% endif %}"></div>
+            </div>
+            <div class="type3_col">
+                <center>
+                
+                <a {% if next %}href="{% url detail_items next.id %}" class="hyperlink" style="color:blue;"{%endif%}>
+                    {% if next %}
+                        <div class="picture_border1 det_item_pic1 det_rel_item_pic" style="background-image:url({% thumbnail next.picture1.name 80x60 %});"></div>
+                    {% else %}
+                        <img  src="{{MEDIA_URL}}no_item_image.jpg" border="1" width="80" height="60"/>
+                    {% endif%}
+                    <div class="next_img_arrow">
+                    </div>
+                </a>
+                </center>
+            </div>
+        </div>
+        <div>
+            &nbsp;
+        </div>
+       {% cache 3600 related_to_item item.id item.line.store.user user%}        <div class="title">
+        {% ifequal item.line.store.user.account_type 1%}{%trans 'Store Details'%}{%else%}{%trans 'Designer Details' %}{%endifequal%}
+        </div>
+        <div class="rows" id="det_item_store_info">
+            <div class="rows2 small_bottom_space">
+                <div class="detail_item_rows">
+                    <div class="related_store_table_column1">
+                        {%trans 'Name'%}
+                    </div>
+                    <div class="divide">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {% url view_stores item.line.store.slug as store_name %}
+                        <a href="{{store_name}}" class="hyperlink">{{item.line.store}}</a>
+                    </div>
+                </div>
+                <div class="detail_item_row">
+                    <div class="related_store_table_column1">
+                        {%trans 'Username'%}
+                    </div>
+                    <div class="divide">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {% url view_profile item.line.store.user.id as store_owner%}
+                        <a href="{{store_owner}}" class="hyperlink">{{item.line.store.user}}</a>
+                    </div>
+                </div>
+                <div class="detail_item_row">
+                    <div class="related_store_table_column1">
+                        {%trans 'Address'%}
+                    </div>
+                    <div class="divide">
+                        :
+                    </div>
+                    <div class="related_store_table_column2" id="ie_suck_warp">
+                        {% for line in item.line.store.location_list|default:"-" %}
+                            {{ line}}<br>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="detail_item_row">
+                    <div class="related_store_table_column1">
+                        {%trans 'Telephone'%}
+                    </div>
+                    <div class="divide">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                       {% if item.line.store.user.phone_area_code %} {{item.line.store.user.phone_area_code}} - {%endif%}{{item.line.store.user.telephone|default:"-"}}
+                    </div>
+                </div>
+                <div class="detail_item_row">
+                    <div class="related_store_table_column1">
+                        {%trans 'Handphone'%}
+                    </div>
+                    <div class="divide">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                            {{item.line.store.user.handphone|default:"-"}}
+                    </div>
+                </div>
+                <div class="detail_item_row">
+                    <div class="related_store_table_column1">
+                        {%trans 'Facsimile'%}
+                    </div>
+                    <div class="divide">
+                        :
+                    </div>
+                    <div class="related_store_table_column2">
+                        {%if item.line.store.user.fax%}
+                            {{item.line.store.user.fax_area_code}} -{% endif %} {{item.line.store.user.fax|default:"-"}}
+                        
+                    </div>
+                </div>
+                <div class="detail_item_row">
+                    <div class="related_store_table_column1">
+                        {%trans 'Email'%}
+                    </div>
+                    <div class="divide">
+                        :
+                    </div>
+                    <div class="related_store_table_column2" id="email_column">
+                        {{item.line.store.user.email|mailhide}}
+                    </div>
+                </div>
+            </div>
+            <div class="rows2" >
+                {%ifequal user.id item.line.store.user.id%}
+                &nbsp;
+                {%else%}
+                {%if request.user.id%}
+                    {%if addict%}
+                        {%ifequal addict.store.id item.line.store.id%}
+                        <div class="title">{%trans 'Already Addicted'%}</div>
+                        {%else%}
+                        <a class="medium_red_button" href="{%url addicted item.line.store.user.id%}">{%trans 'Addict Store'%}</a>
+                        <a id="addict_clickme" href="#"  title='Addict Store|If you think this store is cool and you would like to get notified with their latest products, simply click "Addict Store" button. All notifications on their products and services will be sent to your "Fashionment Mail" (its on the left side menu!). List of your addictions will appear on your profile and related stores will get informed whenever someone is addicted to them. '><img style="margin:3px 0 0 3px;border:none;cursor:help;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>
+                        {% endifequal %}
+                    {%else%}
+                        <a class="medium_red_button" href="{%url addicted item.line.store.user.id%}">{%trans 'Addict Store'%}</a>
+                        <a id="addict_clickme" href="#"  title='Addict Store|If you think this store is cool and you would like to get notified with their latest products, simply click "Addict Store" button. All notifications on their products and services will be sent to your "Fashionment Mail" (its on the left side menu!). List of your addictions will appear on your profile and related stores will get informed whenever someone is addicted to them. '><img style="margin:3px 0 0 3px;border:none;cursor:help;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>
+                    {%endif%}
+                {%else%}
+                {%endif%}
+                {% endifequal %}
+            </div>
+            <hr class="breaking_line"/>
+            <div class="title rows2 breaking_line">
+                {% trans "Store's other collections :"%}
+            </div>
+                {% for collection in lines %}
+                <div class="rows">
+                    <a href="{% url view_item collection.id %}" class="hyperlink">{{collection.line|capfirst}}</a>
+                </div>
+                {% endfor %}
+            {% if request.user.id %}
+                {%ifnotequal request.user.id item.line.store.user.id %}
+                    <hr class="breaking_line"/>
+                    <div class="related_store_table">
+                        {%url report item.id "item" as report%}
+                        <a href="{{report}}" class="hyperlink"><div id="report_flag"></div>{% trans 'Report item' %}</a>
+                    </div>
+                {%endifnotequal %}
+            {% endif %}
+        </div>
+        <div class="related_store_head_row">
+            <div class="title">{% ifequal item.line.store.user.account_type 1 %}{%trans 'Related Store'%}{%else%}{% trans 'Related Designer' %}{%endifequal%}</div>
+        </div>
+        {% endcache %}      {% cache 60 related_store/designer item.id %}    <div class="related_store_div">
+        {%for item in related_items%}
+        <div class="related_store_table">
+          <div class="rows2" >
+            <div class="related_item_div1"><a href="{%url detail_items item.id %}" class="link_decoration" ><div class="picture_border" style="height:60px;width:80px;background:no-repeat;background-position:center center;{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 80x60 %});{% endif %}"></div></a></div>
+            <div class="related_item_div2">
+             <div class="rows2">
+                 <div class="rel_item_own">
+                    {%trans 'Owner'%}
+                 </div>
+                 <div class="divide">
+                    :
+                 </div>
+                 <div class="divide">
+                    <a href="{% url view_profile item.line.store.user.id %}" class="hyperlink">{{item.line.store.user.username}}</a>
+                 </div>
+             </div>
+             <div class="rows2">
+                    <div class="rel_item_own" >{%trans 'Collection'%}</div>
+                    <div class="divide">
+                        :
+                    </div>
+                    <div class="divide">{{item.line}}</div>
+             </div>
+             <div class="rows2">
+                <div class="rel_item_own">{%trans 'Item'%}</div>
+                <div class="divide">:</div>
+                <div class="divide">{{item.item|truncatechar:12}}</div>
+              </div>
+              <div class="rows2" valign="top">
+                <a href="{%url detail_items item.id %}" class="link_decoration small_font">{%trans 'More detail'%}</a>
+            </div>
+            </div>
+          </div>
+
+
+          </div>
+
+
+        {%endfor%}
+
+    </div>
+    {% endcache %}    </div>
+    
+ </div>
+</form>
+<script>
+<!--
+var star_counter = $("#star_counter").val();
+var pub_date = $("#pub_date").val();
+var main_img =$('#main_img')
+$(document).ready(function(){
+    detail_items_js()
+    $('#change_img').click(function(e){
+        e.preventDefault()
+        $('#product_picture').attr('href','{% url view_detail_pic item.id "picture2"%}')
+        $('#det_pop_image').attr('style','display:block;height:500px;width:600px;background:no-repeat;background-position:center center;{% if item.picture2 %}background-image:url({% thumbnail item.picture2.name 600x480 %});{% endif %}')
+        main_img.attr('style','height:200px;width:250px;background:no-repeat;background-position:center center;{% if item.picture2 %}background-image:url({% thumbnail item.picture2.name 250x200 %});{% endif %}')
+    })
+    $('#change_img1').click(function(e){
+        e.preventDefault()
+        $('#product_picture').attr('href','{% url view_detail_pic item.id "picture1"%}')
+        $('#det_pop_image').attr('style','display:block;height:500px;width:600px;background:no-repeat;background-position:center center;{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 600x480 %});{% endif %}')
+        main_img.attr('style','height:200px;width:250px;background:no-repeat;background-position:center center;{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 250x200 %});{% endif %}')
+    })
+    var table = $('#email_column')
+
+        table.click(function(e){
+            e.preventDefault();
+            var target = $(e.target)
+            if(target.is('input[type=submit]')){
+                target.parents('form').submit()
+            }
+            else if(target.is('.email_hide')){
+
+                var target_parent = target.parent()
+                var div = $('<div class="win_pop_up_mail_hide"></div>').appendTo('body')
+                div.mailhide(target.attr('href'),{
+                    load:function(data){
+                        target.hide();
+                        $('#detail_items_table').cover();
+                        $('.second_column').center(div);
+                        $('#detail_items_table_cover').click(function(e){
+                            $(this).remove()
+                            target.show();
+                            div.remove()
+                        })
+                    },
+                    success:function(data){
+                        var clone_div = div.clone();
+                        div.remove();
+                        $('#detail_items_table_cover').remove();
+                        target_parent.html(clone_div.html()).attr('style','font-weight:bold;');
+                    }
+                })
+            }
+        })
+        table.find('.email_hide').hover(function(e){
+            $(this).parent().find('.lock').css({'background-image':'url(/media/img/padlock_open_small.gif)'})
+        },
+        function(e){
+            $(this).parent().find('.lock').removeAttr('style')
+        })
+
+        $("a.lock").click(function(e){
+            var target = $(e.target)
+            $(this).siblings().click()
+        })
+});
+
+jQuery.fn.ratings = function(stars, initialRating) {
+
+  //Save  the jQuery object for later use.
+  var elements = this;
+
+  //Go through each object in the selector and create a ratings control.
+  return this.each(function() {
+
+    //Make sure intialRating is set. if(!initialRating)
+    if(!star_counter){
+        initialRating = 0;
+
+
+    }
+      else{
+            initialRating = star_counter;
+        }
+
+    //Save the current element for later use.
+    var containerElement = this;
+
+    //grab the jQuery object for the current container div
+    var container = jQuery(this);
+
+    //Create an array of stars so they can be referenced again.
+    var starsCollection = Array();
+
+    //Save the initial rating.
+    containerElement.rating = initialRating;
+
+    //Set the container div's overflow to auto.  This ensure it will grow to
+    //hold all of its children.
+    container.css('overflow', 'auto');
+
+    //create each star
+    for(var starIdx = 0; starIdx < stars; starIdx++) {
+
+      //Create a div to hold the star.
+      var starElement = document.createElement('div');
+
+      //Get a jQuery object for this star.
+      var star = jQuery(starElement);
+
+      //Store the rating that represents this star.
+      starElement.rating = starIdx + 1;
+
+      //Add the style.
+      star.addClass('jquery-ratings-star');
+
+      //Add the full css class if the star is beneath the initial rating.
+      if(starIdx < initialRating) {
+        star.addClass('jquery-ratings-full');
+      }
+
+      //add the star to the container
+      container.append(star);
+      starsCollection.push(star);
+    if(pub_date==0)
+    {
+    $('#example-1').click(function(e){
+
+        $(this).replaceWith('Loading <img src="{{MEDIA_URL}}wait.gif"/>')
+    })
+       //hook up the click event
+      star.click(function(e) {
+          e.preventDefault()
+        //When clicked, fire the 'ratingchanged' event handler.  Pass the rating through as the data argument.
+        elements.triggerHandler("ratingchanged", {rating: this.rating});
+        containerElement.rating = this.rating;
+        $("#star_id").val(this.rating);
+        $('#form1').attr('action','{%url rate_item item.id%}');
+        $('#form1').submit();
+      });
+      star.mouseenter(function() {
+        //Highlight selected stars.
+        for(var index = 0; index < this.rating; index++) {
+          starsCollection[index].addClass('jquery-ratings-full');
+        }
+        //Unhighlight unselected stars.
+        for(var index = this.rating; index < stars; index++) {
+          starsCollection[index].removeClass('jquery-ratings-full');
+        }
+      });
+
+      container.mouseleave(function() {
+        //Highlight selected stars.
+        for(var index = 0; index < containerElement.rating; index++) {
+          starsCollection[index].addClass('jquery-ratings-full');
+        }
+        //Unhighlight unselected stars.
+        for(var index = containerElement.rating; index < stars ; index++) {
+          starsCollection[index].removeClass('jquery-ratings-full');
+        }
+      });
+    }
+    }
+  });
+};
+
+-->
+</script>
+{%endblock%}

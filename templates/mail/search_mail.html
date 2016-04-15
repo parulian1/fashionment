@@ -1,0 +1,16 @@
+                <tr class="search_mail_height" bgcolor="#95B3DE">
+                    {% for field in form2 %}
+                    {% ifnotequal field.label "Search" %}
+                    <td id="{{field.label}}">
+                        {{field.label}}
+                    </td>
+                    {% endifnotequal %}
+                    <td id="{{field.name}}">
+                        {{field}}asd
+                    </td>
+                    {%endfor%}
+                    <td>
+                        <input type="submit" value="Search" name="searched" >
+                    </td>
+                    <br /><br />
+                </tr>

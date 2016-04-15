@@ -1,0 +1,232 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% block title %}
+{% load thumbnail%}
+{%load humanize%}
+Fashionment.com - {% trans 'Preview Your Fashion Item ' %}
+{% endblock %}
+{%block content_loged%}
+<div id="add_complete_div">
+<div class="rows2">
+    <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> <a href="{% url view_store %}" class="hyperlink">{%ifequal user.account_type 1 %}{% trans 'My Store' %}{%else%}{% trans 'My Portfolio' %}{%endifequal%} ></a> <a href="{% url line_add %}" class="hyperlink">{%trans 'Add Collection' %} ></a><a href="{{previous_url}}" class="hyperlink"> {%trans 'Add Item' %} > </a> {% trans 'Add Item Complete' %}
+</div>
+<div class="rows2">
+
+</div>
+<div class="rows2">
+
+</div>
+<div align="center" class="title" style="padding:0px;"><h2>{%trans 'You Have Successfully Added An Item'%}</h2></div>
+<form method="POST" action="" id="form1" >
+     <div id="add_item_complete_div">
+          <div class="rows2">
+            <div class="rows2">{{item|capfirst}}</div>
+          </div>
+            <div class="rows2"><div id="main_img" class="picture_border_main_img" style="{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 250x200 %});{% endif %}"></div></div>
+            <div class="rows2">&nbsp;</div>
+          <div class="rows2">
+              <a id="change_img1"><div class="picture_border_change_img" id="add_item_pic1" style="{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 80x60 %});{% endif %}"></div></a>
+              {%if item.picture2%}
+              <a id="change_img"><div class="picture_border_change_img" style="{% if item.picture2 %}background-image:url({% thumbnail item.picture2.name 80x60 %});{% endif %}"></div></a>
+              {%else%}
+              <img alt="no_fashion_item_image"  src="{{MEDIA_URL}}no_item_image.jpg" id="add_item_no_pic" border="1" width="70" height="60"/>
+              {%endif%}
+          </div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Collection'%}</div>
+            <div class="half_col"><a href="{%url view_item item.line.id%}" class="link_decoration">{{item.line}}</a></div>
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Rating'%}</div>
+            <div class="half_col" id="example-1">
+                <input type="hidden" id="star_counter" value="{{rating.avg_rate}}" />
+                <input type="hidden" id="star_id" name="star" />
+                <input type="hidden" id="pub_date" value="{{flag}}" />
+            </div>
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Category'%}</div>
+            <div class="half_col">{{item.line.category}}</div>
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Gender'%}</div>
+            <div class="half_col">
+                {%ifequal item.gender 1%}
+                {%trans 'Male'%}
+                {%else%}
+                {%trans 'Female'%}
+                {%endifequal%}
+            </div >
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col" valign="top">{%trans 'Description'%}</div>
+            <div class="half_col" id="description">
+                {% for line in item.description_list|default:"-" %}
+                    {{ line}}<br>
+                {% endfor %}
+
+            </div>
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Colour'%}</div>
+            <div class="half_col">{{item.colour|default:"-"}}</div>
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Size'%}</div>
+            <div class="half_col">{{item.size|default:"-"}}</div>
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Price'%}</div>
+            <div class="half_col">{%ifnotequal item.price 0 %}{{item.price|intcomma}}{%else%}{%trans 'on request'%}{%endifnotequal%}</div>
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Availability'%}</div>
+            <div class="half_col">
+                {%ifequal item.availability 1%}
+                {%trans 'In-Stock'%}
+                {%endifequal%}
+                {%ifequal item.availability 2%}
+                {%trans 'Pre Order'%}
+                {%endifequal%}
+                {%ifequal item.availability 3%}
+                {%trans 'Sold Out'%}
+                {%endifequal%}
+            </div>
+          </div>
+            <div class="rows2"><hr /></div>
+          <div class="rows2">
+            <div class="half_col">{%trans 'Item Code'%}</div>
+            <div class="half_col">{{item.item_code|default:"-"}}</div>
+          </div>
+            <div class="rows2"><hr /></div>
+            <div class="rows2">
+            {%ifequal user.id item.line.store.user.id%}
+                <a class="short_red_button"  href="{%url item_add item.line.id%}">{%trans 'Back'%}</a>
+                <a class="long_red_button"  href="{%url view_item item.line.id%}">{%trans 'Back To My Collection'%}</a>
+            {%endifequal%}
+            </div>
+
+
+        </div>
+    </form>
+</div>
+<script>
+<!--
+var star_counter = $("#star_counter").val();
+var pub_date = $("#pub_date").val();
+var main_img =$('#main_img')
+
+ $(document).ready(function(){
+    img.attr('style','display:;border:none;');
+        
+    $('#change_img').attr('style','cursor:pointer')
+    $('#change_img1').attr('style','cursor:pointer')
+	$('#id_comment').css('width','550px')
+    $('#id_comment').css('height','100px')
+    $('#example-1').ratings(5).bind('ratingchanged', function(event, data) {
+    $('#example-rating-1').text(data.rating);
+    
+
+  });
+    all.show()
+    name1.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+    img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+
+    $('#change_img').click(function(e){
+        e.preventDefault()
+        main_img.attr('style','height:200px;width:250px;background:no-repeat;background-position:center center;{% if item.picture2 %}background-image:url({% thumbnail item.picture2.name 250x200 %});{% endif %}')
+    })
+    $('#change_img1').click(function(e){
+        e.preventDefault()
+        main_img.attr('style','height:200px;width:250px;background:no-repeat;background-position:center center;{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 250x200 %});{% endif %}')
+    })
+});
+
+jQuery.fn.ratings = function(stars, initialRating) {
+
+  //Save  the jQuery object for later use.
+  var elements = this;
+
+  //Go through each object in the selector and create a ratings control.
+  return this.each(function() {
+
+    //Make sure intialRating is set. if(!initialRating)
+    if(!star_counter){
+        initialRating = 0;
+
+
+    }
+      else{
+            initialRating = star_counter;
+        }
+
+    //Save the current element for later use.
+    var containerElement = this;
+
+    //grab the jQuery object for the current container div
+    var container = jQuery(this);
+
+    //Create an array of stars so they can be referenced again.
+    var starsCollection = Array();
+
+    //Save the initial rating.
+    containerElement.rating = initialRating;
+
+    //Set the container div's overflow to auto.  This ensure it will grow to
+    //hold all of its children.
+    container.css('overflow', 'auto');
+
+    //create each star
+    for(var starIdx = 0; starIdx < stars; starIdx++) {
+
+      //Create a div to hold the star.
+      var starElement = document.createElement('div');
+
+      //Get a jQuery object for this star.
+      var star = jQuery(starElement);
+
+      //Store the rating that represents this star.
+      starElement.rating = starIdx + 1;
+
+      //Add the style.
+      star.addClass('jquery-ratings-star');
+
+      //Add the full css class if the star is beneath the initial rating.
+      if(starIdx < initialRating) {
+        star.addClass('jquery-ratings-full');
+      }
+
+      //add the star to the container
+      container.append(star);
+      starsCollection.push(star);
+
+    }
+  });
+};
+  String.prototype.wordWrap = function(m, b, c){
+                var i, j, s, r = this.split("\n");
+                if(m > 0) for(i in r){
+                    for(s = r[i], r[i] = ""; s.length > m;
+                        j = c ? m : (j = s.substr(0, m).match(/\S*$/)).input.length - j[0].length
+                        || m,
+                        r[i] += s.substr(0, j) + ((s = s.substr(j)).length ? b : "")
+                    );
+                    r[i] += s;
+                }
+                return r.join("\n");
+        };
+        var description = $('#description')
+        var new_location1 = description.html().wordWrap(30,"\n",true);
+        description.html(new_location1);
+-->
+
+</script>
+{%endblock%}

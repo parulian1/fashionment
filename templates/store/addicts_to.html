@@ -1,0 +1,36 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load thumbnail%}
+{% block title %}
+Fashionment.com - {% trans 'Addicts To' %}
+{% endblock %}
+{%block content_loged%}
+<div class="form_fields">
+    <div class="detail_comp big_bottom_marg">
+       <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} > </a> {%trans 'I Addicted To'%}
+    </div>
+    <div class="title small_bottom_space activate">
+        {%trans 'I addicted To'%}
+    </div>
+    {%if addicts_to%}
+    {%for fan_to in addicts_to%}
+    <div class="rows fan_to_div">
+        <div class="mail_tab_unselected smallest_bottom_min_marg">
+            {{fan_to}}
+        </div>
+
+        <div class="view_picture">
+            <a href="{%url view_stores fan_to.store.slug%}"  ><div class="addicted_div addicted_div_marg" style="{% if fan_to.store.picture %}background-image:url({% thumbnail fan_to.store.picture.name 120x80 %});{% endif %}"></div></a>
+            <a href="{%url remove_addict fan_to.id%}" >{%trans 'Remove'%}</a>
+        </div>
+    </div>
+    {%endfor%}
+    {%else%}
+        {%blocktrans%}
+            You are not an addiction just yet. Make people addict to you by increasing your collections and doing more promotions
+        {%endblocktrans%}
+    {%endif%}
+</div>
+
+{%endblock%}
+

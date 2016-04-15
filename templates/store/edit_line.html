@@ -1,0 +1,59 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% block title %}
+Fashionment.com - {% trans 'Edit Collection' %}
+{% endblock %}
+{%block content_loged%}
+<div id="edit_line_div">
+    <div>
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> <a href="{% url view_store %}" class="hyperlink">{% trans 'My Store' %} ></a> {%trans 'Add Collection' %}
+    </div>
+     <div>&nbsp;
+    </div>
+     <div>&nbsp;
+    </div>
+    <div class="title">
+        <h2>{%trans 'Edit Collection'%}</h2>
+    </div>
+<form method="POST" id="frm1">
+    {%for line_field in edit_line_form%}
+        <div class="each_row">
+            <div class="column2">
+                <div class="column1">
+                    {% ifnotequal line_field.label "Line" %}
+                    {{line_field.label}}
+                    {% else %}
+                    {% trans 'Collection' %}
+                    {% endifnotequal %}
+                </div>
+                {{line_field}}
+                {{line_field.errors}}
+                <div class="eg">
+                    {{line_field.help_text}}
+                </div>
+            </div>
+        </div>
+    {%endfor%}
+    <div class="column2">
+        <div class="column1">
+        </div>
+        <div >
+            <input class="short_red_button" type="submit" value="Submit"/>
+        </div>
+
+    </div>
+</form>
+</div>
+<script>
+    <!--
+    $(document).ready(function(){
+        $('#frm1').submitLoad()
+        img.attr('style','display:;border:none;');
+        all.show()
+        name1.attr('style',' color:#B5121C; font-size:12px; font-weight:bold; margin-left:0px')
+        img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+    })
+    -->
+</script>
+
+{%endblock%}

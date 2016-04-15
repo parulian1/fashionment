@@ -1,0 +1,154 @@
+[
+  {
+    "pk": 1, 
+    "model": "accounts.countryareacode", 
+    "fields": {
+      "country_name": "indonesia"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "accounts.countryareacode", 
+    "fields": {
+      "country_name": "america"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "accounts.provinceareacode", 
+    "fields": {
+      "country": 2, 
+      "province_name": "LA"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "accounts.provinceareacode", 
+    "fields": {
+      "country": 1, 
+      "province_name": "jakarta"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "accounts.phoneareacode", 
+    "fields": {
+      "prov": 2, 
+      "code": "021", 
+      "name": "binus"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "accounts.phoneareacode", 
+    "fields": {
+      "prov": 1, 
+      "code": "0245", 
+      "name": "side"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "accounts.user", 
+    "fields": {
+      "province": 2, 
+      "picture": "account/img/KELUARAN_BARU_TOYOTA.jpg", 
+      "fax": "", 
+      "post_code": 14450, 
+      "groups": [], 
+      "personal_website": "", 
+      "country": 1, 
+      "phone_area_code": 1, 
+      "fax_area_code": null, 
+      "telephone": "6621634", 
+      "sex": 1, 
+      "handphone": "", 
+      "date_of_birth": "1986-06-01", 
+      "about_me": "I'm a Man...", 
+      "page_view": 45, 
+      "interest": "Women", 
+      "activation_key": "16db3a999cf07c9047f8fcee8c29bcaafd7148e5", 
+      "user_permissions": [], 
+      "user_addicted": [], 
+      "street_address": "Jl. E1 no:293 B\r\nteluk gong, jakarta utara"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "accounts.user", 
+    "fields": {
+      "province": 1, 
+      "picture": "account/img/5yhtesaz.jpg", 
+      "fax": "", 
+      "post_code": 0, 
+      "groups": [], 
+      "personal_website": "http://yoko.com/", 
+      "country": 2, 
+      "phone_area_code": 1, 
+      "fax_area_code": null, 
+      "telephone": "7952350", 
+      "sex": 1, 
+      "handphone": "", 
+      "date_of_birth": "1987-03-11", 
+      "about_me": "no comment", 
+      "page_view": 25, 
+      "interest": "main game", 
+      "activation_key": "8ad78e4f8f7039cbe276256346f2bbbb78137797", 
+      "user_permissions": [], 
+      "user_addicted": [], 
+      "street_address": "jln u no 31 "
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "accounts.user", 
+    "fields": {
+      "province": 1, 
+      "picture": "", 
+      "fax": "", 
+      "post_code": 25122, 
+      "groups": [], 
+      "personal_website": "http://yoko.com/", 
+      "country": 1, 
+      "phone_area_code": 1, 
+      "fax_area_code": null, 
+      "telephone": "7952350", 
+      "sex": 1, 
+      "handphone": "", 
+      "date_of_birth": "1950-01-18", 
+      "about_me": "sadasdasd", 
+      "page_view": 1, 
+      "interest": "yoyo", 
+      "activation_key": "6025fbcefa3921b1593c3b5d6171ca81f13d9b45", 
+      "user_permissions": [], 
+      "user_addicted": [], 
+      "street_address": "aasdasda asa asdasd asdasda\r\nadasda adasd\r\nasdasd"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "accounts.user", 
+    "fields": {
+      "province": 2, 
+      "picture": "account/img/Anyone_seen_Johnson__by_Jas__.jpg", 
+      "fax": "", 
+      "post_code": 123123, 
+      "groups": [], 
+      "personal_website": "http://asd.com/", 
+      "country": 1, 
+      "phone_area_code": 1, 
+      "fax_area_code": null, 
+      "telephone": "123123", 
+      "sex": 1, 
+      "handphone": "123", 
+      "date_of_birth": "1950-01-06", 
+      "about_me": "asd", 
+      "page_view": 11, 
+      "interest": "asd", 
+      "activation_key": "cdbd2d0f93a7e04b5547c2a84890244d8148919b", 
+      "user_permissions": [], 
+      "user_addicted": [], 
+      "street_address": "123123"
+    }
+  }
+]

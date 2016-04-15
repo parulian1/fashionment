@@ -1,0 +1,447 @@
+{% extends 'account_base.html' %}
+{% load i18n %}
+{% load custom %}
+
+{% block title %}
+{%load thumbnail%}
+{%load humanize%}
+Fashionment.com -
+{% if not code_flg %}
+    {% trans 'Find Fashion store , Online Boutique , Designers and Fashion Items.' %}
+{%else%}
+Result for
+{% ifequal flag 0 %}
+    {%if not designer_flag %}{% trans 'Fashion Store and Online Boutique'%}{%else%}{% trans 'Fashion Designers'%}{%endif%}
+{%else%}
+{% trans 'Fashion Collection and items'%}
+{%endifequal%}
+{%endif%}
+{% endblock %}
+{% load paginator %}
+{% block head %}
+  <link rel="stylesheet" href="{{MEDIA_URL}}css/fashion_finder.css" type="text/css" />
+{% endblock %}
+{% block content_loged %}
+<!--
+{% if corrected_query %}
+  Did you mean: <a href="?{{ gets_string }}">{{ corrected_query }}</a>
+{% endif %}
+{% for result in stores.object_list %}
+  {{ result.percent }}% |
+  {{ result.rank }} rank |
+  {{ result.instance.store_story }}
+  {{ result.instance.name }}
+{% endfor %}
+-->
+<table border="0" id="search_base_table">
+    <tr>
+        <td colspan=5">
+            {% include 'store/search_store_form.html' %}
+            {% include 'store/search_item_form.html' %}
+            {% include 'store/search_designer_form.html' %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5">
+            <hr />
+        </td>
+    </tr>
+
+    {% ifequal code_flg 1 %}
+        <tr>
+            <td class="title" style="padding:0px;">
+               <h2> Fashion Finder Result </h2>
+            </td>
+            <td align="right">
+                {%ifequal paginator.num_pages 1%}
+                {%else%}
+                    {% paginator 2 %}
+                {%endifequal%}
+                <!--
+                {% if page_obj.has_previous %}
+                <span class="paginate-first"><a href="?{{gets_string}}&page=1" title="First Page"style="text-decoration:none;color:#B5121C;">{%trans 'First'%}</a></span>
+                    <a href="?{{gets_string}}&page={{ page_obj.previous_page_number }}" class="paginate-previous" style="border:none;text-decoration:none;color:#B5121C;">&lt;</a>
+                {% endif %}
+                {% for page in paginator.page_range %}
+                    {% if page %}
+                        {% ifequal page stores.number %}
+                            <span class="paginate-current" >{{ page }}</span>
+                        {% else %}
+                            <a style="text-decoration:none;color:#B5121C;font-weight:bold;" href="?{{gets_string}}&page={{ page }}" class="page_number">{{ page }}</a>
+                        {% endifequal %}
+                    {% else %}
+                        ...
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="?{{gets_string}}&page={{ page_obj.next_page_number }}"  class="paginate-next" style="border:none;text-decoration:none;color:#B5121C;">&gt;</a>
+                    <span class="paginate-last"><a href="?{{gets_string}}&page={{ paginator.num_pages }}" title="Last Page" style="text-decoration:none;color:#B5121C;">{%trans 'Last'%}</a></span>
+                {% endif %}-->
+            </td>
+        </tr>
+
+        {% ifequal flag 0 %}
+        <tr>
+            <td colspan="5">
+              {%ifnotequal designer_flag 1%}{% trans 'Fashion Store'%}{%else%}{% trans 'Fashion Designer'%}{%endifnotequal%}
+            </td>
+        </tr>
+
+        {% if page_obj.object_list %}
+        <tr>
+            <td colspan="5">
+                {% for result in page_obj.object_list %}
+                    <div class="rows2">
+                        <div class="search_base_column1">
+                            {% url view_stores result.slug as temp_link %}
+                            <a href="{{temp_link}}">
+                                <div class="picture_border" style="height:85px;width:128px;background:no-repeat;background-position:center center;{% if result.picture %}background-image:url({% thumbnail result.picture.name 85x128 %});{% endif %}"></div>
+                            </a>
+                        </div>
+                        <div class="search_base_column2" >
+                            <div style="float:left;width:50%;">
+                                <div class="detail_item_rows">
+                                    <div class="inner_column1">
+                                        {%ifnotequal designer_flag 1%}{%trans 'Store Name'%}{%else%}{%trans 'Designer Name'%}{%endifnotequal%}
+                                    </div>
+                                    <div style="float:left;">
+                                        :
+                                    </div>
+                                    <div class="related_store_table_column2">
+                                        <a href="{{temp_link}}" class="hyperlink">
+                                            {{result.name}}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="detail_item_rows">
+                                    <div class="inner_column1">
+                                        {%trans 'Owner'%}
+                                    </div>
+                                    <div style="float:left;">
+                                        :
+                                    </div>
+                                    <div class="related_store_table_column2">
+                                        <a href="{% url view_profile result.user.id %}" class="hyperlink">
+                                            {{result.user.username}}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="detail_item_rows">
+                                    <div class="inner_column1">
+                                        {%trans 'Address'%}
+                                    </div>
+                                    <div style="float:left;">
+                                        :
+                                    </div>
+                                    <div class="related_store_table_column2" id="ie_suck_warp">
+                                        {% for line in result.location_list|default:_("-") %}
+                                            {{ line }}<br>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="detail_item_rows">
+                                    <div class="inner_column1">
+                                        {%trans 'Telephone'%}
+                                    </div>
+                                    <div style="float:left;">
+                                        :
+                                    </div>
+                                    <div class="related_store_table_column2">
+                                        {% if result.phone_area.code %}
+                                {{result.phone_area.code}} - {{result.telephone}}
+                                        {% else %}
+                                         -
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div align="right" class="detail_item_rows">
+                        <div class="related_store_table_column2">
+                            &nbsp;
+                        </div>
+                        <div align="right">
+                            <div style="float:left;width:18%; text-align: left;">
+                            {% if user.id %}
+                            {% ifnotequal result.user.id user.id %}
+                                 {% ifnotequal result.addicted 1 %}
+                                    <a class="medium_red_button"  href="{% url addicted result.id %}">
+                                        {%trans 'Addict Store'%}
+                                    </a>
+                                  {% else%}
+                                        <div  class="title" style="font-size:12px;">
+                                            {%trans 'Already Addicted'%}
+                                        </div>
+                                 {% endifnotequal %}
+                            {% endifnotequal %}
+                            {% endif %}
+                            </div>
+                            <div style="float:left;width:18%%;">
+                                <a class="medium_red_button"  href="{{temp_link}}">
+                                    {%trans 'View Detail'%}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                There is no such store
+            </td>
+        </tr>
+        {% endif %}
+        {% else %}
+        <tr>
+            <td colspan="5">
+                Fashion Items
+            </td>
+        </tr>
+        {% if page_obj.object_list %}
+        <tr>
+            <td colspan="5">
+                {% for result in page_obj.object_list %}
+                {%ifequal result.deleted 0%}
+                    <div class="rows2">
+                        <div class="search_base_column1">
+                            {% url detail_items result.id as temp_link %}
+                            <a href="{{temp_link}}"  class="hyperlink">
+                                <div class="picture_border" style="height:85px;width:128px;background:no-repeat;background-position:center center;{% if result.picture1 %}background-image:url({% thumbnail result.picture1.name 85x128 %});{% endif %}">{%ifequal result.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_small.png" style="border:none;" alt="item sold out" />{%endifequal%}</div>
+                            </a>
+                        </div>
+                        <div class="search_base_column2">
+                            <div style="float:left;width:50%;">
+                                <div class="detail_item_rows">
+                                    <div class="inner_column1">
+                                        {%trans 'Item Name'%}
+                                    </div>
+                                    <div style="float:left;">
+                                        :
+                                    </div>
+                                    <div class="related_store_table_column2">
+                                        <a href="{{temp_link}}" class="hyperlink" >
+                                            {{result.item|default:_("No Name")}}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="detail_item_rows">
+                                    <div class="inner_column1">
+                                        {%trans 'Price'%}
+                                    </div>
+                                    <div style="float:left;">
+                                        :
+                                    </div>
+                                    <div class="related_store_table_column2">
+                                        {%ifnotequal result.price 0 %}{{result.price}}{%else%}{%trans 'on request'%}{%endifnotequal%}
+                                    </div>
+                                </div>
+                                <div class="detail_item_rows">
+                                    <div class="inner_column1">
+                                        {%trans 'Collection'%}
+                                    </div>
+                                    <div style="float:left;">
+                                        :
+                                    </div>
+                                    <div class="related_store_table_column2" id="ie_suck_warp">
+                                            <a href="{% url view_item result.line.id %}" class="hyperlink">
+                                            {{result.line.line}}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="detail_item_rows">
+                                    <div class="inner_column1">
+                                        {%trans 'Category'%}
+                                    </div>
+                                    <div style="float:left;">
+                                        :
+                                    </div>
+                                    <div class="related_store_table_column2">
+                                        {{result.line.category.name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div align="right" class="detail_item_rows">
+                        <div class="related_store_table_column2">
+                            &nbsp;
+                        </div>
+                        <div align="right">
+                            <div style="float:left;width:18%; text-align: left;">
+                                {% if result.item %}
+                                    {% if user.id %}
+                                        {% ifnotequal result.line.store.user.id user.id %}
+                                          {% ifnotequal result.addicted 1 %}
+                                                <a class="medium_red_button" href="{% url addicted result.line.store.user.id %}">
+                                                    {%trans 'Addict Store'%}
+                                                </a>
+                                          {% else%}
+                                            <div class="title" style="font-size:12px;">
+                                                {%trans 'Already Addicted'%}
+                                            </div>
+                                          {% endifnotequal %}
+                                        {% endifnotequal %}
+                                    {%endif%}
+                                {% endif %}
+                            </div>
+                            <div style="float:left;width:18%%;">
+                                <a class="medium_red_button"  href="{{temp_link}}">
+                                    {%trans 'View Detail'%}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                {%endifequal%}
+                {% endfor %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                There is no such item
+            </td>
+        </tr>
+        {% endif %}
+        {% endifequal %}
+    {% else %}
+    <tr>
+        <td colspan="4">
+                {% url list_store2 alphabet type as link %}
+                <div style="float:left;">{% trans 'Sort By:' %}&nbsp;</div>{% url list_store2 "store" "" as store_index %}
+                <div style="float:left;"><a href="{{store_index}}" class="{% ifequal type 'store' %}short_red_button{%else%}log_in{%endifequal%}">{% trans 'Store' %}</a> &nbsp;</div>
+                {% url list_store2 "collection" "" as collection_index %}
+                <div style="float:left;"><a href="{{collection_index}}" class="{% ifequal type 'collection' %}short_red_button{%else%}log_in{%endifequal%}">{% trans 'Collection' %}</a> &nbsp;</div>
+                {% url list_store2 "designer" "" as designer_index %}
+                <div style="float:left;"><a href="{{designer_index}}" class="{% ifequal type 'designer' %}short_red_button{%else%}log_in{%endifequal%}">{% trans 'Designer' %}</a> &nbsp;</div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" >
+            &nbsp;
+        </td>
+    </tr>
+    {% ifequal type "store" %}
+    <tr>
+        <td colspan="4" style="font-size:1.2em;color:#B5121C;font-weight:bold;">
+            {% trans 'Store Index' %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <div>
+                {%for alphabet in array%}
+                    {% url list_store2 type alphabet as link %}
+                    <a href="{{link}}" style="text-decoration:none;color:#B5121C;font-size:12px;font-weight:bold;">
+                       {{alphabet|capfirst}}
+                    </a>&nbsp;|&nbsp;
+                {%endfor%}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <hr />
+        </td>
+    </tr>
+    {% else %}
+        {%ifequal type "designer"%}
+            <tr>
+                <td colspan="4" style="font-size:1.2em;color:#B5121C;font-weight:bold;">
+                    {% trans 'Designer Index' %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div>
+                        {%for alphabet in array%}
+                            {% url list_store2 type alphabet as link %}
+                            <a href="{{link}}" style="text-decoration:none;color:#B5121C;font-size:12px;font-weight:bold;">
+                               {{alphabet|capfirst}}
+                            </a>&nbsp;|&nbsp;
+                        {%endfor%}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <hr />
+                </td>
+            </tr>
+        {%else%}
+            <tr >
+                <td colspan="4" style="font-size:1.2em;color:#B5121C;font-weight:bold;">
+                    {% trans 'Collection Index' %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <hr />
+                </td>
+            </tr>
+        {%endifequal%}
+    {% endifequal %}
+    <tr>
+        <td colspan="4">
+            {% for data in object %}
+
+              {% if forloop.first %}
+                <div style="overflow:hidden;" id="#anchor1">
+                    <a name="anchor1" />
+              {% endif %}
+                <div style="float:left;width:20%;">
+                        <div style="font-weight:bold;color:#B5121C;font-size:12px;">
+                            {{data.alphabet|capfirst}}
+                        </div>
+                        {% for temp_data in data.object %}
+                            <div>
+                                {% ifequal type "collection" %}
+                                    {% url view_item temp_data.id as collection_link %}
+                                    {% url same_collection temp_data.line|slugify as same_collection_link %}
+                                    {% if temp_data.show %}
+                                        <a href="{% ifequal temp_data.same_name_count 1 %}{{collection_link}}{%else %}{{same_collection_link}}{%endifequal%}" style="color:black;" class="hyperlink">
+                                        {{temp_data.line|capfirst|truncatechar:25}}</a>
+                                    {%endif%}
+                                {% else %}
+                                    {% url view_stores temp_data.slug as store_link %}
+                                    <a href="{{store_link}}" style="color:black;" class="hyperlink">{{temp_data.name|capfirst|truncatechar:25}}</a>
+                                    
+                                  
+                                {% endifequal %}
+                            </div>
+                        {% endfor %}
+                </div>
+                {%if data.clear%}<div style="clear:both;overflow:hidden;">&nbsp;</div>{%endif%}
+                {%if data.link_back %}<div style="overflow:hidden;clear:both;width:100%;text-align:right;height:25px;"><a href="#anchor{{data.div_id}}">{% trans 'back to top' %}</a></div></div><div><a name="anchor{{data.div_id}}" />{%endif%}
+            {% endfor %}
+        </td>
+    </tr>
+
+    {% endifequal %}
+</table>
+<script>
+    <!--
+    $(document).ready(function(){
+        searchFormTabs([{id:'search_store_form_box',text:'{% trans "Find by store" %}'},{id:'search_item_form_box',text:'{% trans "Find by fashion" %}'},{id:'search_designer_form_box',text:'{% trans "Find by Designer" %}'}])
+        {% ifequal temp_flg 1 %}
+            $('.side_menu_box').attr('style','height:999px;')
+        {% endifequal %}
+        })
+
+        -->
+</script>
+{% endblock %}

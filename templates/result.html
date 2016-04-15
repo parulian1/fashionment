@@ -1,0 +1,27 @@
+{{% extends 'mail_base.html' %}
+{% load i18n %}
+{% load humanize %}
+{% block mail_content %}
+<table width="674px" height="140px" id="result_table">
+  <tr>
+  <td align="center">
+  <h2 class="title">{{ title }}</h2>
+  <p>{{ description }}</p>
+    <div class="links" >
+      {% trans 'Click ' %} <a href="{{previous_url}}">{% trans 'here' %}</a>
+      {% trans 'to continue' %}
+      <br />
+      <br />
+        <div align="center" id="back_to_store">
+            <a class="short_red_button back_link" href="{% url view_store %}">{% trans 'My Store' %}</a>
+        </div>
+        <div style="margin-left:3%;float:left;">
+            <a class="short_red_button back_link" href="{% url view_my_profile %}">{% trans 'Explore' %}</a>
+        </div>
+        <br />
+        <br />
+    </div>
+    </td>
+  </tr>
+</table>
+{% endblock %}

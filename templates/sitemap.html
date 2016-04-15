@@ -1,0 +1,57 @@
+{% extends "account_base.html" %}
+{% load i18n %}
+{% load cache %}
+{%block content_loged%}
+<div id="site_map" style="margin-top:-25px;">
+  <h2>{% trans 'Site Map' %}</h2>
+  <div>{# 1st ROW #}
+    <div>
+      <h1>{% trans 'Home' %}</h1>
+      <div style="float:left;width:30%;padding-left:10px;border-right:1px solid black;">
+          <h2 style="margin-bottom:0px;">{% trans 'Item'%}</h2>
+          <a href="/fashion/most/items/most-viewed/"> {% trans 'Most Viewed' %}</a>
+          <a href="/fashion/most/items/most-commented"> {% trans 'Most Commented ' %} </a>
+          <a href="/fashion/most/items/most-favourite"> {% trans 'Most Favorited' %}</a>
+          <a href="/fashion/most/item/last-updated"> {% trans 'Last Update' %} </a>
+      </div>
+      <div style="float:left;border-right:1px solid black;width:30%;padding-left:2px;">
+          <h2 style="margin-bottom:0px;">{% trans 'Designer'%}</h2>
+          <a href="/fashion/most/store/most-viewed/2/"> {% trans 'Most Viewed' %}</a>
+          <a href="/fashion/most/store/most-commented/2/"> {% trans 'Most Commented ' %} </a>
+          <a href="/fashion/most/store/most-favourite/2/"> {% trans 'Most Favorited' %}</a>
+          <a href="/fashion/most/store/last-updated/2/"> {% trans 'Last Update' %} </a>
+      </div>
+      <div style="float:left;width:35%;padding-left:2px;">
+          <h2 style="margin-bottom:0px;">{% trans 'Store'%}</h2>
+          <a href="/fashion/most/store/most-viewed/"> {% trans 'Most Viewed' %}</a>
+          <a href="/fashion/most/store/most-commented"> {% trans 'Most Commented ' %} </a>
+          <a href="/fashion/most/store/most-favourite"> {% trans 'Most Favorited' %}</a>
+          <a href="/fashion/most/store/last-updated"> {% trans 'Last Update' %} </a>
+      </div>
+      
+    </div>
+    <div>
+      <h1>{% trans 'Fashion Finder'%}</h1>
+      <a href="/fashion/find-by-store/"> {% trans 'Search' %}</a>
+    </div>
+  </div>
+
+  <div>{# 2nd ROW #}
+    <div>
+      <h1>{% trans 'User'%}</h1>
+      <a href="{%url sign_up%}"> {% trans 'Registration' %} </a>
+    </div>
+    <div>
+      <h1>{% trans 'About Fashion'%}</h1>
+      <a href="/"> {% trans 'Home' %} </a>
+      <a href="/account/contact-us/"> {% trans 'Contact us' %}</a>
+      <a href="/account/about-us/"> {% trans 'About us' %}</a>
+    </div>
+    <div>
+        <h1>{% trans 'Fashion Article' %}</h1>
+        <a href="/fashion-facts/"> {% trans 'News' %}</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

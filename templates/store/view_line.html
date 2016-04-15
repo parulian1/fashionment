@@ -1,0 +1,245 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load thumbnail%}
+{%load custom%}
+{% load humanize %}
+{% load paginator%}
+{% load cache %}
+{% block title %}
+Fashionment.com -
+{% ifequal user.id flag_line.store.user.id %}
+{% trans 'View Collection' %}
+{% else %}
+{{flag_line.store|capfirst}} {% trans 'View Collection' %}
+{% endifequal %}
+{% endblock %}
+{%block head%}
+
+{%endblock%}
+{%block content_loged%}
+{% cache 60 view_line_page %}
+<div id="store_view" class="form_fields" style="margin-top:-60px; width:100%;">
+    <div>
+        {% ifequal user.id flag_line.store.user.id %}
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> <a href="{% url view_store %}" class="hyperlink">{% trans 'My Store' %} ></a>
+        {% else %}
+        <a href="{% url view_profile flag_line.store.user.id %}" class="hyperlink">{{flag_line.store.user.username|capfirst}} {% trans 'Profile' %} ></a> <a href="{% url view_stores flag_line.store.slug %}" class="hyperlink">{{flag_line.store|capfirst}} {% trans 'Store' %} ></a>
+        {% endifequal %}
+        {{flag_line.store|capfirst}} {%trans 'All Collection' %}
+    </div>
+    <div>&nbsp;
+    </div>
+    <div>&nbsp;
+    </div>
+    <div class="pagination">
+        {%ifequal paginator.num_pages 1%}
+        {%else%}
+            {% paginator 2 %}
+        {%endifequal%}
+    </div>
+    {%for lines in page_obj.object_list%}
+    <div style="margin-bottom:15px;">
+        {%ifequal forloop.counter 1%}
+        <div class="title">
+            <h3 style="margin-bottom:5px;">
+                {{lines.store|capfirst}}'s Collection
+            </h3>
+        </div>
+            {%ifequal lines.store.user.id user.id%}
+            <div>
+                <div style="float:left;width:15%;">
+                    <a class="link_decoration" href="{%url line_add %}">{%trans 'Add Collection'%}</a>
+                </div>
+                <div style="float:left;width:85%;">
+                    {%url remove_collection_or_item "line" "" as remove %}
+                    <a class="link_decoration" href="{{ remove }}">{%trans 'Remove Collection'%}</a>
+                </div>
+            </div>
+            {%endifequal%}
+        {%endifequal%}
+    </div>
+        <div class="rows2">
+            <a href="" class="link_decoration" style="color:black; font-size:12px; font-weight:bold;" id="line_id{{forloop.counter}}"><img style=" border:none;" id="imgArrow{{forloop.counter}}" src="{{MEDIA_URL}}1.jpg" />{{lines.store|capfirst}}'s {{lines}} Collection</a>
+            {%if lines.my_items%}
+            {%else%}
+            <div style="width:87%;float:left;">
+                &nbsp;
+            </div>
+            <div>
+                {%ifequal lines.store.user.id user.id%}
+                    <a class="short_red_button"  href="{%url item_add lines.id%}">{%trans 'Add Item'%}</a>
+                {%endifequal%}
+            </div>
+
+            {%endif%}
+            {%if lines.my_items%}
+            <div class="rows" style="height:135px;">
+            <div style="width:88%;float:left;">
+                {%for item in lines.my_items|slice:":5"%}
+                    <div class="view_picture">
+                        <div style="text-align:left; color:#917B4C; font-size:12px; margin-bottom:5px;">{{item.item|capfirst|truncatechar:16}}</div>
+                        <a href="{%url detail_items item.id %}?page={{forloop.revcounter}}">
+                            <div class="picture_border" style="height:75px;width:100px;{% if item.picture1 %}background-image:url({% thumbnail item.picture1.name 100x75 %});{% endif %}">{%ifequal item.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_small.png" style="border:none;" />{%endifequal%}</div>
+                        </a>
+                    {%ifequal user.id item.line.store.user.id%}
+                        <a class="link_decoration" href="{%url edit_item item.id%}">{%trans 'Edit'%} |</a>
+                        {%url remove_collection_or_item "item" item.id as remove %}
+                        <a class="link_decoration" href="{{remove}}">{%trans 'Remove'%}</a>
+                    {%endifequal%}
+                    </div>
+                {%endfor%}
+            </div>
+            <input type="hidden" value="{{lines.id}}" id="lines_items{{forloop.counter}}" />
+            <div style="margin-top:50px;float:left; width:10%;">
+            <div>
+                 {%ifequal lines.store.user.id user.id%}
+                    <a class="short_red_button" href="{%url item_add lines.id%}">{%trans 'Add Item'%}</a>
+                 {%endifequal%}
+            </div>
+            {%for item in lines.my_items|slice:":5"%}
+                {%ifequal forloop.counter 5%}
+                    <div align="right" >
+                        <a class="link_decoration" href="{%url view_item lines.id%}" >{%trans 'more'%} >></a>
+                    </div>
+                {%endifequal%}
+            {%endfor%}
+            </div>
+        </div>
+        {%endif%}
+        </div>
+        <div class="form_fields" style="width:670px;">
+            <hr />
+        </div>
+    {%endfor%}
+    {%for lines in view_line%}
+   <div>
+        {%ifequal forloop.counter 1%}
+            {%ifequal lines.store.user.id user.id%}
+                <a class="link_decoration" href="{%url line_add %}">{%trans 'Add Collection'%}</a>
+                <a class="link_decoration" href="{%url remove_line %}">{%trans 'Remove Collection'%}</a>
+            {%endifequal%}
+        {%endifequal%}
+    </div>
+    {%endfor%}
+</div>
+{% endcache %}
+<script>
+<!-- //script is commented to prevent google crawl, but script still works
+$(document).ready(function(){
+    //Put all script inside 'document).ready' to prevent IE errors
+    var lines_items1 = $("#lines_items1").val()
+    var lines_items2 = $("#lines_items2").val()
+    var lines_items3 = $("#lines_items3").val()
+    var lines_items4 = $("#lines_items4").val()
+    var lines_items5 = $("#lines_items5").val()
+    var line_id1 = $("#line_id1")
+    var line_id2 = $("#line_id2")
+    var line_id3 = $("#line_id3")
+    var line_id4 = $("#line_id4")
+    var line_id5 = $("#line_id5")
+    var line_id6 = $("#line_id6")
+    var line_id7 = $("#line_id7")
+    var imgArrow1 = $('#imgArrow1')
+    var imgArrow2 = $('#imgArrow2')
+    var imgArrow3 = $('#imgArrow3')
+    var imgArrow4 = $('#imgArrow4')
+    var imgArrow5 = $('#imgArrow5')
+    var imgArrow6 = $('#imgArrow6')
+    var imgArrow7 = $('#imgArrow7')
+    line_id5.siblings().hide();
+    line_id6.siblings().hide();
+    line_id7.siblings().hide();
+    imgArrow5.attr('src','{{MEDIA_URL}}2.jpg');
+    imgArrow6.attr('src','{{MEDIA_URL}}2.jpg');
+    imgArrow7.attr('src','{{MEDIA_URL}}2.jpg');
+    all.show()
+    if('{{user}}'=='{{flag_line.store.user}}'){
+        img.attr('style','display:;border:none;');
+        name1.attr('style',' color:#B5121C; font-size:12px; font-weight:bold; margin-left:0px')
+        img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+    }
+        if(lines_items1==id_line_items1){
+            $('#item1 .rows').show()
+        }
+        if(lines_items2==id_line_items2){
+            $('#item2 .rows').show()
+        }
+        if(lines_items3==id_line_items3){
+            $('#item3 .rows').show()
+        }
+        if(lines_items4==id_line_items4){
+            $('#item4 .rows').show()
+        }
+        if(lines_items5==id_line_items5){
+            $('#item5 .rows').show()
+        }
+if(!$.mobile()){
+line_id1.toggle(
+function(){
+
+     $(this).siblings().slideToggle();
+     imgArrow1.attr('src','{{MEDIA_URL}}2.jpg');
+}, function() {
+     $(this).siblings().slideToggle();
+     imgArrow1.attr('src','{{MEDIA_URL}}1.jpg');
+});
+line_id2.toggle(
+function(){
+
+     $(this).siblings().slideToggle();
+     imgArrow2.attr('src','{{MEDIA_URL}}2.jpg');
+}, function() {
+     $(this).siblings().slideToggle();
+     imgArrow2.attr('src','{{MEDIA_URL}}1.jpg');
+});
+line_id3.toggle(
+function(){
+
+     $(this).siblings().slideToggle();
+     imgArrow3.attr('src','{{MEDIA_URL}}2.jpg');
+}, function() {
+     $(this).siblings().slideToggle();
+     imgArrow3.attr('src','{{MEDIA_URL}}1.jpg');
+});
+line_id4.toggle(
+function(){
+
+     $(this).siblings().slideToggle();
+     imgArrow4.attr('src','{{MEDIA_URL}}2.jpg');
+}, function() { // same here
+     $(this).siblings().slideToggle();
+     imgArrow4.attr('src','{{MEDIA_URL}}1.jpg');
+});
+line_id5.toggle(
+function(){
+
+     $(this).siblings().slideToggle();
+     imgArrow5.attr('src','{{MEDIA_URL}}1.jpg');
+}, function() {
+     $(this).siblings().slideToggle();
+     imgArrow5.attr('src','{{MEDIA_URL}}2.jpg');
+});
+line_id6.toggle(
+function(){
+     $(this).siblings().slideToggle();
+     imgArrow6.attr('src','{{MEDIA_URL}}1.jpg');
+}, function() {
+     $(this).siblings().slideToggle();
+     imgArrow6.attr('src','{{MEDIA_URL}}2.jpg');
+});
+line_id7.toggle(
+function(){
+     $(this).siblings().slideToggle();
+     imgArrow7.attr('src','{{MEDIA_URL}}1.jpg');
+}, function() {
+     $(this).siblings().slideToggle();
+     imgArrow7.attr('src','{{MEDIA_URL}}2.jpg');
+});
+}
+});
+
+
+-->
+</script>
+
+{%endblock%}

@@ -1,0 +1,180 @@
+{% extends 'account_base.html' %}
+{%load i18n%}
+{%load thumbnail%}
+{%load humanize%}
+{% load cache %}
+{% block title %}
+Fashionment.com - {% trans 'Premium Designers , New Designers and Portfolio.' %}
+{% endblock %}
+{% block head %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+	theme : "advanced",
+	mode : "textareas",
+	plugins : "bbcode,emotions",
+	theme_advanced_buttons1 : "bold,italic,underline,undo,redo,link,unlink,image,emotions,removeformat,cleanup",
+	theme_advanced_buttons2 : "",
+	theme_advanced_buttons3 : "",
+	theme_advanced_toolbar_location : "bottom",
+	theme_advanced_toolbar_align : "center",
+	theme_advanced_styles : "Code=codeStyle;Quote=quoteStyle",
+	content_css : "",
+	entity_encoding : "raw",
+	add_unload_trigger : false,
+	remove_linebreaks : false,
+    relative_urls : false
+});
+</script>
+{% endblock %}
+{% block content_loged %}
+<div style="margin-left:-14px;margin-top:-60px;width:700px;">
+            <div style="padding-bottom:30px;font-size:11px;">
+                <a href="/" style="text-decoration:none;">Home > </a> {% trans 'Designers' %}
+            </div>
+            <div style="padding-bottom:30px;">
+                {% url list_store2 "designer" "" as find_all_designer %}
+                <a href="{{find_all_designer}}" class="hyperlink"><img alt="pick your designer" style="border:none;" src="{{MEDIA_URL}}img/pick_a_designer.png" /></a>
+            </div>
+            <div class="rows2" style="height:25px;">
+                <div class="title" style="padding:0px;">Designer Portfolio</div>
+            </div>
+            <div class="rows2">
+                <div style="float:left;width:7%;">{% trans 'Sort by'%} :</div>
+                {% url view_all_designer "last-updated" as last_updlink %}
+                {% url view_all_designer "most-viewed" as most_viewedlink %}
+                <div style="float:left;width:18%;">
+                    <a href="{{last_updlink}}" class="{%ifequal title 'Last updated'%}medium_red_button{%else%}med_log_in{%endifequal%}">
+                        {%trans 'Last Updated'%}
+                    </a>
+                    
+               </div>
+               <div style="float:left;width:75%;">
+                    <a href="{{most_viewedlink}}" class="{%ifequal title 'Most viewed'%}medium_red_button{%else%}med_log_in{%endifequal%}">
+                        {%trans 'Most Viewed'%}
+                    </a>
+               </div>
+            </div>
+            <div class="rows2">
+                <div style="width:550px;float:left;">
+                    &nbsp;
+                </div>
+                <div style="float:left;width:13%;text-align:center;">
+                    {% if object.has_previous %}
+                       <a href="?page={{ object.previous_page_number }}" class="hyperlink">< previous</a>
+                    {%else%}
+                            < previous
+                    {% endif %}
+                </div>
+                <div style="float:left;width:7%;">
+                    {% if object.has_next %}
+                       <a href="?page={{ object.next_page_number }}" class="hyperlink">next ></a>
+                    {% else %}
+                            next >
+                    {% endif %}
+
+                </div>
+            </div>
+                
+           <div class="rows2">
+            <div colspan="3" width="100%">
+                {%  for data in object.object_list %}
+                <div  class="rows2">
+                  {% cache 300 designer_list data.designer.id %}
+                    {% ifequal title 'Last updated' %}
+                        {% url view_stores data.designer.slug as link %}
+                    {% else %}
+                        {% url view_stores data.designer.store.slug as link %}
+                    {% endifequal %}
+
+                   <div class="rows2" style="height:25px;">
+                       <div style="font-size:16px;font-weight:bold;float:left;width:70%;">
+                           <a href="{{link}}" style="color:#B5121C;" class="hyperlink">
+                                {% ifequal title 'Last updated' %}{{data.designer.name|capfirst}}
+                                {%else%}{{data.designer.store.name|capfirst}}{%endifequal%}
+                            </a>
+                       </div>
+                       <div style="float:left;width:26%;text-align:right;">
+                           <a href="{{link}}" class="hyperlink">
+                                {% trans 'See Full Profile'%}
+                            </a>
+                       </div>
+                       <div style="float:left;width:4%;">&nbsp;</div>
+                   </div>
+               <div>
+                   <div >
+                       <div style="background-color:#EDEBE9;overflow:hidden;width:670px;padding:5px;">
+                           {% for item_data in data.items|slice:"24" %}
+                            <div style="width:111px;float:left">
+                                <div class="designer_picture_border" style="height:85px;width:111px;background:no-repeat;background-color:white;background-position:center center;{% if item_data.picture1 %}background-image:url({% thumbnail item_data.picture1.name 111x85 %});{% endif %}">
+                                </div>
+                            </div>
+                           {%endfor%}
+                           {% for no_item in data.no_item %}
+                            <div style="width:111px;float:left">
+                                <div class="designer_picture_border" style="height:85px;width:111px;background:no-repeat;background-position:center center;background-image:url({{MEDIA_URL}}no_portfolio.jpg);">
+                                </div>
+                            </div>
+                           {%endfor%}
+                       </div>
+                   </div>
+               </div>
+               {%endcache %}
+               <div>
+                   <div >
+                       
+                       {% if data.designer.store %}
+                        {% url view_comment "store" data.designer.store.id as designer_comment%}
+                       {%else%}
+                        {% url view_comment "store" data.designer.id as designer_comment%}
+                       {%endif%}
+                       <iframe id="comment_frame" src="{{designer_comment}}"  frameborder="0" height="500px" width="679"  scrolling="no" ></iframe>
+                       
+                   </div>
+               </div>
+
+               <div style="background-color:#DDD5C2;width:680px;">
+                   <div>
+                       <div class="title" style="padding-top:5px;padding-bottom:5px;">
+                           &nbsp;{% trans 'Leave your comment here' %}
+                       </div>
+                        {% if messages %}
+                                <div style="margin-top:10px;font-weight:bold;">
+                                    {% for message in messages %}
+                                            {{ message }}
+                                       {% endfor %}
+                                </div>
+                                {% endif %}
+                       <form method="POST" action="">
+                       <div class="rows" style="text-align:center;">
+                            {%for commentfield in form%}
+                                <div class="rows">
+                                    {{commentfield}}{{commentfield.errors}}
+                                </div>
+                            {%endfor%}
+                            <div style="padding-top:10px;padding-bottom:27px;padding-left:5px;">
+                                <input class="short_red_button" type="submit" style="background-color:transparent;" value="Comment" />
+                            </div>
+                            <input type="hidden" value="{% ifequal title 'Last updated' %}{{data.designer.id}}{% else %}{{data.designer.store.id}}{% endifequal %}" name="designer_id"/>
+                            <input type="hidden" value="{{object.page_num}}" name="page_num"/>
+                        </div>
+                      </form>
+                   </div>
+               </div>
+              </div>
+              {% endfor %}
+             </div>
+           </div>
+</div>
+<script>
+<!--
+
+
+$(document).ready(function(){
+    $('#id_comment').attr('style','width:670px;')
+    $('#comment_div').attr('style','height:450px;overflow:auto;width:97%; padding:10px;');
+})
+    -->
+</script>
+{% endblock %}
+

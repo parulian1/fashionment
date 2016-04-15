@@ -1,0 +1,30 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content %}
+<div id="content-main-container" style="float:left;width:100%">
+    {{ block.super }}
+    <div id="content-main2">
+       <div class="module">
+           <table>
+               <caption>
+                   Add Page Flip
+               </caption>
+               <tr>{% url add_pageflip "zip" as add_zip %}
+                   <th scope="row"><a href="{{add_zip}}">Add Page Flip with zip file</a></th>
+                   <td>&nbsp;</td>
+                   <td>&nbsp;</td>
+                   <td>&nbsp;</td>
+               </tr>
+               <tr>{% url add_pageflip "manual" as add_manual %}
+                   <th scope="row"><a href="{{add_manual}}">Add Page Flip manually</a></th>
+                   <td>&nbsp;</td>
+                   <td>&nbsp;</td>
+                   <td>&nbsp;</td>
+               </tr>
+           </table>
+       </div>
+    </div>
+</div>
+
+{% endblock %}

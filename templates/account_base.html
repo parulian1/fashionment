@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% load custom %}
+{% load thumbnail %}
+{% load i18n %}
+{% load cache %}
+{% block head %}
+
+{% endblock %}
+{% block content %}
+    <div id="acc_base_background"></div>
+    <div class="second_column">
+      
+        <div class="content_loged">
+            <img src="{{ MEDIA_URL }}line_long1.png" class="content_border_left" alt="fashionment.com left border">
+            <img src="{{ MEDIA_URL }}line_long1.png" class="content_border_right" alt="fashionment.com right border">
+            {% block content_loged%}
+
+            {% endblock %}
+        </div>
+    </div>
+    <div class="first_column">
+        
+        <div class="side_menu_box">
+            <img src="{{ MEDIA_URL }}line_long1.png" class="border_left" alt="fashionment.com left border">
+            <img src="{{ MEDIA_URL }}line_long1.png" class="border_right" alt="fashionment.com right border">
+            {% block context_side_bar %}
+            {% if user.is_authenticated %}
+                <div class="form_fields" id="account_base_side_bar" >
+                    {% cache 600 view_profile%}
+                    <div id="account_base_first_div">
+                        <a href="" id="profile" ><img id="profile_img" src="" alt="fashionment fav.ico" /></a> <a class="link_decoration2" id="name7">{%trans 'My Profile'%}</a>
+                        <div id="all7" class="rows">
+                            <div>
+                                <a id="view_link" href="{% url view_my_profile %}" class="link_decoration2">{%trans 'View'%}</a>
+                            </div>
+                            <div>
+                                <a href="{% url edit_profile %}"class="link_decoration2">{%trans 'Edit'%}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endcache%}
+                    <div class="divider_div">
+
+                    </div>
+                    <div id="acc_base_side_store">
+                     
+                        <a href="" id="store" ><img id="img" alt="fashionment fav.ico"/> </a><a id="name1" class="link_decoration2" >{%ifequal user.account_type 1 %}{%trans 'My Store'%}{%else%}{% trans 'My Portfolio'%}{%endifequal%}</a>
+                    <!--a href="{%url view_store%}" class="link_decoration">{%trans 'View'%}</a>
+                    <a href="{%url edit_store%}" class="link_decoration">{%trans 'Edit'%}</a-->
+                    <div id="all" class="rows" >
+                            {% cache 600 store_part%}
+                            <div id="all5" class="rows">
+                                    {% ifequal store2 None %}
+                                        <a href="{%url add_store %}" class="link_decoration2">
+                                    {% endifequal %}
+                                        {%ifequal user.account_type 1 %}{%trans 'Add Store'%}{%else%}{%trans 'Add Portfolio'%}{%endifequal%}
+                                    {% ifequal store2 None %}
+                                    </a>
+                                    {%endifequal%}
+                            </div>
+                            <div class="rows">
+                                    {% if store2 %}<a href="{%url view_store %}" class="link_decoration2">{%endif%}
+                                        {% trans 'View'%}
+                                    {% if store2 %}
+                                    </a>
+                                    {%endif%}
+                            </div>
+                            <div class="rows">
+                                    {% if store2 %}<a href="{%url edit_store %}" class="link_decoration2">{%endif%}
+                                        {% trans 'Edit'%}
+                                    {% if store2 %}
+                                    </a>
+                                    {%endif%}
+                            </div>
+                            {% endcache %}
+                            {% cache 60 all_col2 %}
+                            <div  id="all_col2">
+                                <ul class="sf-menu">
+                                  <li>
+                                        {% if store2 %}<a href="{% url view_line store2.id %}" class="link_decoration2" id="all_col" >{%endif%}{%trans 'All Collections'%}{% if store2 %}</a>{%endif%}
+                                        <ul id="dropdown2">
+
+                                                {% if line_data %}
+                                                        {%for lines in line_data|dictsortreversed:"id"|slice:":15"%}
+                                                            {% if forloop.first %}
+                                                            <li>
+                                                                    <a href="{% url line_add%}">{% trans 'Add Collection'%}</a>
+                                                            </li>
+                                                            {%endif %}
+                                                            <li>
+                                                                    <a href="{%url view_item lines.id%}" >{{lines|capfirst|truncatechar:18}}   </a>
+                                                                {%if lines.my_items%}
+
+                                                                <ul id="collection_part">
+                                                                    {%for items in lines.my_items|slice:":15"%}
+                                                                    {% if forloop.first %}
+                                                                        <li>
+                                                                            <a href="{% url edit_line lines.id %}">{% trans 'Edit Collection'%}</a>
+                                                                        </li>
+                                                                    {%endif%}
+                                                                    <li>
+                                                                        <a href="{% url detail_items items.id %}">{{items|capfirst|truncatechar:15}}</a>
+                                                                    </li>
+                                                                    {% if forloop.last %}
+                                                                    <li>
+                                                                        <a  href="{%url item_add items.line.id%}">{%trans 'Add Item'%}</a>
+                                                                    </li>
+                                                                    {%endif%}
+                                                                    {%endfor %}
+
+                                                                </ul>
+                                                                {%endif%}
+                                                            </li>
+                                                        {%endfor%}
+                                                        <li>
+                                                            <a href="{%url view_line store2.id %}" class="link_decoration">{%trans 'See All'%}</a>
+                                                        </li>
+                                                        <li>{%url remove_collection_or_item "line" "" as remove%}
+                                                            <a href="{{remove}}" class="link_decoration" >{%trans 'Remove Collection'%}</a>
+                                                        </li>
+                                                {% endif %}
+                                        </ul>
+                                  </li>
+                                </ul>
+                           </div>
+                           {% endcache %}
+                           <div id="removing_store">
+                                {% if store2 %}<a href="{% url confirm_rem_store %}" class="link_decoration2" id="rem_col">{%endif%}{%trans 'Remove Store'%}{% if store2 %}</a>{%endif%}
+                           </div>
+                        
+                    </div>
+                    </div>
+                    <div class="divider_div">
+
+                    </div>
+                    {% cache 600 compare %}
+                    <div id="acc_base_compare">
+                        <a href="" id="list_compare" ><img id="unhide" src="" alt="fashionment fav.ico" /></a> <a class="link_decoration2" id="name2">{%trans 'My Compare List'%}</a>
+                        <a id="clickme" href="#"  title='My Compare List|Want to compare products before you buy? View the item and add it to your list by clicking "Add to My Compare List" button. Review all the selected items by going to "My Compare List" page by selecting the button from the left side menu. '><img style="margin:3px 0 0 0;cursor:help;border:none;" src="{{MEDIA_URL}}/img/whats_this.png" alt="fashionment question icon" /></a>
+                        <div id="all1" class="rows">
+                            <div>
+                            <a href="{% url view_compare_list %}" id="view_list_link" class="link_decoration2">{%trans 'View List'%}</a>
+                            </div>
+                            <div>
+                            <a href="{% url view_compare_thumbnails %}"class="link_decoration2">{%trans 'View Thumbnails'%}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endcache %}
+                    <div class="divider_div">
+
+                    </div>
+                    {% cache 120 message_bar %}
+                    <div id="acc_base_msg">
+                        <a href="" id="mail" ><img id="expand" src="" /> </a><a class="link_decoration2" id="name3">{%trans 'My Mail & Notifications'%}</a>
+                        <div id="all2" class="rows">
+                            <div>
+                            <a href="/mail/inbox/" class="link_decoration_for_mail">{%trans 'Inbox'%}({{inbox}})</a>
+                            </div>
+                            <div>
+                            <a href="/mail/notifications/" class="link_decoration_for_mail">{%trans 'Notifications'%}({{notification}})</a>
+                            </div>
+                            <div>
+                            <a href="/mail/send_items/" class="link_decoration_for_mail">{%trans 'Sent Message'%}</a>
+                            </div>
+                            <div>
+                             <a href="/mail/draft/" class="link_decoration_for_mail">{%trans 'Draft'%}</a>
+                            </div>
+                            <div>
+                             <a href="/mail/compose/" class="link_decoration_for_mail">{%trans 'Compose'%}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endcache %}
+                    <div class="divider_div">
+
+                    </div>
+                    {% cache 3600 invite %}
+                    <div id="acc_base_inv">
+                        <a href="" id="invite_link" ><img  id="invite_img" src="" /></a> <a class="link_decoration2" id="invite2">{%trans 'Invite Your Friends'%}</a>
+                        <div id="invite" class="rows">
+                            <div>
+                                <a href="{% url by_email %}" id="invite_link" class="link_decoration2">{%trans 'By Emails'%}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endcache %}
+                    <div class="divider_div">
+
+                    </div>
+                </div>
+
+            {%else%}
+                <div class="title" id="welcome_title">
+                    {%trans 'Welcome'%},
+                    <div class="title" id="welcome_user">
+                       {%trans 'Guest'%}
+                    </div>
+                </div>    
+            {%endif%}
+               {% if left_ad %}
+                {%for advertise in left_ad%}
+                    <div>
+                        <a href="{{advertise.ad_website}}" class="hyperlink"><img id="acc_base_adv_banner" src="{{ MEDIA_URL }}{{advertise.ad_image}}" width="189px"/></a>
+                    </div>
+                    <div>
+                        &nbsp;
+                    </div>
+                {%endfor%}
+               {%endif%}
+            {% endblock %}            
+        </div>
+    </div>
+    
+
+<script>
+    <!--
+    
+    var id_line_items1 = $('#id_line_items1').val()
+    var id_line_items2 = $('#id_line_items2').val()
+    var id_line_items3 = $('#id_line_items3').val()
+    var id_line_items4 = $('#id_line_items4').val()
+    var id_line_items5 = $('#id_line_items5').val()
+    var store1 = $("#store1")
+    var unhide = $('#unhide')
+    var name2 = $('#name2')
+    var invite = $('#unhide')
+    var invite2 = $('#invite2')
+    var name1 = $('#name1')
+    var all1 =$('#all1')
+    var all2 =$('#all2')
+    //var all5 = $('#all5')
+    var all = $('#all')
+    var img = $('#img')
+    var img5 = $('#img5')
+    var expand = $('#expand')
+    var name3 = $('#name3')
+    $(document).ready(function(){
+       acc_base_js()
+       if('{{user.id}}'!=''){
+           $('#acc_base_background').show()
+       }else{
+           $('#acc_base_background').hide()
+       }
+    })
+    -->
+</script>
+{% endblock %}

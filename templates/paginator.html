@@ -1,0 +1,54 @@
+{% spaceless %}
+
+<!--<a href="" class="paginate-link" style="text-decoration:none;" id="page_jump" title="Page Jump">{{ pages }} Pages</a>-->
+
+{% if show_first %}<span class="paginate-first"><a href="?{% if gets_string %}{{gets_string}}&{%endif%}page=1" title="First Page"style="text-decoration:none;color:#B5121C;">First</a></span>{% endif %}
+{% if has_previous %}<span class="paginate-previous"><a href="?{% if gets_string %}{{gets_string}}&{%endif%}page={{ previous }}" title="Previous Page" style="text-decoration:none;color:#B5121C;">&lt;</a></span>{% endif %}
+{% for num in page_numbers %}
+  {% ifequal num page %}
+    <span class="paginate-current" id="current_page" title="Current Page">{{ num }}</span>
+  {% else %}
+    <span class="paginate-link"><a href="?{% if gets_string %}{{gets_string}}&{%endif%}page={{ num }}" title="Page {{ num }}" style="text-decoration:none;color:#B5121C;">{{ num }}</a></span>
+  {% endifequal %}
+{% endfor %}
+{% if has_next %}<span class="paginate-next"><a href="?{% if gets_string %}{{gets_string}}&{%endif%}page={{ next }}" title="Next Page" style="text-decoration:none;color:#B5121C;">&gt;</a></span>{% endif %}
+{% if show_last %}<span class="paginate-last"><a href="?{% if gets_string %}{{gets_string}}&{%endif%}page={{ pages }}" title="Last Page" style="text-decoration:none;color:#B5121C;">Last</a></span>{% endif %}
+<!--div align="right" style="position:relative;  margin-top:5px;">
+    <div id="submit" class="paginate-pages" onclick="Paginator.jumpToPage({{ pages }})" title="Page Jump">Submit</div>
+    <input style="float:right;" id="text_input" type="text" >   
+</div-->
+
+{% endspaceless %}
+<script>
+$(document).ready(function(){
+         $('#text_input').hide();
+         $('#submit').hide();
+    $('#page_jump').toggle(
+    function(){
+         $('#text_input').slideToggle();
+         $('#submit').slideToggle();
+    }, function() {
+         $('#text_input').slideToggle();
+         $('#submit').slideToggle();
+
+    });
+})
+
+    var a = $("#text_input").val();
+
+    var Paginator =
+{
+    jumpToPage: function(pages)
+    {
+        var page = $("#text_input").val();
+        if (page != undefined)
+        {
+            page = parseInt(page, pages+1)
+            if (!isNaN(page) && page > 0 && page <= pages)
+            {
+                window.location.href = "?page=" + page;
+            }
+        }
+    }
+};
+</script>

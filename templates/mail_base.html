@@ -1,0 +1,102 @@
+{% extends "account_base.html"%}
+{% load paginator %}
+{% load i18n %}
+{% load cache %}
+{% block title%}
+{% trans 'Fashionment.com - Fashion Email system , compose email , inbox and drafts'%}
+{% endblock %}
+{% block content_loged %}
+    <table border="0" cellpadding="0" cellspacing="0" id="mail_base_table">
+        <tr>
+            <td colspan="3" >
+                <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> <a href="{% url inbox None %}" class="hyperlink">{% trans 'Mail' %} ></a>&nbsp;
+                {% ifequal position 1 %}
+                    {% trans 'Inbox' %}
+                {% endifequal %}
+                {% ifequal position 4 %}
+                    {% trans 'Notifications' %}
+                {% endifequal %}
+                {% ifequal position 2 %}
+                    {% trans 'Sent Messages' %}
+                {% endifequal %}
+                {% ifequal position 3 %}
+                    {% trans 'Draft' %}
+                {% endifequal %}
+                {% ifequal position 0 %}
+                    {% trans 'Compose Message' %}
+                {% endifequal %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+         
+            </td>
+        </tr>
+        <tr>
+           <td align="left" width="70%" class="title" id="mail_title">
+                   Mail
+           </td>
+            <td colspan="2" align="center">
+                {% if not ctr %}
+                         {%ifequal paginator.num_pages 1%}
+                         {%else%}
+                            {% if paginator %}
+                            {% paginator 5 %}
+                            {% endif %}
+                         {%endifequal%}
+                 {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <table cellspacing="0" id="mail_table_tab" width="674" >
+                    <tr>
+                        <td width="12%" class="{% ifnotequal position 1%}mail_border{%else%}mail_border_chosen{%endifnotequal%}">
+                            <a href="/mail/inbox/" class="mail_link {% ifequal position 1 %}mail_tab_selected{%else%}mail_tab_unselected{%endifequal%}">
+                                Inbox
+                                </a>
+                        </td>
+                        <td width="3px" style=""></td>
+                        <td width="18%" class="{% ifnotequal position 4 %}mail_border{%else%}mail_border_chosen{%endifnotequal%}">
+                            <a href="/mail/notifications/" class="mail_link {% ifequal position 4 %}mail_tab_selected{%else%}mail_tab_unselected{%endifequal%}">
+                                Notifications
+                                </a>
+                        </td>
+                        <td width="3px" style=""></td>
+                        <td width="18%" class="{% ifnotequal position 2 %}mail_border{%else%}mail_border_chosen{%endifnotequal%}">
+                            <a href="/mail/send_items/" class="mail_link {% ifequal position 2 %}mail_tab_selected{%else%}mail_tab_unselected{%endifequal%}">
+                                Sent Messages
+                                </a>
+                        </td>
+                        <td width="3px" style=""></td>
+                        <td width="12%" class="{% ifnotequal position 3 %}mail_border{%else%}mail_border_chosen{%endifnotequal%}">
+                            <a href="/mail/draft/" class="mail_link {% ifequal position 3 %}mail_tab_selected{%else%}mail_tab_unselected{%endifequal%}">
+                                 Draft
+                                </a>
+                        </td>
+                        <td width="2px" style=""></td>
+                        <td style="">
+                            
+                        </td>
+                        <td width="3px" style=""></td>
+                        <td width="25%" colspan="2" class="{% ifnotequal position 0 %}mail_border1{%else%}mail_border_chosen1{%endifnotequal%}">
+                            <a href="/mail/compose/" class="mail_link {% ifequal position 4 %}mail_tab_selected{%else%}mail_tab_unselected{%endifequal%}" id="compose_tab">
+                                    Compose Message
+                                </a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    {% block mail_content %}
+    {% endblock %}
+{% endblock %}

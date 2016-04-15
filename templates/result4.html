@@ -1,0 +1,28 @@
+{% extends "account_base.html" %}
+{% load i18n %}
+{% block title %}
+  Fashionment.com - {% trans 'Complete' %}
+{% endblock%}
+{% block content_loged %}
+
+<div class="moving_left_div">
+  <div>
+    <h2 class="title">Item Rating</h2>
+  </div>
+  <div>
+      &nbsp;
+  </div>
+  <div >
+
+      Thank you For Rating my Item
+
+  </div>
+    <div>
+      &nbsp;
+  </div>
+          <div>
+            <a class="short_red_button"  href="{%url detail_items item.id %}">{%trans 'Back' %}</a>
+        </div>
+</div>
+  
+{% endblock %}

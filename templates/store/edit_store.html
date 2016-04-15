@@ -1,0 +1,112 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% block title %}
+{% load thumbnail%}
+Fashionment.com - {% trans 'Edit Your Own Online Store' %}
+{% endblock %}
+{%block content_loged%}
+<div id="edit_store">
+    <div>
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> <a href="{% url view_store %}" class="hyperlink">{% trans 'My Store' %} ></a> {%trans 'Edit Store' %}
+    </div>
+    <div>
+        &nbsp;
+    </div>
+    <div>
+        &nbsp;
+    </div>
+<div class="title">
+    <h2>{%trans 'Edit Store'%}</h2>
+</div>
+<form method="POST" id="edit_store_form"  enctype="multipart/form-data" >
+    <div class="form_fields1">
+        {%for field in form%}
+            <div class="column2" id="row{{forloop.counter}}">
+                <div class="column1" id="columnb{{forloop.counter}}">
+                    {{field.label}}
+                </div>
+                {% ifequal field.name "picture" %}
+                    {% if form.instance.picture.name %}
+                        
+                        <div class="picture_border_edit" style="{% if form.instance.picture %}background-image:url({% thumbnail form.instance.picture.name 180x120 %});{% endif %}"></div>
+                    {% endif %}
+                {% endifequal %}
+                {{field}}
+                {{field.errors}}
+                <div class="eg" id="eg{{forloop.counter}}">
+                    {{field.help_text}}
+                </div>
+            </div>
+        {%endfor%}
+        <div class="column2">
+            <div class="column1">
+            </div>
+            <input class="short_red_button" type="submit" value="Submit"/>
+        </div>
+    </div>
+</form>
+</div>
+<script>
+    <!--
+    $(document).ready(function(){
+
+    $("#columnb14").append('<a id="promotion_clickme" href="#"  title="Promotion Text|Promote your store now to get the chance of selling items fast. All promotional text you type here are viewable from homepage, but make sure you update it regularly as we only have limited space for promotional text."><img style="margin:3px 0 0 0;border:none;cursor:help;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>')
+    $('#promotion_clickme').cluetip({activation: 'click', sticky: true,closePosition: 'title', width: 350, splitTitle: '|'});
+    if($('#id_country').val()!='1'){$('#id_province').attr('disabled',true);}
+    if(!$.mobile()){
+    updateModel2({form:'#edit_store_form',model:'#id_province',brand:'#id_country'})
+    updateModel2({form:'#edit_store_form',model:'#id_phone_area',brand:'#id_province'})
+    updateModel2({form:'#edit_store_form',model:'#id_fax_code',brand:'#id_province'})
+    all.show()
+    img.attr('style','display:;border:none;');
+    name1.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+    img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+        $('#row6').hide();
+        $('#id_phone_area').insertAfter($('#columnb7'));
+        $('#row9').hide();
+        $('#id_fax_code').insertAfter($('#columnb10'));
+        $('.side_menu_box').css('height','1050px')
+        $('#row13').attr('style','width:300px')
+        $('#id_telephone').numeric({allow:"+"});
+        $('#id_post_code').numeric();
+        $('#id_handphone').numeric({allow:"+"});
+        $('#id_fax').numeric({allow:"+"});
+        $('#id_country').change(function(){
+            if($(this).val()=="1"){
+                $('#id_phone_area').attr('disabled',false);
+                $('#id_fax_code').attr('disabled',false);
+            }else{
+                $('#id_province').attr('disabled',true);
+                $('#id_phone_area').attr('disabled',true);
+                $('#id_fax_code').attr('disabled',true);
+            }
+        })
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_location"), //reference to form field
+            maxlength: 100,
+            statusids: ["eg2"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_store_story"), //reference to form field
+            maxlength: 1000,
+            statusids: ["eg12"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_promotion_text"), //reference to form field
+            maxlength: 1000,
+            statusids: ["eg14"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        }
+    });
+    -->
+</script>
+{%endblock%}

@@ -1,0 +1,260 @@
+{% extends 'mail_base.html' %}
+{% load i18n %}
+{% load humanize %}
+{%load custom%}
+{% load cache %}
+{% block head %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+	theme : "advanced",
+	mode : "textareas",
+	plugins : "bbcode,emotions",
+	theme_advanced_buttons1 : "bold,italic,underline,undo,redo,link,unlink,image,emotions,removeformat,cleanup",
+	theme_advanced_buttons2 : "",
+	theme_advanced_buttons3 : "",
+	theme_advanced_toolbar_location : "bottom",
+	theme_advanced_toolbar_align : "center",
+	theme_advanced_styles : "Code=codeStyle;Quote=quoteStyle",
+	content_css : "",
+	entity_encoding : "raw",
+	add_unload_trigger : false,
+	remove_linebreaks : false,
+    relative_urls : false
+});
+</script>
+{% endblock %}
+
+{% block mail_content %}
+<table cellpadding="0" cellspacing="0" border="0" width="674px">
+      {% if flag %}
+      <form method="POST" id="form1" class="inbox_form" action="/mail/inbox/" >
+                <tr class="mail_tab">
+                    <td id="{{form2.select.label}}" class="border_top_bottom small_left_right_pad" >
+                        {{form2.select.label}}
+                    </td>
+                    <td class="border_top_bottom">
+                        {{form2.select}}
+                    </td>
+                    <td width="5%" class="border_top_bottom">
+                        &nbsp;
+                    </td>
+                    <td class="border_top_bottom">
+                        <input class="button_border"id="unread" type="submit" value="Mark as unread" name="unread" />
+                    </td>
+                    <td width="5%" class="border_top_bottom">
+                        &nbsp;
+                    </td>
+                    <td class="border_top_bottom">
+                        <input class="button_border"id="read" type="submit" value="Mark as read" name="read" />
+                    </td>
+                    <td width="5%" class="border_top_bottom">
+                        &nbsp;
+                    </td>
+                    <td class="border_top_bottom">
+                        <input class="button_border"id="delete"  type="submit" value="Delete" name="delete" />
+                    </td>
+                    <td width="5%">
+                        &nbsp;
+                    </td>
+                    <td class="border_top_bottom">
+                        {{form2.search}}
+                    </td>
+                    <td class="border_top_bottom med_right_pad">
+                        <input class="sign_up smallest_pad" type="submit" value="Search" name="searched" />
+                    </td>
+                </tr>
+        <tr id="checkbox_bg"><td colspan="1" ><input type="checkbox" name="checkall" value="{{data.id}}" class="checkall"></td><td colspan="11">{%trans 'Check All'%}</td></tr>
+        <tr>
+        <td>
+            {% cache 300 topic_inbox topic_current_page%}
+        {% for data in page_obj.object_list %}
+             <tr>
+                 <td>
+                     <input type="checkbox" name="topics" value="{{data.id}}" class="check">
+                 </td>
+                 <td colspan="2">
+                 <a href="{% url view_profile data.from_user.id %}" class="hyperlink reply_inbox_user_font">
+                     {{data.from_user.username}}
+                 </a>
+                 <br />
+                 <div class="reply_inbox_date_font">{{data.date_send|naturalday|capfirst}}{% trans ' at ' %}{{data.date_send|date:"H:i"}}</div>
+                 </td>
+                 <td colspan="4" class="med_left_pad">
+                 {% ifequal data.read 0%}
+                    <a href="{{data.pk}}/" class="hyperlink">{{data.thread.subject}}</a>
+                 {%else%}
+                    <a href="{{data.pk}}/" class="hyperlink normal_color">{{data.thread.subject}}</a>
+                 {% endifequal %}
+                </td>
+                <td colspan="4" align="center">
+                 <div class="grey_color">
+                     {% ifequal data.message_type 1 %}
+                        {% trans 'Pricing' %}
+                     {% endifequal %}
+                     {%ifequal data.message_type 2 %}
+                        {% trans 'Delivery' %}
+                     {% endifequal %}
+                     {% ifequal data.message_type 3 %}
+                        {% trans 'Size And Colours' %}
+                     {% endifequal %}
+                     {%ifequal data.message_type 4 %}
+                        {% trans 'Others' %}
+                     {% endifequal %}
+                 </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="11">
+                    <hr />
+                </td>
+            </tr>
+           
+        {% endfor %}
+
+        {% if not page_obj.object_list %}
+            <tr>
+                <td colspan="11">
+                    {% trans 'No message match to keyword or message type' %}
+                </td>
+            </tr>
+        {%endif%}
+        {% endcache %}
+       </form>
+       {% else %}
+       {% cache 300 reply_msg user.id msg_id msg_list_current_page %}
+   <tr>
+    <td  colspan="11" width="652px">
+      <table width="652px" class="med_top_min_marg">
+       <tr>
+           <td width="5%">
+               &nbsp;
+           </td>
+           <td colspan="8">
+            <h2 class="small_size">{% trans 'Subject' %}: {{subject}}</h2>
+            <div class="grey_color">{% trans 'Between' %} {{from }} {% trans 'and me' %}</div>
+           </td>
+       </tr>
+       <tr>
+             <td colspan="9" width="100%">
+                 <hr />
+             </td>
+         </tr>
+         {% for data in message_list.object_list %}
+         <tr id="msg{{forloop.counter}}">
+             <td width="5%">
+                 
+             </td>
+             <td width="20%">
+                 <a href="{% url view_profile data.from_user.id %}" class="hyperlink link_blue"><B>{{data.from_user.username}}</B></a><br />
+                 <div  class="reply_inbox_date_font">{{data.date_send|naturalday|capfirst}}
+                     {% trans ' at ' %}
+                     {{data.date_send|date:"H:i"}}
+                     </div>
+             </td>
+             <td>
+                 &nbsp;
+             </td>
+             <td colspan="5" width="400px">
+                 {% if data.reply.message %}
+                 {{ data.reply.message|safe}}
+                 {% else %}
+                 {{ data.thread.message|safe}}
+                 {% endif%}
+             </td>
+             <td width="10%">
+                 {% if data.reply.files %}
+                 <a href="{{MEDIA_URL}}/{{data.reply.files.name}}">{{data.reply.files.name|cut:"mail/files/"|truncatechar:20}}</a>
+                 {% else %}
+                 <a href="{{MEDIA_URL}}/{{data.thread.files.name}}" >{{data.thread.files.name|cut:"mail/files/"|truncatechar:20}}</a>
+                 {% endif%}
+             </td>
+         </tr>
+         <tr>
+             <td colspan="9" width="100%">
+                 <hr />
+             </td>
+         </tr>
+         
+         {% endfor %}
+         <tr>
+            <form action="" method="POST" class="form_fields" enctype="multipart/form-data" >
+            {% if form.non_field_erros %}
+                <td>{{ form.non_field_errors }}</td>
+            {% endif %}
+            {% for field in form %}
+            <tr>
+                <td></td>
+                <td width="25%">
+                        {% ifequal forloop.counter 1 %}Reply{% else %}&nbsp;{%endifequal%}
+                </td>
+                <td width="20px">&nbsp;</td>
+                <td colspan="6">
+                     {{field}}
+                     {{field.errors}}
+                </td>
+             </tr>
+            {% endfor %}
+            <br />
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="5">
+                    <a href="/mail/inbox/" class="hyperlink">Back</a>
+                </td>
+                <td colspan="3" align="right">
+                    <input type="submit" value="Send" class="short_red_button" name="reply">
+                </td>
+            </tr>
+            </form>
+         </tr>
+       </table>
+     </td>
+   </tr>
+   {% endcache %}
+       {%endif%}
+</table>
+<script>
+    <!--
+    
+    $(document).ready(function() {
+        $("#id_search").attr('style','width:130px;')
+        if('{{search}}'!='None'){ $('#id_search').val('{{search}}') }
+        if(!$.mobile()){
+        $('#id_select').change(function(e){
+            $('#form1').submit();
+        })
+        expand.attr('style','display:inline;border:none;');
+        //$('#msg3').hide()
+        all2.show();
+        expand.attr('src','/media/fashion_icon.png');
+        name3.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+        $("input[name=topics]").click(function(){
+        var length=$(this).length
+        if($("input[name=topics]").length!=$("input[name=topics]:checked").length){
+         $(".checkall").each(function()
+            {
+                $(this).attr('checked',false)
+            });
+          }
+        });
+ $('.checkall').click(function(){
+            var checked_status = this.checked;
+            $(".checkall").each(function(){
+                this.checked = checked_status;
+
+
+            });
+
+            $("input[name=topics]").each(function()
+            {
+                this.checked = checked_status;
+
+
+            });
+    })
+    }
+    })    
+    -->
+</script>
+
+{% endblock %}

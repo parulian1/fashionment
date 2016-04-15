@@ -1,0 +1,13 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%block content_loged%}
+<div style="margin-top:-20px;">
+     {{tagview}}
+    <h1>{%trans 'Article Tags'%}</h1>
+     {% for tag in object_list|dictsort:"name"%}
+
+     <a href="{{url}}{{tag.name|slugify}}/">
+        {{ tag.name }}</a> <br />
+     {% endfor %}
+</div>
+{%endblock%}

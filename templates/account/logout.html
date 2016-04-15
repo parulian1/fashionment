@@ -1,0 +1,11 @@
+{% extends "account_base.html" %}
+{% load i18n%}
+
+{% block title %}Fashionment.com - {%trans 'Logged Out'%}{% endblock %}
+
+
+
+{% block content_loged %}
+<h1>{% trans "You've logged out successfully" %}</h1>
+<a class="log_in" href="{% url auth_login %}">{% trans 'Log in' %}</a> {% trans 'again' %}
+{% endblock %}

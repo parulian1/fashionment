@@ -1,0 +1,101 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load thumbnail%}
+{% block title %}
+Fashionment.com - {% trans 'Edit Your Fashion Item' %}
+{% endblock %}
+{%block content_loged%}
+<div id="edit_item_div">
+    <div><a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a><a href="{% url view_store %}" class="hyperlink">{%ifequal user.account_type 1 %}{% trans 'My Store' %}{%else%}{% trans 'My Portfolio' %}{%endifequal%} ></a>  <a href="{% url detail_items item.id %}" class="hyperlink">{{item|capfirst}} ></a> {%trans 'Add Item' %}
+    </div>
+    <div>&nbsp;
+    </div>
+    <div>&nbsp;
+    </div>
+<form method="POST" enctype="multipart/form-data" >
+    <table width="100" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>
+    <div class="title activate">
+        <h2>{%trans 'Edit Item'%}</h2>
+    </div>
+        
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign="top" height="120">
+ {%for field in edititemform%}
+  {% ifequal field.name "picture1" %}
+        {% if edititemform.instance.picture1.name %}
+            <div class="picture_big_img" style="{% if edititemform.instance.picture1 %}background-image:url({% thumbnail edititemform.instance.picture1.name 160x120 %});{% endif %}"></div>
+        {% endif %}
+  {%endifequal%}
+{%endfor%}
+    </td>
+    <td rowspan="2">
+    <div class="form_fields1">
+        {%for field in edititemform%}
+        <div class="column2 edit_form_div" id="row{{forloop.counter}}">
+            <div class="column1 edit_form_col1">
+                {{field.label}}
+            </div>
+            {{field}}
+            {{field.errors}}
+            <div class="eg" id="eg{{forloop.counter}}">
+                {{field.help_text}}
+            </div>
+        </div>
+        {%endfor%}
+        <div class="column2">
+            <div class="column1">
+            </div>
+            <input class="short_red_button" type="submit" value="Submit"/>
+        </div>
+    </div>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+{%for field in edititemform%}
+  {% ifequal field.name "picture2" %}
+        {% if edititemform.instance.picture2.name %}
+            <div class="picture_border_change_img no_margin_left" style="{% if edititemform.instance.picture1 %}background-image:url({% thumbnail edititemform.instance.picture2.name 80x60 %});{% endif %}"></div>
+            <a href="{% url remove_picture edititemform.instance.id %}">{% trans 'remove' %}</a>
+        {%else%}
+        <img src="{{MEDIA_URL}}no_item_image.jpg" width="80" height="60"/>
+
+        {% endif %}
+  {%endifequal%}
+{%endfor%}
+    </td>
+  </tr>
+</table>
+
+
+</form>
+</div>
+<script>
+    <!--
+$(document).ready(function(){
+    img.attr('style','display:;border:none;');
+    all.show()
+    name1.attr('style',' color:#B5121C;font-weight:bold; margin-left:0px')
+    img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+    if(!$.mobile()){
+    $('#id_price').numeric();
+    $('#row7').hide()
+    $('#id_currency').insertBefore($('#id_price'))
+    fieldlimiter.setup({
+        thefield: document.getElementById("id_description"), //reference to form field
+        maxlength: 800,
+        statusids: ["eg3"], //id(s) of divs to output characters limit. If non, set to empty array [].
+        onkeypress:function(maxlength, curlength){ //onkeypress event handler
+            //define custom event actions here if desired
+        }
+    })
+    }
+})
+-->
+</script>
+{%endblock%}

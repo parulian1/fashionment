@@ -1,0 +1,1473 @@
+[
+  {
+    "pk": 1, 
+    "model": "store.linecategory", 
+    "fields": {
+      "name": "T-shirt"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.linecategory", 
+    "fields": {
+      "name": "jeans"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.store", 
+    "fields": {
+      "province": 1, 
+      "company_website": "http://yoko.com/", 
+      "fax": "", 
+      "post_code": 0, 
+      "last_updated": "2009-07-15 13:04:11", 
+      "name": "Cabacula", 
+      "picture": "store/img/697.1_____.jpg", 
+      "deleted": false, 
+      "country": 2, 
+      "telephone": "7952350", 
+      "promotion_text": "******", 
+      "handphone": "081932126008", 
+      "fax_code": null, 
+      "location": "jln u no 31", 
+      "phone_area": 1, 
+      "store_story": "no comment", 
+      "user": 2
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.store", 
+    "fields": {
+      "province": 2, 
+      "company_website": "http://www.google.com/", 
+      "fax": "46546464", 
+      "post_code": 654646, 
+      "last_updated": "2009-07-02 08:45:59", 
+      "name": "handy store", 
+      "picture": "store/img/DSCF2793_JPG.jpg", 
+      "deleted": false, 
+      "country": 2, 
+      "telephone": "6466646456", 
+      "promotion_text": "asddsdasddsa", 
+      "handphone": "65464654564", 
+      "fax_code": 1, 
+      "location": "jl. ehaksdj\naD;GHASDKH\n;akhskdh", 
+      "phone_area": 1, 
+      "store_story": "asdsasdasdadsa", 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.store", 
+    "fields": {
+      "province": 2, 
+      "company_website": "http://asd.com/", 
+      "fax": "", 
+      "post_code": 123123, 
+      "last_updated": "2009-07-15 14:19:59", 
+      "name": "halo", 
+      "picture": "store/img/Anyone_seen_Johnson__by_Jas_________.jpg", 
+      "deleted": false, 
+      "country": 1, 
+      "telephone": "123123", 
+      "promotion_text": "asd", 
+      "handphone": "123", 
+      "fax_code": null, 
+      "location": "ocean field n run\r\n", 
+      "phone_area": 1, 
+      "store_story": "asdads", 
+      "user": 3
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "store.store", 
+    "fields": {
+      "province": 2, 
+      "company_website": "http://asd.com/", 
+      "fax": "", 
+      "post_code": 123123, 
+      "last_updated": "2009-07-02 09:48:14", 
+      "name": "abc", 
+      "picture": "store/img/Anyone_seen_Johnson__by_Jas_________.jpg", 
+      "deleted": true, 
+      "country": 1, 
+      "telephone": "123123", 
+      "promotion_text": "asd", 
+      "handphone": "123", 
+      "fax_code": null, 
+      "location": "asdasd", 
+      "phone_area": 1, 
+      "store_story": "asdads", 
+      "user": 4
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "store.store", 
+    "fields": {
+      "province": 1, 
+      "company_website": "http://asd.com/", 
+      "fax": "", 
+      "post_code": 123123, 
+      "last_updated": "2009-07-06 13:35:28", 
+      "name": "uhui", 
+      "picture": "store/img/200px-Omega_Seamaster_De_Ville_1970_.jpg", 
+      "deleted": false, 
+      "country": 2, 
+      "telephone": "123123", 
+      "promotion_text": "asd", 
+      "handphone": "123", 
+      "fax_code": null, 
+      "location": "123123", 
+      "phone_area": 1, 
+      "store_story": "asd", 
+      "user": 4
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.line", 
+    "fields": {
+      "category": 1, 
+      "line": "Vacation T-shirt", 
+      "store": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.line", 
+    "fields": {
+      "category": 1, 
+      "line": "keren line", 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.line", 
+    "fields": {
+      "category": 2, 
+      "line": "holiday ", 
+      "store": 1
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "store.line", 
+    "fields": {
+      "category": 2, 
+      "line": "casablanco traitor", 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "store.line", 
+    "fields": {
+      "category": 1, 
+      "line": "test", 
+      "store": 4
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "store.line", 
+    "fields": {
+      "category": 1, 
+      "line": "asdasd", 
+      "store": 5
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "store.line", 
+    "fields": {
+      "category": 2, 
+      "line": "running", 
+      "store": 1
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "store.line", 
+    "fields": {
+      "category": 1, 
+      "line": "halo", 
+      "store": 3
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "store.line", 
+    "fields": {
+      "category": 1, 
+      "line": "halo", 
+      "store": 3
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.item", 
+    "fields": {
+      "description": "have a dot in all the t-shirt", 
+      "set_primary_date": "2009-07-03 09:14:03", 
+      "picture2": "cloth/img/Wedding_Dress.jpg", 
+      "gender": 2, 
+      "colour": "white with red dot", 
+      "picture1": "cloth/img/ShirtDress__.jpg", 
+      "deleted": false, 
+      "primary": true, 
+      "item_code": "B-0071", 
+      "availability": 1, 
+      "item": "trinity", 
+      "line": 1, 
+      "price": 750000, 
+      "size": "22-36 and 3XL"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.item", 
+    "fields": {
+      "description": "asdklhaskash\r\nasjd;khas;khas;hdas\r\nas;kda;sh\u00e1sldasldhasl;\r\nasdk;askldaskldlasjdas\r\nasd;kashd;aslkhas;klhasd;kl", 
+      "set_primary_date": "2009-07-01 10:11:52", 
+      "picture2": "", 
+      "gender": 2, 
+      "colour": "merah kuning hijau", 
+      "picture1": "cloth/img/DSCF2793_JPG.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "B456", 
+      "availability": 1, 
+      "item": "Kaos oblong ", 
+      "line": 2, 
+      "price": 120912092, 
+      "size": "123 182390 129302139"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.item", 
+    "fields": {
+      "description": "long and short", 
+      "set_primary_date": null, 
+      "picture2": "cloth/img/ERD_Fashion___.JPG", 
+      "gender": 0, 
+      "colour": "blue", 
+      "picture1": "cloth/img/Foley_Corinna_____.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "J-0011", 
+      "availability": 1, 
+      "item": "shiny", 
+      "line": 3, 
+      "price": 100000, 
+      "size": "S,M,L"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "store.item", 
+    "fields": {
+      "description": "a6sd54a6sd46as54", 
+      "set_primary_date": "2009-07-01 11:47:26", 
+      "picture2": "", 
+      "gender": 1, 
+      "colour": "asdasd", 
+      "picture1": "cloth/img/Jakarta_bebas_macet.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "as64d6a", 
+      "availability": 1, 
+      "item": "asd64s6", 
+      "line": 4, 
+      "price": 564654646, 
+      "size": "654564654"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "store.item", 
+    "fields": {
+      "description": "asdasasdas", 
+      "set_primary_date": "2009-07-02 08:45:58", 
+      "picture2": "", 
+      "gender": 2, 
+      "colour": "adsass", 
+      "picture1": "cloth/img/KELUARAN_BARU_TOYOTA___.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "32123423", 
+      "availability": 1, 
+      "item": "asdasda", 
+      "line": 4, 
+      "price": 12312321, 
+      "size": "1321"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "store.item", 
+    "fields": {
+      "description": "asdasd", 
+      "set_primary_date": "2009-07-02 08:58:24", 
+      "picture2": "", 
+      "gender": 1, 
+      "colour": "asdasd", 
+      "picture1": "cloth/img/2unu26a.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "asd", 
+      "availability": 1, 
+      "item": "123123", 
+      "line": 5, 
+      "price": 123123, 
+      "size": "1212asdasd"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "store.item", 
+    "fields": {
+      "description": "asd", 
+      "set_primary_date": "2009-07-02 09:02:19", 
+      "picture2": "", 
+      "gender": 1, 
+      "colour": "asdasd", 
+      "picture1": "cloth/img/dark-angel-5099.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "asd123", 
+      "availability": 1, 
+      "item": "asd23", 
+      "line": 5, 
+      "price": 123123, 
+      "size": "123"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "store.item", 
+    "fields": {
+      "description": "black edition\r\nlimited edition", 
+      "set_primary_date": "2009-07-06 09:07:10", 
+      "picture2": "", 
+      "gender": 1, 
+      "colour": "Black", 
+      "picture1": "cloth/img/5yhtesaz_.jpg", 
+      "deleted": false, 
+      "primary": true, 
+      "item_code": "C-002", 
+      "availability": 1, 
+      "item": "Black", 
+      "line": 3, 
+      "price": 200000, 
+      "size": "M, L, XL"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "store.item", 
+    "fields": {
+      "description": "asd", 
+      "set_primary_date": "2009-07-02 09:48:14", 
+      "picture2": "", 
+      "gender": 1, 
+      "colour": "asdasd", 
+      "picture1": "cloth/img/dark-angel-5099_.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "asd123", 
+      "availability": 1, 
+      "item": "asd23", 
+      "line": 5, 
+      "price": 123123, 
+      "size": "123"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "store.item", 
+    "fields": {
+      "description": "asdasdasd", 
+      "set_primary_date": "2009-07-06 13:33:48", 
+      "picture2": "", 
+      "gender": 2, 
+      "colour": "asda", 
+      "picture1": "cloth/img/dark-angel-5099__.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "asdasdas", 
+      "availability": 1, 
+      "item": "asdasddas", 
+      "line": 6, 
+      "price": 123123132, 
+      "size": "asdads"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "store.item", 
+    "fields": {
+      "description": "asddas\r\nasdasd\r\nasdasasd\r\nasdsda", 
+      "set_primary_date": "2009-07-06 13:35:28", 
+      "picture2": "", 
+      "gender": 2, 
+      "colour": "asda", 
+      "picture1": "cloth/img/Anyone_seen_Johnson__by_Jas.jpg", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "asdasd", 
+      "availability": 1, 
+      "item": "asdsda", 
+      "line": 6, 
+      "price": 123123, 
+      "size": "123132"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "store.item", 
+    "fields": {
+      "description": "hahah", 
+      "set_primary_date": "2009-07-15 12:32:23", 
+      "picture2": "cloth/img/fashion_finder_.JPG", 
+      "gender": 1, 
+      "colour": "blue", 
+      "picture1": "cloth/img/fashion_finder.JPG", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "B001", 
+      "availability": 2, 
+      "item": "aloha", 
+      "line": 7, 
+      "price": 800000, 
+      "size": "60"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "store.item", 
+    "fields": {
+      "description": "dasdsa", 
+      "set_primary_date": "2009-07-15 13:04:11", 
+      "picture2": "cloth/img/1.gif", 
+      "gender": 1, 
+      "colour": "asd", 
+      "picture1": "cloth/img/2.gif", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "asdasd", 
+      "availability": 1, 
+      "item": "asdas", 
+      "line": 7, 
+      "price": 213123, 
+      "size": "asds"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "store.item", 
+    "fields": {
+      "description": "jgjkg", 
+      "set_primary_date": "2009-07-15 14:19:58", 
+      "picture2": "", 
+      "gender": 1, 
+      "colour": "gjg", 
+      "picture1": "cloth/img/2_.gif", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "wewer", 
+      "availability": 1, 
+      "item": "mh", 
+      "line": 8, 
+      "price": 6566565, 
+      "size": "hg"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "store.item", 
+    "fields": {
+      "description": "jgjkg", 
+      "set_primary_date": "2009-07-15 14:19:59", 
+      "picture2": "", 
+      "gender": 1, 
+      "colour": "gjg", 
+      "picture1": "cloth/img/2__.gif", 
+      "deleted": false, 
+      "primary": false, 
+      "item_code": "wewer", 
+      "availability": 1, 
+      "item": "mh", 
+      "line": 8, 
+      "price": 6566565, 
+      "size": "hg"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.addicted", 
+    "fields": {
+      "deleted": false, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.addicted", 
+    "fields": {
+      "deleted": false, 
+      "user": 4, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "Yoko doyok,\r\n", 
+      "item": null, 
+      "user": 1, 
+      "store": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "allowwww", 
+      "item": null, 
+      "user": 4, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdadasdsd asda  asa sdasd asd adasdasdas", 
+      "item": null, 
+      "user": 4, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasddasd", 
+      "item": null, 
+      "user": 4, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "handy store", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "dassd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "sadad", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "dasd", 
+      "item": 11, 
+      "user": 2, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": 11, 
+      "user": 2, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "sadsd", 
+      "item": 11, 
+      "user": 2, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "hai hio hui  hhihihi hehehhe ooioioioioi ahuahauhauaha sndbjabduaua dadnaksd ahjsjdd", 
+      "item": 11, 
+      "user": 2, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "sdfs", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "sdfsdf", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "sdfsdf", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "sdfsdfdsf", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "sdfsdfdsf", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "sdfsdfdsf", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "zdzc", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "zdzc", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "zdzc", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "zdzc", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "zdzc", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "zdzc", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "zdzc", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "zdzc", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "store.comment", 
+    "fields": {
+      "comment": "asdasdasd", 
+      "item": null, 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.view", 
+    "fields": {
+      "count": 349, 
+      "item": null, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.view", 
+    "fields": {
+      "count": 179, 
+      "item": null, 
+      "store": 3
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.view", 
+    "fields": {
+      "count": 34, 
+      "item": null, 
+      "store": 4
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "store.view", 
+    "fields": {
+      "count": 4, 
+      "item": 8, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "store.view", 
+    "fields": {
+      "count": 38, 
+      "item": 2, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "store.view", 
+    "fields": {
+      "count": 82, 
+      "item": 9, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "store.view", 
+    "fields": {
+      "count": 2, 
+      "item": 6, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "store.view", 
+    "fields": {
+      "count": 84, 
+      "item": null, 
+      "store": 5
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "store.view", 
+    "fields": {
+      "count": 19, 
+      "item": 7, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "store.view", 
+    "fields": {
+      "count": 185, 
+      "item": 3, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "store.view", 
+    "fields": {
+      "count": 6, 
+      "item": 10, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "store.view", 
+    "fields": {
+      "count": 46, 
+      "item": 11, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "store.view", 
+    "fields": {
+      "count": 35, 
+      "item": 12, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "store.view", 
+    "fields": {
+      "count": 11, 
+      "item": null, 
+      "store": 1
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "store.view", 
+    "fields": {
+      "count": 68, 
+      "item": 1, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "store.view", 
+    "fields": {
+      "count": 10, 
+      "item": 4, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "store.view", 
+    "fields": {
+      "count": 43, 
+      "item": 13, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "store.view", 
+    "fields": {
+      "count": 2, 
+      "item": 14, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "store.view", 
+    "fields": {
+      "count": 12, 
+      "item": 16, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "store.view", 
+    "fields": {
+      "count": 3, 
+      "item": 15, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.commentnumber", 
+    "fields": {
+      "count": 1, 
+      "item": null, 
+      "store": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.commentnumber", 
+    "fields": {
+      "count": 45, 
+      "item": null, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.commentnumber", 
+    "fields": {
+      "count": 4, 
+      "item": 11, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.rating", 
+    "fields": {
+      "item": null, 
+      "avg_rate": 4, 
+      "store": 3
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.rating", 
+    "fields": {
+      "item": null, 
+      "avg_rate": 4, 
+      "store": 4
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.rating", 
+    "fields": {
+      "item": null, 
+      "avg_rate": 3, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "store.rating", 
+    "fields": {
+      "item": 12, 
+      "avg_rate": 3, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "store.rating", 
+    "fields": {
+      "item": null, 
+      "avg_rate": 5, 
+      "store": 5
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": null, 
+      "rate": 4, 
+      "pub_date": "2009-07-02 00:00:00", 
+      "user": 2, 
+      "store": 3
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": null, 
+      "rate": 4, 
+      "pub_date": "2009-07-02 00:00:00", 
+      "user": 2, 
+      "store": 4
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": null, 
+      "rate": 4, 
+      "pub_date": "2009-07-02 00:00:00", 
+      "user": 4, 
+      "store": 3
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": null, 
+      "rate": 4, 
+      "pub_date": "2009-07-02 00:00:00", 
+      "user": 4, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": null, 
+      "rate": 1, 
+      "pub_date": "2009-07-02 00:00:00", 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": null, 
+      "rate": 5, 
+      "pub_date": "2009-07-06 00:00:00", 
+      "user": 4, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": 12, 
+      "rate": 5, 
+      "pub_date": "2009-07-09 00:00:00", 
+      "user": 2, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": null, 
+      "rate": 5, 
+      "pub_date": "2009-07-15 00:00:00", 
+      "user": 2, 
+      "store": 2
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": null, 
+      "rate": 5, 
+      "pub_date": "2009-07-15 00:00:00", 
+      "user": 2, 
+      "store": 5
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "store.ratingcounter", 
+    "fields": {
+      "item": 12, 
+      "rate": 1, 
+      "pub_date": "2009-07-15 00:00:00", 
+      "user": 2, 
+      "store": null
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 1, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 3, 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 7, 
+      "user": 2
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 8, 
+      "user": 2
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 2, 
+      "user": 2
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 2, 
+      "user": 4
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 9, 
+      "user": 4
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 9, 
+      "user": 2
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "store.compare_list", 
+    "fields": {
+      "deleted": false, 
+      "item": 12, 
+      "user": 2
+    }
+  }
+]

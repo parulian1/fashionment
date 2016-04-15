@@ -1,0 +1,106 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load thumbnail%}
+{%load paginator%}
+{%load custom%}
+{% load humanize %}
+{% load cache %}
+{% block title %}
+Fashionment.com - {{line.line|capfirst}} {% trans 'Fashion Collection'%}
+{% endblock %}
+{%block content_loged%}
+{% cache cache_time view_item_page line.id page_num owner_flag%}
+<div class="form_fields" id="view_item">
+    <div>
+        {% ifequal user.id line.store.user.id %}
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a><a href="{% url view_store %}" class="hyperlink">{%ifequal user.account_type 1 %}{% trans 'My Store' %}{%else%}{% trans 'My Portfolio' %}{%endifequal%} ></a>
+        {% else %}
+        <a href="{% url view_profile line.store.user.id %}" class="hyperlink">{{line.store.user.username|capfirst}} {% trans 'Profile' %} ></a> <a href="{% url view_stores line.store.slug %}" class="hyperlink">{{line.store|capfirst}}{%ifequal line.store.user.account_type 1%}{% trans 'Store' %}{%else%}{% trans 'Portfolio' %}{%endifequal%} ></a>
+        {% endifequal %}
+        {{line.line|capfirst}} {%trans 'Collection' %}
+    </div>
+    <div>
+        &nbsp;
+    </div>
+    <div>
+        &nbsp;
+    </div>
+    <form method="POST" id="form1" action="{%url primary_picture line.id%}">
+        <div class="pagination">
+            {%ifequal paginator.num_pages 1%}
+            {%else%}
+                {% paginator 2 %}
+            {%endifequal%}
+        </div>
+        <div class="rows">
+            <div class="title activate">
+                {{line.store|capfirst}}'s {{line.line|capfirst}} Collection 
+            </div>
+            <div class="note">
+                {%trans 'Note:   * Only 5 primary pictures can be choose to represent the fashion Collection'%}
+            </div>
+            {%for items in page_obj.object_list%}
+                <div class="item_list">
+                    <div class="view_picture left_text">
+                        <div class="item_list_name">
+                            {{items.item|default:_("No Name")|truncatechar:12|capfirst}}
+                        </div>
+                        <a href="{% url detail_items items.id %}">
+                            <div class="picture_border addict_pic" style="{% if items.picture1 %}background-image:url({% thumbnail items.picture1.name 100x75 %});{% endif %}">{%ifequal items.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_small.png" style="border:none;" />{%endifequal%}</div>
+                        </a>
+                        <div class="item_list_name">
+                          {%ifnotequal items.price 0 %}{{items.currency}} {{items.price|intcomma}}{%else%}{%trans 'on request'%}{%endifnotequal%}
+                        </div>
+                        {%ifequal user.id items.line.store.user.id%}
+                        <div class="small_margin_left">
+                            <a class="link_decoration" href="{%url edit_item items.id%}">{%trans 'Edit'%}</a> |
+                            {%url remove_collection_or_item "item" items.id as remove %}
+                            <a class="link_decoration" href="{{remove}}">{%trans 'Remove'%}</a>
+                        </div>
+                        {%endifequal%}
+                        <div class="left_text small_font">
+                            {%ifequal line.store.user.id user.id%}
+                                {%ifequal items.primary 1%}
+                                    <input type="checkbox" name="check" value="{{items.id}}" checked />
+                                {%else%}
+                                    <input type="checkbox" name="check" value="{{items.id}}"/>
+                                {%endifequal%}
+                                {%trans 'Primary Picture'%}*
+                            {%endifequal%}
+                        </div>
+                    </div>
+                </div>
+            {%endfor%}
+        </div>
+
+        <div class="form_fields">
+        <div class="small_margin_top">
+            {%ifequal line.store.user.id user.id%}
+                <input class="medium_red_button" type="submit" value="Set Primary">
+                <a class="medium_red_button" href="{%url item_add line.id%}">{%trans 'Add New Item'%}</a>
+            {%endifequal%}
+        </div>
+        </div>
+    </form>
+</div>
+{% endcache %}
+<script>
+<!--
+    
+    $(document).ready(function(){
+        var form1 = $("#form1")
+        img.attr('style','display:;border:none;');
+        all.show()
+        if('{{user.id}}'=='{{ line.store.user.id}}'){
+            name1.attr('style',' color:#B5121C; font-weight:bold; margin-left:0px')
+            img.attr('src','{{MEDIA_URL}}fashion_icon.png');
+        }
+        $("#set_primary").click(function(e){
+            e.preventDefault()
+            form1.attr('action','{%url primary_picture line.id%}')
+            form1.submit()
+        })
+    })
+-->
+</script>
+{%endblock%}

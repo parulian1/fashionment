@@ -1,0 +1,143 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% block title %}
+Fashionment.com - {%ifequal user.account_type 1 %}{% trans 'Add Your Own Online Store' %}{% else %}{% trans 'Add Portfolio to designers profile' %}{%endifequal%}
+{% endblock %}
+{%block content_loged%}
+<div id="add_store_big_div">
+<form method="POST" id="add_store_form"  enctype="multipart/form-data" >
+    <div>
+        <div class="title">
+            <h2>{%ifequal user.account_type 1 %}{%trans 'Add your Store'%}{%else%}{%trans 'Add your Portfolio'%}{%endifequal%}</h2>
+        </div>
+        {%for field_add_store in add_store_form%}
+            <div class="each_row" id="row{{forloop.counter}}">
+                <div class="column2">
+                    <div class="column1" id="columnb{{forloop.counter}}">
+                        {{field_add_store.label}}
+                    </div>
+                    {{field_add_store}}
+                    {{field_add_store.errors}}
+                    <div class="eg" id="eg{{forloop.counter}}">
+                        {{field_add_store.help_text}}
+                    </div>
+                </div>
+            </div>
+        {%endfor%}
+        <div class="column2">
+            <div class="column1">
+            </div>
+            <input class="short_red_button" type="submit" value="Submit"/>
+        </div>
+    </div>
+</form>
+</div>
+
+<textarea class="location no_display" name="tb">{{user_data.street_address}}</textarea>
+<script>
+ <!--
+$(document).ready(function(){
+    $("#add_store_form").submitLoad()
+    var address;
+    if(!$.mobile()){
+    $('textarea[name="tb"]').each(function(){
+	      address =$(this).val()
+    $("#columnb15").append('<a id="promotion_clickme" href="#"  title="Promotion Text|Promote your store now to get the chance of selling items fast. All promotional text you type here are viewable from homepage, but make sure you update it regularly as we only have limited space for promotional text."><img style="margin:3px 0 0 0;border:none;cursor:help;" src="{{MEDIA_URL}}/img/whats_this.png" /></a>')
+    $('#promotion_clickme').cluetip({activation: 'click', sticky: true,closePosition: 'title', width: 350, splitTitle: '|'});
+  })
+  
+  updateModel2({form:'#add_store_form',model:'#id_province',brand:'#id_country'})
+  updateModel2({form:'#add_store_form',model:'#id_phone_area',brand:'#id_province'})
+  updateModel2({form:'#add_store_form',model:'#id_fax_code',brand:'#id_province'})
+  $('#id_checkbox').attr('style','margin-left:-150px;')
+  $('#eg2').attr('style','margin-left:-130px; margin-top: -16px; font-size:13px; font-weight:bold;') 
+  $('#row7').hide()
+  $('#id_phone_area').insertAfter($('#columnb8'))
+  $('#row10').hide()
+  $('#columnb2').hide()
+  $('#id_fax_code').insertAfter($('#columnb11'))
+  $('#id_checkbox').click(function(){
+        if (this.checked) {      //this.checked is NOT from jquery
+            $("#id_country").val('{{user_data.country}}')
+                if($('#id_country').val()=="1"){
+                    $('#id_province').attr('disabled',false);
+                    $('#id_phone_area').attr('disabled',false);
+                    $('#id_fax_code').attr('disabled',false);
+                    $('#fake_select').children().appendTo('#id_province')
+                    $("#id_phone_area").val('{{user_data.phone_area_code}}')
+                }
+                if($('#id_country').val()!="1"){
+                    $('#id_province').attr('disabled',true);
+                    $('#id_phone_area').attr('disabled',true);
+                    $('#id_fax_code').attr('disabled',true);
+                }
+            $("#id_location").val(address)
+            $("#id_province").val('{{user_data.province}}')
+            $("#id_post_code").val('{{user_data.post_code}}')
+            
+            $("#id_telephone").val('{{user_data.telephone}}')
+            $("#id_handphone").val('{{user_data.handphone}}')
+            $("#id_fax_code").val('{{user_data.fax_area_code}}')
+            $("#id_fax").val('{{user_data.fax}}')
+            $("#id_company_website").val('{{user_data.personal_website}}')
+            //updateModel2({form:'#add_store_form',model:'#id_province',brand:'#id_country',temp_value:'{{user_data.province}}'});
+            //alert('{{user_data.province}}')
+        } else {
+            $("#id_location").val('');
+            $("#id_province").val('');
+            $("#id_post_code").val('');
+            $("#id_country").val('');
+            $("#id_phone_area").val('');
+            $("#id_telephone").val('');
+            $("#id_handphone").val('');
+            $("#id_fax_code").val('');
+            $("#id_fax").val('');
+            $("#id_company_website").val('');
+            $('#id_province').attr('disabled',true)
+         }
+    });
+        $('#id_telephone').numeric({allow:"+"});
+        $('#id_post_code').numeric();
+        $('#id_handphone').numeric({allow:"+"});
+        $('#id_fax').numeric({allow:"+"});
+        $('#id_country').change(function(){
+            if($(this).val()=="1"){
+                $('#id_province').attr('disabled',false);
+                $('#id_phone_area').attr('disabled',false);
+                $('#id_fax_code').attr('disabled',false);
+            }else{
+                $('#id_province').attr('disabled',true);
+                $('#id_phone_area').attr('disabled',true);
+                $('#id_fax_code').attr('disabled',true);
+            }
+        })
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_location"), //reference to form field
+            maxlength: 100,
+            statusids: ["eg3"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_store_story"), //reference to form field
+            maxlength: 1000,
+            statusids: ["eg13"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_promotion_text"), //reference to form field
+            maxlength: 1000,
+            statusids: ["eg15"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        }
+});
+
+-->
+</script>
+{%endblock%}

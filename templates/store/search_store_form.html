@@ -1,0 +1,43 @@
+{% load i18n %}   
+     <div id="search_store_form_box" class="search_form_box">
+          <form method="GET" id="search_store_form" action="{% url list_store %}">
+            <table>
+                 {% for field in form %}
+                <tr>
+                    <td width="22%">
+                        {% ifequal field.label "Line" %}
+                        {% trans 'Collection ' %}
+                        {% else %}
+                        {{ field.label }} 
+                        {% endifequal %}
+                        :
+                    </td>
+                    <td width="76%">
+                        {{ field }}
+                    </td>
+                </tr>
+                 {% endfor %}
+                 <tr style="height:25px;">
+                    <td width="22%">
+                        &nbsp;
+                    </td>
+                    <td width="76%">
+                        &nbsp;
+                    </td>
+                </tr>
+                 <tr>
+                     <td colspan="5" align="right">
+                            <input class="short_red_button" style="padding:1px 11px 4px;" type="submit" value="search" name="submit" />
+                     </td>
+                 </tr>
+            </table>
+          </form>
+        </div>
+<script>
+    <!--
+    $(document).ready(function(){
+        $("#id_keyword").css('width','450px')
+        updateModel3({form:'#search_store_form',model:'#id_line',brand:'#id_category'})
+    })
+    -->
+</script>

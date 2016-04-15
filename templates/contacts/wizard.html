@@ -1,0 +1,21 @@
+{% extends "account_base.html" %}
+
+{% block title %}
+Fashion {%trans 'Contact Fashiontment'%}
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="/css/contact.css" type="text/css" />
+{% endblock %}
+
+{% block content_loged %}
+  <p>Step {{ step }} of {{ step_count }}</p>
+  <form action="." method="post" class="form_wizard">
+    <table>
+      {{ form }}
+    </table>
+    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+      {{ previous_fields|safe }}
+    <input type="submit">
+  </form>
+{% endblock %}

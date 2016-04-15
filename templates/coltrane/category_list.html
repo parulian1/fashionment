@@ -1,0 +1,12 @@
+{% extends "account_base.html" %}
+{% block content_loged %}
+{{category_list}}
+{%for category in object_list%}
+<div>
+   <a href="{{category.get_absolute_url}}">
+    {{category.title}}
+</a>
+</div>
+
+{%endfor%}
+{%endblock%}

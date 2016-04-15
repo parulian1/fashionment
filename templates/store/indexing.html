@@ -1,0 +1,217 @@
+{% load i18n %}
+{% load humanize %}
+{% load thumbnail %}
+{% load custom %}
+<table class="rows2" id="index_table">
+    <tr>
+        <td colspan="4">
+		<a name="anchor1" />
+                    <div class="rows" id="#anchor1">
+
+                        <div class="left_float">{% trans 'Sort By:' %}&nbsp;</div>{% url indexing "store" "" as store_index %}
+                        <div class="left_float"><a href="{{store_index}}" class="{% ifequal type 'store' %}short_red_button{%else%}log_in{%endifequal%} indexing" id="indexing_store">{% trans 'Store' %}</a> &nbsp;</div>
+                        {% url indexing "collection" "" as collection_index %}
+                        <div class="left_float"><a href="{{collection_index}}" class="{% ifequal type 'collection' %}short_red_button{%else%}log_in{%endifequal%} indexing" id="indexing_collection">{% trans 'Collection' %}</a> &nbsp;</div>
+                        {% url indexing "designer" "" as designer_index %}
+                        <div class="left_float"><a href="{{designer_index}}" class="{% ifequal type 'designer' %}short_red_button{%else%}log_in{%endifequal%} indexing" id="indexing_designer">{% trans 'Designer' %}</a> &nbsp;</div>
+
+                    </div>
+                </a>
+        </td>
+    </tr>
+    {% ifequal type "store" %}
+    <tr>
+        <td colspan="4" class="indexing_title">
+            {% trans 'Store Index' %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <div id="indexing_array_store">
+                {%for alphabet in array%}
+                    {% url indexing "store" alphabet as link %}
+                    <a href="{{link}}" class="alphabet">
+                       {{alphabet|capfirst}}
+                    </a>&nbsp;|&nbsp;
+                {%endfor%}
+            </div>
+            <div id="indexing_array_designer">
+                {%for alphabet in array%}
+                    {% url indexing "designer" alphabet as link %}
+                    <a href="{{link}}" class="alphabet">
+                       {{alphabet|capfirst}}
+                    </a>&nbsp;|&nbsp;
+                {%endfor%}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <hr />
+        </td>
+    </tr>
+    {% else %}
+        {%ifequal type "designer"%}
+            <tr>
+                <td colspan="4" class="indexing_title">
+                    {% trans 'Designer Index' %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div id="indexing_array">
+                        {%for alphabet in array%}
+                            {% url indexing type alphabet as link %}
+                            <a href="{{link}}" class="alphabet">
+                               {{alphabet|capfirst}}
+                            </a>&nbsp;|&nbsp;
+                        {%endfor%}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <hr />
+                </td>
+            </tr>
+        {%else%}
+            <tr >
+                <td colspan="4" class="indexing_title">
+                    {% trans 'Collection Index' %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <hr />
+                </td>
+            </tr>
+        {%endifequal%}
+    {% endifequal %}
+    <tr>
+        <td colspan="4" id="results">
+            {% for data in object %}
+
+              {% if forloop.first %}
+                <div style="overflow:hidden;" id="#anchor1">
+                    <a name="anchor1" />
+              {% endif %}
+              <div class="comment_user_report">
+                    <div class="alphabet2">
+                            {{data.alphabet|capfirst}}
+                        </div>
+                        {% for temp_data in data.object %}
+                            <div>
+                                {% ifequal type "collection" %}{{temp_data.show}}
+                                    {% url view_item temp_data.id as collection_link %}
+                                    {% url same_collection temp_data.line|slugify as same_collection_link %}
+                                    {% if temp_data.show %}
+                                        <a href="{% ifequal temp_data.same_name_count 1 %}{{collection_link}}{%else %}{{same_collection_link}}{%endifequal%}" class="hyperlink normal_color">
+                                        {{temp_data.line|capfirst|truncatechar:25}}</a>
+                                    {%endif%}
+                                {% else %}
+                                    {% url view_stores temp_data.slug as store_link %}
+                                    <a href="{{store_link}}" class="hyperlink result normal_color">{{temp_data.name|capfirst|truncatechar:25}}</a>
+
+
+                                {% endifequal %}
+                            </div>
+                        {% endfor %}
+                </div>
+              {%if data.clear%}<div class="rows2">&nbsp;</div>{%endif%}
+              {%if data.link_back %}<div class="rows2 back_to_top"><a href="#anchor1">{% trans 'back to top' %}</a></div></div><div><a name="anchor1" />{%endif%}
+            {% endfor %}
+        </td>
+    </tr>
+    </table>
+<script>
+    <!--
+    $(document).ready(function(){
+        $('#indexing_array_designer').hide()
+        $('.alphabet , .indexing').click(function(e){
+            e.preventDefault();
+            $.ajax({
+                  url:$(this).attr('href'),
+                  type:'GET',
+                  dataType:'json',
+                  success:function(data){
+                    var type = data.type
+                    var alphabet = data.alphabet
+                    var index_title = ''
+                    if(type=="store"){
+                        index_title="Store Index"
+                        $('#indexing_store').attr('class','short_red_button indexing')
+                        $('#indexing_collection').attr('class','log_in indexing')
+                        $('#indexing_designer').attr('class','log_in indexing')
+                        $('#indexing_array').attr('style','display:block;')
+                        $('#indexing_array_store').show()
+                        $('#indexing_array_designer').hide()
+                    }
+                    if(type=="collection"){
+                        index_title="Collection Index"
+                        $('#indexing_store').attr('class','log_in indexing')
+                        $('#indexing_collection').attr('class','short_red_button indexing')
+                        $('#indexing_designer').attr('class','log_in indexing')
+                        $('#indexing_array_store').hide()
+                        $('#indexing_array_designer').hide()
+                    }
+                    if(type=="designer"){
+                        index_title="Designer Index"
+                        $('#indexing_store').attr('class','log_in indexing')
+                        $('#indexing_collection').attr('class','log_in indexing')
+                        $('#indexing_designer').attr('class','short_red_button indexing')
+                        $('#indexing_array').attr('style','display:block;')
+                        $('#indexing_array_store').hide()
+                        $('#indexing_array_designer').show()
+                    }
+                    $('#results').html('')
+                    $('.indexing_title').html(index_title)
+                    if(data.object.length==0){
+                        $('<div class="rows" ><a id="first_anchor" />').appendTo($('#results'))
+                        $('<div class="comment_user_report" id="resultss0"><div class="alphabet2">'+data.alphabet+'</div>').appendTo($('#first_anchor'))
+                    }
+                    for(var i=0;i<data.object.length;i++){
+                        var clear = data.object[i].clear
+                        var link_back = data.object[i].link_back
+                        var clear_div = $('<div style="clear:both;overflow:hidden;">&nbsp;</div>')
+                        if(i==0){
+                                $('<div class="rows" ><a id="first_anchor" />').appendTo($('#results'))
+                                if(alphabet!='')$('<div class="comment_user_report" id="resultss0"><div class="alphabet2">'+data.alphabet+'</div>').appendTo($('#first_anchor'))
+                        };
+                        if(alphabet==''){
+
+                            $('<div class="comment_user_report" id="resultss'+i+'"><div class="alphabet2">'+data.object[i].alphabet+'</div>').appendTo($('#first_anchor'))
+                           }
+                        var tempdata = data.object[i]
+                        var temp_div = ''
+                        if(type!="collection"){temp_div=tempdata.name}
+                        if(alphabet!=''){
+                            var url =  tempdata.url
+                            $('<div class="rows2 "><a href="'+url+'" class="hyperlink result normal_color">'+temp_div+'</a></div>').appendTo($('#resultss0'))
+                        }else{
+                            for(var j=0;j<data.object[i].object.length;j++){
+                                var object_j = data.object[i].object[j]
+                                if(type!="collection"){name=object_j['name']
+                                    $('<div class="rows2 '+tempdata.alphabet+'"><a href="'+object_j['url']+'" class="hyperlink result normal_color">'+name+'</a></div>').appendTo($('#resultss'+i))
+                                }else{
+                                    name = object_j['line']
+                                    if(object_j['show']!='')$('<div class="rows2 '+tempdata.alphabet+'"><a href="'+object_j['url']+'" class="hyperlink result normal_color">'+name+'</a></div>').appendTo($('#resultss'+i))
+                                }
+                                
+                            }
+                        }
+                        if(clear!=''){
+                            clear_div.insertAfter($('#resultss'+i))
+                        }
+                        if(link_back!=''){
+                            if(clear_div!='')$('<div class="rows2 back_to_top"><a href="#anchor1">back to top</a></div></div><div><a name="anchor1" />').insertAfter(clear_div)
+                            else $('<div class="rows2 back_to_top"><a href="#anchor1">back to top</a></div></div><div><a name="anchor1" />').insertAfter($('#resultss'+i))
+                        }
+
+                      }
+                  }
+                    })
+
+                  })
+    })
+    -->
+</script>

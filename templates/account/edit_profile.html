@@ -1,0 +1,60 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% load thumbnail%}
+{% block title %}
+Fashionment.com - {% trans 'Edit Your Profile ' %}
+{% endblock %}
+{%block content_loged%}
+<div id="edit_profile">
+<form method="POST" id="edit_form"  enctype="multipart/form-data" >
+    <div>
+        <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> {%trans 'Edit Profile' %}
+    </div>
+    <div>
+        &nbsp;
+    </div>
+    <div>
+        &nbsp;
+    </div>
+    <div class="title">
+       <h2>{%trans 'Edit Profile'%}</h2>
+    </div>
+    <div class="form_fields1">
+        {%for field in edit_my_profile_form%}
+            <div class="column2" id="column{{forloop.counter}}">
+                <div class="column1" id="columnb{{forloop.counter}}">
+                    {{field.label}}
+                </div>
+                {% ifequal field.name "picture" %}
+                     {% if edit_my_profile_form.instance.picture.name %}
+                        
+                        <div class="picture_border_edit" style="{% if edit_my_profile_form.instance.picture %}background-image:url({% thumbnail edit_my_profile_form.instance.picture.name 180x120 %});{% endif %}"></div>
+                     {% else %}
+                        <img src="{{MEDIA_URL}}no_user_picture.jpg" width="160" height="120" alt="no user picture"/>
+                     {% endif %}
+                {% endifequal %}
+                {{field}}
+                {{field.errors}}
+                    <div class="eg" id="eg{{forloop.counter}}">
+                        {{field.help_text}}
+                    </div>
+                    
+            </div>
+        {%endfor%}
+        <div class="column2">
+            <div class="column1">
+            </div>
+            <input class="short_red_button" type="submit" value="Submit"/>
+        </div>
+    </div>
+</form>
+</div>
+<script>
+    <!--
+    $(document).ready(function(){
+        if(!$.mobile()){
+            edit_profile_js()
+        }
+    })-->
+</script>
+{%endblock%}

@@ -1,0 +1,51 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% block title %}
+Fashionment.com - {% trans 'Login' %}
+{% endblock %}
+{%block content_loged%}
+<div style="margin-top:-30px;">
+<div class="title" style="padding:0px;">
+    <h3>{% trans 'Log In' %}</h3>
+</div>
+<form method="POST">
+    <div class="column2" style="margin-left:150px;">
+        <div class="column1">
+        </div>
+        <font style="color:maroon;">
+            {%if message%}
+                {{message}}
+            {%else%}
+                &nbsp;
+            {%endif%}
+        </font>
+    </div>
+    {{ form.non_field_errors }}
+    {%for login_field in form%}
+        <div class="each_row">
+            <div class="column2" style="margin-left:150px;">
+                <div class="column1">
+                    {{login_field.label}}
+                </div>
+            {{login_field}}
+            {{login_field.errors}}
+                <div class="eg">
+                    {{login_field.help_text}}
+                </div>
+            </div>
+        </div>
+    {%endfor%}
+    <div class="column2" style="margin-left:150px; width:150px;">
+        <div class="column1">
+        </div>
+        <div class="rows">
+            <input class="short_red_button" style="" type="submit" value="Submit"/>
+            <a class="sign_up" href="{% url sign_up %}" style="">{% trans 'Sign Up' %}</a>
+        </div>
+        <div>
+            <a style="font-size:12px;" href="{% url forgot_password %}">{% trans 'Forgot Password ?' %}</a>
+        </div>
+    </div>
+</form>
+</div>
+{%endblock%}

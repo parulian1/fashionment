@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% load thumbnail %}
+{% load custom %}
+{% load cache %}
+{% block head %}
+  <link rel="stylesheet" href="{{MEDIA_URL}}css/home.css" type="text/css" />
+  <meta name="google-site-verification" content="IBVPi9yj9r_uTGbIFGVwOyRxp36sm92KezBJpf9mWFI" />
+{% endblock %}
+{% block content %}
+<!-- ae4f7f75123be0ea642b4e7a4b6153be -->
+<div id="news_background">
+
+</div>
+<div id="magazine_background">
+
+</div>
+<div id="latest_background">
+
+</div>
+<div id="horoscope_background">
+
+</div>
+<div id="fashion_index_background">
+
+</div>
+<div id="store_promote_text">
+    {% trans 'STORE PROMOTION'%}
+</div>
+{% cache 600 static_paragraph %}
+    {% block static_paragraph %}
+    <p class="intro">
+    <b>Fashion</b>, Style and Trend, or whatever you want to say it, are all here. Fashionment.com is designed for those who love to style up, be <b>latest</b> and fashionable. Not just providing facility to <b>shop</b> or <b>buy</b>, we also provide online <b>boutique</b> for those who have the passion to <b>sell</b> the <b>latest fashion</b>. So what are you waiting for, explore and be creative in Fashionment.com!
+    </p>
+    {% endblock %}
+{% endcache %}
+{% cache 300 "marquee_backg"%}
+    <div id="marquee_backg">
+        <div id="announcement">
+            {% for promotion in store_promotion %}
+                {% url view_stores promotion.slug as link %}
+            <span id="span_subuser"><a href="{{link}}" class="hyperlink">{{promotion.name|capfirst}}</a></span>
+                {{promotion.promotion_text|truncatechar:120}}
+            {% endfor %}
+        </div>
+    </div>
+{% endcache %}
+    <div class="big_pic" align="center" id="index_mid_page">
+        <div id="index_mid_page_div1">
+            <div class="rows" >
+                <div class="div1">
+                    &nbsp;
+                </div>
+                <div align="right" class="div2">
+                    <a class="index_news_see_all" href="/fashion-facts/" >See All</a>
+                </div>
+            </div>
+            {% for news in front_news|slice:"5" %}
+                <div align="left" class="rows2">
+                    <div class="div1">
+                        <a href="{{news.get_absolute_url}}"><div align="left" class="latest_news_picture picture_border" style="background-image:url({% thumbnail news.article_image.name 60x60 %});" ></div></a>
+                    </div>
+                    <div class="div2">
+                        <div>
+                            <a class="title_side_news" href="{{news.get_absolute_url}}">{{news.title|truncatechar:70}}</a>
+                        </div>
+                        <div>
+                            {{news.excerpt_html|safe|truncatewords_html:7|removetags:"p"}}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div align="right" id="index_mid_page_div2">
+            <div id="flash">
+                {% if ads_index %}
+                {%for advertise in ads_index|slice:":1"%}
+                    <img class="flash_picture" src="{{ MEDIA_URL }}{{advertise.ad_flash}}" alt="fashionment.com big animation" />
+                {%endfor%}
+                {% else %}
+                 &nbsp;
+                {% endif %}
+            </div>
+            <div class="menu_under_big_pic_background" >
+                {#for transparant background#}
+            </div>
+            <div id="menu1" class="menu_under_big_pic">
+                <input class="initial" type="hidden" value="5" />
+                <ul class="ads_for_index" style="margin-left:-40px;list-style:none;">
+                {%for advertise in ads_index|slice:":4"%}
+                  <li style="float:left;width:25%;position:relative;display:block;height:80px;">
+                   <a>
+                    <div align="left" class="pic_row" id="row_pic{{forloop.counter}}" style="">
+                        <div class="index_adv" style="background-image:url({{MEDIA_URL}}{{advertise.ad_picture}});"></div>
+                        <!--<img style="" src="{{ MEDIA_URL }}{{advertise.ad_picture}}" />-->
+                            <input id="flash_ad" class="flash_input" type="hidden" value="{{advertise.ad_flash}}" />
+                    </div>
+                    <div align="left" class="pic_description">
+                        {{advertise.ad_description}}
+                    </div>
+                  </a>
+                  </li>
+                {%endfor%}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="div2" class="rows">
+        {% cache 300 "left_part" %}
+            <div id="left_part" >
+            
+	   {% if magazine%}
+            <div style="overflow:hidden;width:100%;padding-bottom:20px;" id="blog">
+                <div id="magazine_header" style="background-image:url({{MEDIA_URL}}whatsthefashion.png);"></div>
+                <a {% if magazine.0.url %}href="{{ magazine.0.url }}" {% else %}href="{{ magazine.0.download_file.url }}" {% endif %}class="ad_link" onclick="javascript:pageTracker._trackPageview(this.getAttribute('href'));">
+                    <div class="ad_image" style="background-image:url({{MEDIA_URL}}{{magazine.0.image.name}});width:233px;height:393px;margin-bottom:5px;"></div>
+                </a>
+                    <div style="font-size:20px;">{{magazine.0.description}}</div>
+                    {% if magazine.0.download_file %}
+                        <a href="{{ magazine.0.download_file.url}}" class="hyperlink" onclick="javascript:pageTracker._trackPageview(this.getAttribute('href'));">{% trans 'Download' %}</a>
+                        {% if magazine.0.url %}
+                            or <a href="{{ magazine.0.url }}" class="hyperlink" onclick="javascript:pageTracker._trackPageview(this.getAttribute('href'));"> Read Online</a>
+                        {% endif %}
+                    {% endif %}
+            </div>
+	    {%endif%}
+            <div  id="ideal" style="background-image:url('{{MEDIA_URL}}img/ideal_weight.png');">
+                <div id="ideal_div" style="padding-top:30px;text-align:justify;width:76%;">
+                <table id="ideal_form">
+                    <tr>
+                        <td>
+
+                        <form name="form" method="post">
+                            {% trans 'Wrap your thumb and major fingers around your smallest part of your wrist,and find your...' %}<br>
+
+                            <input type="radio" id="frame" name="frame" value="1" class="frame"/>{% trans 'fingers overlap'%}<br>
+                            <input type="radio" id="frame" name="frame" value="2" class="frame" />{% trans 'fingers barely touch'%}<br>
+                            <input type="radio" id="frame" name="frame" value="3" class="frame" />{% trans "fingers don't touch" %}<br>
+                            <table BORDER="0">
+                                <tr>
+                                    <td>
+                                        <table border="0" cellpadding="1" cellspacing="0">
+
+                                        <tr>
+                                            <td><b>{%trans 'Height'%}:</b></td>
+                                            <td><input type="text" size="3" id="ibw_height_feet" name="ibw_height_feet" maxlength="3" style="width:32px; background-color:white;" onkeydown="setWhiteBG(this);" /> cm</td>
+                                        </tr><tr>
+
+                                            <td><b>{%trans 'Weight'%}:</b></td>
+                                            <td><input type="text" size="3"  id="ibw_weight" name="ibw_weight" maxlength="3" style="width:32px; background-color:white;" onkeydown="setWhiteBG(this);" /> kg.</td>
+                                        </tr>
+                                        </table>
+                                        <input type="hidden" name="step" value="1">
+                                        <div id="hv_error"></div>
+                                        <a id="submit_ideal" class="short_red_button">{% trans 'calculate' %}</a>
+
+                                    </td >
+                                </tr>
+                            </table>
+                        </form>
+                        </td>
+                    </tr>
+                </table>
+                <div id="ideal_res"></div>
+                </div>
+            </div>
+            <div style="overflow:hidden;padding-top:10px;"><a id="size_guide" href="."><img alt="fashionment.com size guide" style="border:none;" src="{{MEDIA_URL}}img/size_guide.png" width="230px"/></a></div>
+        </div>
+        {% endcache %}
+        {% cache 60 "right_part" %}
+            <div id="right_part" >
+                <iframe src="{{item_link}}" width="690px" height="261px" id="item_frame" frameborder="0" scrolling="no" ></iframe>
+                <iframe src="{{designer_link}}" width="690px" height="270px" id="designer_frame" frameborder="0" scrolling="no" ></iframe>
+                <iframe src="{{store_link}}" width="690px" height="270px" id="store_frame" frameborder="0" scrolling="no" ></iframe>
+            </div>
+        {%endcache %}
+        {% cache 600 "new_astrology"%}
+            <div class="rows" id="astro_head_backg">
+                <div class="astro_backg_button">
+                </div>
+                <div class="astro_head_title" id="head_title_astro">{% trans 'Your Daily Fashion Astrology'%}</div>
+                <div style="float:left;width:10%;padding-top:2px;" ><a href="#" id="minimize_astro" class="hyperlink astro_head_title">Minimize</a><a href="#" id="maximize_astro" class="hyperlink astro_head_title">Maximize</a></div>
+            </div>
+            <div  class="astro_big_row">
+                <div class="astro_2nd_div">
+                    <div id="astro_div1"></div>
+                    <div style="background-image:url({% thumbnail  big_horoscope.0.artis_image.name 210x215 %});" class="astro_artis_img"></div>
+                    <div id="astro_div3" >
+                        <div class="astro_title">{{big_horoscope.0.name|upper}} {% trans 'CELEBRITY: ' %}{{big_horoscope.0.artis_name|upper}}</div>
+                        {% trans 'Birthdate: '%}{{big_horoscope.0.artis_birthday|date:"d F Y"}}<br/>
+                        {{big_horoscope.0.description|truncatechar:220}}
+                    </div>
+                </div>
+                {% for horoscope in all_horoscope|slice:"12" %}
+
+                   {% if horoscope.new_col %}
+                       {% if not forloop.first %}
+                        </div>
+                       {%endif%}
+                        <div class="astro_column" style="padding-top:22px;">
+                   {%endif %}
+                    <div class="rows2">
+                        <div style="background-image:url({{MEDIA_URL}}horoscope/{{horoscope.name}}.png);" class="astro_star_img"></div>
+                        <div class="rows" >
+                            <div class="astro_title">{{horoscope.short_title|upper}}</div>
+                            {{horoscope.description|truncatechar:220}}
+                        </div>
+                    </div>
+               {%endfor %}
+                        </div>
+    </div>
+       {% endcache %}
+       <div id="index" class="rows2">&nbsp;
+        {% include 'store/indexing.html'   %}
+       </div>
+    </div>
+    
+    <input id="click_value" type="hidden" value="{{click}}"/>
+    <input id="click_value_item" type="hidden" value="{{click}}"/>
+    {% block content_bottom %}
+
+    {%endblock%}
+{% cache 43200 "size_pop_up"%}
+<div id="size_pop_up">
+    <div style="padding-top:10px;">
+        <div>
+            <a href="#" class="close" id="close_size"></a>
+        </div>
+        <div id="image">
+            {% include 'size_guide.html' %}
+        </div>
+    </div>
+</div>
+{% endcache %}
+{% cache 3600 pop_up_ad %}
+<div id="pop_up_ad">
+
+</div>
+{% endcache %}
+<script>
+<!--
+//   var last_selected = $([])
+     var click_value = $('#click_value').val()
+    $(document).ready(function(){
+        $('#announcement').ticker(1)
+        $('#maximize_astro').hide()
+        $('#minimize_astro').click(function(e){
+            e.preventDefault();
+            $('#minimize_astro').hide()
+            $('#maximize_astro').show()
+            $('.astro_big_row').hide()
+            $('#horoscope_background').hide()
+            $('#fashion_index_background').attr('style','top:1520px;')
+        })
+        $('#maximize_astro').click(function(e){
+            e.preventDefault();
+            $('#maximize_astro').hide()
+            $('#minimize_astro').show()
+            $('.astro_big_row').show()
+            $('#horoscope_background').show()
+            $('#fashion_index_background').attr('style','top:2190px;')
+        })
+        index_js()
+    })
+-->
+</script>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "account_base.html" %}
+{% load i18n %}
+{% load cache %}
+{% block head %}
+  <link rel="stylesheet" href="{{MEDIA_URL}}css/contact_us.css" type="text/css" />
+{% endblock %}
+{% block title %}
+{% trans 'Fashionment.com - Buy Sell Fashion , Open Fashion Store , Import Clothes , Korea Japan Fashion , Accessories , Shoes , Fashion trend'%}
+{%endblock%}
+{% block content_loged %}
+{% cache 3600 new_contact_page %}
+<div class="flatpages_page">
+  <h1>{{ flatpage.title }}</h1>
+  {{ flatpage.content }}
+</div>
+{% endcache %}
+{% endblock %}

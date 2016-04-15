@@ -1,0 +1,301 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load thumbnail%}
+{%load humanize%}
+{% load cache %}
+{% block title %}
+Fashionment.com - {% trans 'View Detail Compare , Compare Full Fashion Item Details To Many Other Fashion Item Details' %}
+{% endblock %}
+{%block content_loged%}
+{% cache 600 detail_compare user.id %}
+<div class="form_fields detail_comp">
+    <table width="200" border="0" cellpadding="0" cellspacing="0" >
+        <tr>
+            <td colspan="{{count}}">
+                <a href="{% url view_my_profile %}" class="hyperlink">{% trans 'My Profile' %} ></a> <a href="{{previous_url}}" class="hyperlink"> {%trans 'My Compare' %} ></a> {% trans 'View compare detail' %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td class="title activate" colspan="{{count}}">Comparison</td>
+            
+        </tr>
+        <tr valign="top">
+            <td >
+                <table width="150" border="0" cellpadding="0" cellspacing="0" class="have_line">
+                    <tr>
+                        <td  height="180">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>{%trans 'Fashion Code'%}
+                        </td>
+                    </tr>
+                 
+                    <tr>
+                        <td>{%trans 'Collection'%}</td>
+                    </tr>
+                 
+                    <tr >
+                        <td>
+                            {%trans 'Rating'%}
+                            <img src="{{MEDIA_URL}}full-star.png" class="full_star" />
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>{%trans 'Category'%}</td>
+                    </tr>
+                   
+                    <tr>
+                        <td>{%trans 'Gender'%}</td>
+                    </tr>
+                   
+                    <tr>
+                        <td>{%trans 'Description'%}</td>
+
+                    </tr>
+             
+                    <tr>
+                        <td>{%trans 'Colours'%}</td>
+                    </tr>
+               
+                    <tr>
+                        <td>{%trans 'Sizes'%}</td>
+                    </tr>
+                
+                    <tr>
+                        <td>{%trans 'Price'%}</td>
+                    </tr>
+            
+                    <tr>
+                        <td>{%trans 'Availability'%}</td>
+                    </tr>
+            
+                    <tr>
+                        <td>{%trans 'Item Code'%}</td>
+                    </tr>
+              
+                    <tr>
+                    <td  valign="top" height="140">
+                        {%trans 'Seller details'%}
+                    </td>
+                    </tr>
+                   
+                    <tr>
+                        <td class="no_border">&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+        {%for item_list in item%}
+            <td>
+                <table width="250" border="0" cellpadding="0" cellspacing="0" class="have_line margin_left_small_min">
+                    <tr>
+                        <td  height="180" width="200" ><div class="picture_compare" style="{% if item_list.picture1 %}background-image:url({% thumbnail item_list.picture1.name 220x165 %});{% endif %}">{%ifequal item_list.availability 3%}<img src="{{MEDIA_URL}}/img/sold_out_large.png" class="no_border" />{%endifequal%}</div></td>
+                        <td width="30">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;{{item_list.id}}</td>
+                        <td width="10">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;{{item_list.line|capfirst}}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            {%if item_list.rating_set.all%}
+                            {%for rating in item_list.rating_set.all%}
+                                &nbsp;<input type="hidden" id="star_counter" class="star_counter_class" value="{{rating.avg_rate}}" />
+                            {%endfor%}
+                            {%else%}
+                                &nbsp;<input type="hidden" id="star_counter" class="star_counter_class" value="0" />
+                            {%endif%}
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;{{item_list.line.category|capfirst}}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            {%ifequal item_list.gender 1%}
+                            &nbsp;{%trans 'Male'%}
+                            {%endifequal%}
+                            {%ifequal item_list.gender 0%}
+                            &nbsp;{%trans 'Female'%}
+                            {%endifequal%}
+                            {%ifequal item_list.gender 2%}
+                            &nbsp;{%trans 'Unisex'%}
+                            {%endifequal%}
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td class="description small_padding_left">
+                            <a href="" class="link_blue">{%trans 'See description'%}</a>
+                            <div id="horoscopePanel" class="popupPanelClass horoscopePanel rows" >
+                                <div class="small_bottom_space">
+                                    <span class="bold_font" >{%trans 'The Description'%}</span>
+                                </div>
+                                &nbsp;
+                                <div class="sn_closeX">
+                                    <a href="" class="x_close">
+                                    <img class="cross1 no_border" src="{{MEDIA_URL}}cross.png"/>
+                                    </a>
+                                </div>
+                                <div class="a description_div">
+                                    {{item_list.description}}
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;{{item_list.colour|default:"-"|capfirst}}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;{{item_list.size|default:"-"}}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;{%ifnotequal item_list.price 0 %}{{item_list.price|intcomma}}{%else%}{%trans 'on request'%}{%endifnotequal%}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            {%ifequal item_list.availability 1%}
+                                &nbsp;{%trans 'In-Stock'%}
+                            {%endifequal%}
+                            {%ifequal item_list.availability 2%}
+                                &nbsp;{%trans 'Pre Order'%}
+                            {%endifequal%}
+                            {%ifequal item_list.availability 3%}
+                                &nbsp;{%trans 'Sold Out'%}
+                            {%endifequal%}
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;{{item_list.item_code}}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td  valign="top" height="140">
+                            <table class="no_line" width="100%" border="0" cellpadding="0" cellspacing="0">
+                              <tr>
+                                <td width="110">&nbsp;{% ifequal item_list.line.store.user.account_type 1 %}{%trans 'Store:'%}{%else %}{%trans 'Designer'%}{%endifequal%}</td>
+                                <td>{{item_list.line.store|capfirst}}</td>
+                              </tr>
+                              <tr>
+                                  <td width="110" valign="top">&nbsp;{%trans 'Location:'%}</td>
+                                <td  class="location">
+                                    <a href="" class="link_blue">{%trans 'See Location'%}</a>
+                                    <div id="horoscopePanel1" class="popupPanelClass1 horoscopePanel1 rows">
+                                        <div class="small_bottom_space">
+                                            <span class="bold_font" >{%trans 'Detail Location'%}</span>
+                                        </div>
+                                        
+                                        <div class="sn_closeX">
+                                            <a href="" class="close1"  >
+                                            <img class="no_border" src="{{MEDIA_URL}}cross.png"/>
+                                            </a>
+                                        </div>
+                                        <div class="a" >
+                                            {{item_list.line.store.location}}
+                                        </div>
+                                    </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                  <td  width="110">&nbsp;{%trans 'Country:'%}</td>
+                                <td>{{item_list.line.store.country|capfirst}}</td>
+                              </tr>
+                              <tr>
+                                  <td  width="110">&nbsp;{%trans 'Pos Code:'%}</td>
+                                <td>
+                                    {%ifequal item_list.line.store.post_code 0%}
+                                    {%trans 'None'%}
+                                    {%else%}
+                                    {{item_list.line.store.post_code}}
+                                    {%endifequal%}
+                                </td>
+                              </tr>
+                              <tr>
+                                  <td  width="110">&nbsp;{%trans 'Telephone:'%}</td>
+                                <td>{{item_list.line.store.phone_area}} - {{item_list.line.store.telephone}}</td>
+                              </tr>
+                              <tr>
+                                  <td  width="110">&nbsp;{%trans 'Handphone:'%}</td>
+                                <td>{{item_list.line.store.handphone}}</td>
+                              </tr>
+                              <tr>
+                                  <td  width="110">&nbsp;{%trans 'Facimile:'%}</td>
+                                <td>{%if item_list.line.store.fax_code%}
+                                        {{item_list.line.store.fax_code}} - {%endif%}{{item_list.line.store.fax|default:"-"}}
+                                    
+                                </td>
+                              </tr>
+                              <tr>
+                                  <td  width="110">&nbsp;{%trans 'Email:'%}</td>
+                                <td>{{item_list.line.store.user.email}}</td>
+                              </tr>
+                            </table>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" class="no_border"><a href="{% url message_fashion_owner item_list.id %}" class="short_red_button" >{%trans 'Mail'%}</a></td>
+                    </tr>
+                </table>
+            </td>
+        {%endfor%}
+ 
+    </table>
+
+</div>
+{%endcache %}
+<script>
+    <!--
+    
+$(document).ready(function(){
+  view_detail_compare_js()
+});
+  String.prototype.wordWrap = function(m, b, c){
+                var i, j, s, r = this.split("\n");
+                if(m > 0) for(i in r){
+                    for(s = r[i], r[i] = ""; s.length > m;
+                        j = c ? m : (j = s.substr(0, m).match(/\S*$/)).input.length - j[0].length
+                        || m,
+                        r[i] += s.substr(0, j) + ((s = s.substr(j)).length ? b : "")
+                    );
+                    r[i] += s;
+                }
+                return r.join("\n");
+        };
+        var p=$([]);
+-->
+</script>
+
+{%endblock%}

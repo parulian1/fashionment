@@ -1,0 +1,14 @@
+{% extends "account_base.html" %}
+{% load i18n %}
+{% load cache %}
+{% block title %}
+{% trans 'Fashionment.com - Buy Sell Fashion , Open Fashion Store , Import Clothes , Korea Japan Fashion , Accessories , Shoes , Fashion trend'%}
+{%endblock%}
+{% block content_loged %}
+<div style="margin-top:-25px;">
+    <div style="width:670px;">
+      <h1>{{ flatpage.title }}</h1>
+      {{ flatpage.content }}
+    </div>
+</div>
+{% endblock %}

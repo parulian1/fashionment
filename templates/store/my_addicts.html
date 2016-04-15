@@ -1,0 +1,19 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{%load thumbnail%}
+{% block title %}
+Fashionment.com - {% trans 'My Addicts' %}
+{% endblock %}
+{%block content_loged%}
+{%for my_fan in my_addict%}
+    {%for store_fan in my_fan.user.store_set.all%}
+        <div class="rows" style="float:left;">
+            {{store_fan}}
+            <div class="view_picture">
+                <div class="addicted_div addicted_div_margin" style="{% if store_fan.picture %}background-image:url({% thumbnail store_fan.picture.name 120x80 %});{% endif %}"></div>
+            </div>
+        </div>
+    {%endfor%}
+{%endfor%}
+{%endblock%}
+

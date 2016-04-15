@@ -1,0 +1,80 @@
+{% extends "account_base.html" %}
+{% load i18n%}
+{% load pagination_tags %}
+{% load thumbnail%}
+{% load cache %}
+{% block title %}Fashionment.com - {%trans 'Latest Article'%}{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{MEDIA_URL}}css/fashion_facts.css" type="text/css" />
+{% endblock %}
+{% block content_loged %}
+<div style="margin-top:-25px;">
+<div style="width:100%; overflow:hidden;">
+    <h2>
+        {% trans "What's The Fashion Magazine"%}
+    </h2>
+    {% if our_magazines%}
+    {%for fashion_magz in our_magazines|slice:"4"%}
+    <div class="magazine">
+        <div class="magazine_picture" style="{% if fashion_magz.fact_img %}background-image:url({% thumbnail fashion_magz.fact_img.name 90x127 %}){%else%}background-image:url({% thumbnail fashion_magz.image.name 90x127 %}){%endif%};padding-bottom:5px;"></div>
+        <div class="magazine_link">
+            {{fashion_magz.title}}<br/>
+            {% if fashion_magz.download_file.url %}
+                <a href="{{ fashion_magz.download_file.url}}" class="hyperlink">{% trans 'Download'%}</a>
+            {% endif %}
+            {% if fashion_magz.url %}
+               or <a href="{{ fashion_magz.url }}" class="hyperlink">{% trans 'Read Online'%}</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif%}
+</div>
+<h2>{%trans 'All Article in year' %}</h2>
+
+{%for date in date_list%}
+{%url fashionfacts_archive_year date.year as year%}
+<div >
+    <a class="short_red_button" href ="{{year}}">{{date.year}}</a>
+</div>
+{%endfor%}
+    <div style="margin-top:55px;" id="article_view" class="form_fields">
+        <h2>{%trans 'Latest article' %}</h2>
+        {%if entry_list%}
+        {% autopaginate entry_list 10 %}
+        {% paginate %}
+        {%endif%}
+        {%if entry_list%}
+        {%for latest_Entry in entry_list%}
+            <a class="article_title" href="{{latest_Entry.get_absolute_url}}">
+                {{latest_Entry.title}}
+            </a>
+            <div class="article_date">
+                Posted on {{latest_Entry.pub_date.date|date:"d b Y" }} by {{latest_Entry.author}}
+            </div>
+            <div class="rows" >
+                <div style="float:left;">
+                    {% if latest_Entry.article_image %}
+                        <a href="{{latest_Entry.get_absolute_url}}"><div class="article_small_image picture_border" style="background-image:url({% thumbnail latest_Entry.article_image.name 100x75 %});" ></div></a>
+                    {% endif %}
+                </div>
+                <div style="margin-top:5px;">
+                    {%if latest_Entry.excerpt_html%}
+                        {{latest_Entry.excerpt_html|safe|removetags:"p" }}
+                    {%else%}
+                        {{latest_Entry.body_html|truncatewords_html:50|safe|removetags:"p"  }}
+                    {%endif%}
+                </div>
+
+            </div>
+            <div id="hr_line">
+                <hr />
+            </div>
+        {%endfor%}
+        {%else%}
+        {%trans 'no article yet'%}
+        {%endif%}
+    </div>
+</div>
+{% endblock %}

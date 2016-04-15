@@ -1,0 +1,103 @@
+{%extends "account_base.html"%}
+{%load i18n%}
+{% block title %}
+Fashionment.com - {% trans 'Sign Up to fashionment.com , create your own online store ' %}
+{% endblock %}
+{% block head %}
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/recaptcha_ajax.js"></script>
+{% endblock %}
+{%block content_loged%}
+<div style="margin-top:-20px;">
+<form method="POST"  enctype="multipart/form-data" id="sign_up_form" >
+    <div>
+        <div class="title">
+        <h2>{%trans 'Sign Up'%}</h2>
+        </div>
+        {%for add_user_field in add_user_form%}
+            <div class="each_row" id="row{{forloop.counter}}">
+                <div class="column2" id="column{{forloop.counter}}">
+                    <div class="column1" id="columnb{{forloop.counter}}">
+                        {{add_user_field.label}}
+                    </div>
+                    {{add_user_field}}
+                    {{add_user_field.errors}}
+                    <div class="eg" id="eg{{forloop.counter}}">
+                        {{add_user_field.help_text}}
+                    </div>
+                </div>
+            </div>
+        {%endfor%}
+        
+        <div class="column2">
+            <div class="column1">
+            </div>
+            <input class="short_red_button" type="submit" value="Submit"/>
+        </div>
+    </div>
+</form>
+</div>
+<script>
+    <!--
+    $(document).ready(function(){
+      if(!$.mobile()){
+        $('#sign_up_form').submitLoad()
+        if($('#id_country').val()!="1"){$('#id_province').attr('disabled',true);}
+        updateModel2({form:'#sign_up_form',model:'#id_province',brand:'#id_country'})
+        updateModel2({form:'#sign_up_form',model:'#id_phone_area_code',brand:'#id_province'})
+        updateModel2({form:'#sign_up_form',model:'#id_fax_area_code',brand:'#id_province'})
+        
+       $('#verification').insertBefore("#row22")
+       
+       $("#row11").hide()
+       $("#row14").hide()
+       $("#columnb23").hide()
+       $('#eg22').attr('style','margin-left:5px; font-size:10px; width:250px;')
+       $('#id_phone_area_code').insertAfter($('#columnb12'))
+       $('#id_fax_area_code').insertAfter($('#columnb15'))
+       $("#id_date_of_birth").datepicker({ showAnim: 'slideDown' ,altField: '#id_date_of_birth',altFormat: 'dd/mm/yy',changeMonth: true, changeYear: true,  minDate: new Date(1950, 0,1),maxDate: new Date(2000, 12, 0), yearRange: '1950:2000',defaultDate:  new Date(1950, 0, 1),showOn: 'button', buttonImage: '{{ MEDIA_URL}}css/images/calendar.gif', buttonImageOnly: true});
+       $('#recaptcha_help').click(function(){
+        Recaptcha.showhelp()
+      })
+      $('#reload_recaptcha').click(function(){
+        Recaptcha.reload()
+      })
+      Recaptcha.create("{{ captcha_public_key }}", null, {
+        theme: 'custom',
+        tabindex: 0
+      });
+        $('#id_telephone').numeric({allow:"+"});
+        $('#id_post_code').numeric();
+        $('#id_handphone').numeric({allow:"+"});
+        $('#id_fax').numeric({allow:"+"});
+        $('#id_country').change(function(){
+            if($(this).val()=="1"){
+                $('#id_phone_area_code').attr('disabled',false);
+                $('#id_fax_area_code').attr('disabled',false);
+            }else{
+                $('#id_province').attr('disabled',true);
+                $('#id_phone_area_code').attr('disabled',true);
+                $('#id_fax_area_code').attr('disabled',true);
+            }
+        })
+      $('#id_date_of_birth').attr('readonly',true)
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_street_address"), //reference to form field
+            maxlength: 1000,
+            statusids: ["eg16"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        fieldlimiter.setup({
+            thefield: document.getElementById("id_about_me"), //reference to form field
+            maxlength: 1000,
+            statusids: ["eg20"], //id(s) of divs to output characters limit. If non, set to empty array [].
+            onkeypress:function(maxlength, curlength){ //onkeypress event handler
+                //define custom event actions here if desired
+            }
+        })
+        }
+    })
+    -->
+</script>
+{%endblock%}

@@ -1,0 +1,75 @@
+{% extends "account_base.html"%}
+{% load i18n %}
+{% load thumbnail%}
+{% load cache %}
+{% block title %}
+    {% trans 'Fashionment.com - Detail Article' %} {{entry_list}}
+{% endblock %}
+{%block content_loged%}
+{%url tag_view entry_list.tags as goto_tag_list%}
+{%url tag_page as tag_view %}
+{%blocktrans%}
+{%endblocktrans%}
+{% cache 3600 fashionfact_detail_new entry_list.pub_date %}
+<div style="margin-top:-15px;">
+<div class="form_fields" style="width:665px;">
+    <div class="news_detail">
+        <div class="title" style="font-size:1.8em;">
+             {{entry_list}}
+        </div>
+        <div class="article_date">
+            Posted on {{entry_list.pub_date.date|date:"d b Y" }} by {{entry_list.author}}
+        </div>
+        Tags:
+        {% for tag in entry_list.tag_list %}
+          <a class="link_blue" href="{% url tag_view tag%}">{{ tag }}</a>,
+        {% endfor %}
+          <a class="link_blue" href="{{tag_view}}">{%trans 'show all tags'%}</a>
+       
+        {% if entry_list.article_image %}
+            <div class="image_article" style="background-image:url({% thumbnail entry_list.article_image.name 200x150 %});" ></div>
+        {% endif %}
+        <div >
+            {{entry_list.body|safe}}
+        </div>
+        <a style="margin-bottom:10px;" class="long_red_button" href="{{ entry_list.get_absolute_url_day }}">
+            <div >{{entry_list.pub_date.date|date:"d F Y" }} {% trans 'Article' %}</div>
+        </a>
+    </div>
+    <div>
+        <div class="news_word" style="width:39%;">{% trans 'Latest News' %}</div>
+        <div class="column_news">
+            {%for latest_Entry in latest_entry|slice:":5"%}
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <a class="title_side_news" href="{{latest_Entry.get_absolute_url}}">{{latest_Entry.title}}</a>
+                            <div  class="article_date">
+                                Posted on {{latest_Entry.pub_date.date|date:"d b Y" }} by {{latest_Entry.author}}
+                            </div>
+                        </tr>
+                        <tr>
+                            <td width="70" height="75">
+                                <a href="{{latest_Entry.get_absolute_url}}"><div align="left" class="latest_news_picture picture_border" style="background-image:url({% thumbnail latest_Entry.article_image.name 60x60 %});" ></div></a>
+                            </td>
+                            <td valign="top">
+                                <div style="margin-top:5px;">
+                                    <a class="news_summary">{{latest_Entry.excerpt_html|safe|truncatewords_html:15|removetags:"p"}}</a>
+                                    <a class="read_more_link" href="{{latest_Entry.get_absolute_url}}">read more</a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr />
+                    {%endfor%}
+            <div style="float:right;">
+                {%url coltrane_entry_archive_index as article%}
+                <a href="/fashion-facts/" class="more_news">{%trans 'More News'%}</a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endcache %}
+{%endblock%}
+
